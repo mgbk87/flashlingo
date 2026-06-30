@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashlingo 🇪🇸</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:       #7C3AED;
+      --purple-light: #A78BFA;
+      --purple-faint: #F3EEFF;
+      --purple-dark:  #5B21B6;
+      --yellow:       #F59E0B;
+      --yellow-light: #FDE68A;
+      --green:        #10B981;
+      --red:          #EF4444;
+      --bg:           #FAF9FF;
+      --white:        #FFFFFF;
+      --text:         #1E1B4B;
+      --text-mid:     #4B5563;
+      --text-muted:   #9CA3AF;
+      --radius:       20px;
+      --radius-lg:    28px;
+      --shadow:       0 8px 32px rgba(124,58,237,0.12);
+      --shadow-card:  0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    html, body { height: 100%; font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: block; }
+
+    .blob-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+    .blob-bg::before { content: ''; position: absolute; top: -120px; right: -100px; width: 420px; height: 420px; border-radius: 60% 40% 50% 70% / 50% 60% 40% 60%; background: #FECACA; opacity: 0.7; }
+    .blob-bg::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 320px; height: 320px; border-radius: 70% 30% 60% 40% / 40% 70% 30% 60%; background: #FEF3C7; opacity: 0.5; }
+
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: var(--white); border-bottom: 3px solid var(--purple-faint); position: relative; z-index: 10; }
+    .nav-logo { font-size: 1.4rem; font-weight: 900; color: var(--purple); display: flex; align-items: center; gap: 6px; letter-spacing: -0.5px; }
+    .nav-logo .logo-flash { color: var(--purple); }
+    .nav-logo .logo-lingo { font-style: italic; color: var(--yellow); }
+    .nav-logo .logo-flag  { font-style: normal; }
+    .lang-home-btn { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.82rem; color: var(--purple); text-decoration: none; background: var(--purple-faint); padding: 5px 12px; border-radius: 999px; white-space: nowrap; }
+    .lang-home-btn:hover { background: #DDD6FE; }
+    .flag-stripe { height: 6px; background: linear-gradient(90deg, #AA151B 25%, #F1BF00 25% 75%, #AA151B 75%); }
+    .home-lang-flag { width: 90px; height: auto; margin-bottom: 6px; display: block; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+
+    #screen-home { background: #FFFBEB; }
+    .home-hero { text-align: center; padding: 28px 24px 14px; position: relative; z-index: 1; }
+    .home-hero h1 { font-size: clamp(1.8rem, 5.5vw, 2.8rem); font-weight: 900; line-height: 1.15; margin-bottom: 10px; }
+    .home-hero h1 em { font-style: italic; color: var(--purple); }
+    .home-hero p { font-size: 1rem; color: var(--text-mid); font-weight: 600; max-width: 420px; margin: 0 auto; }
+    .badge { display: inline-block; background: var(--yellow); color: var(--text); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.5px; padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; text-transform: uppercase; }
+
+    .high-score-bar { background: linear-gradient(135deg, #3B0764, #7C3AED); margin: 0 18px 4px; border-radius: var(--radius-lg); padding: 12px 18px; position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .hs-title { font-size: 0.78rem; font-weight: 900; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+    .hs-scores { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
+    .hs-chip { background: rgba(255,255,255,0.15); color: #fff; border-radius: 999px; padding: 4px 11px; font-size: 0.8rem; font-weight: 800; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
+    .hs-chip .hs-pts { color: var(--yellow-light); }
+
+    .mode-grid { display: flex; flex-direction: column; gap: 12px; max-width: 480px; margin: 14px auto 28px; padding: 0 18px; position: relative; z-index: 1; }
+    .mode-card { border-radius: var(--radius-lg); padding: 20px 24px; cursor: pointer; position: relative; overflow: hidden; border: none; text-align: left; transition: transform 0.18s ease, box-shadow 0.18s ease; box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+    .mode-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,0.16); }
+    .mode-card:active { transform: translateY(0); }
+    .mode-card-bg { position: absolute; top: -40px; right: -40px; width: 150px; height: 150px; border-radius: 50%; opacity: 0.18; }
+    .mode-icon    { font-size: 2rem; margin-bottom: 7px; display: block; }
+    .mode-name    { font-size: 1.4rem; font-weight: 900; color: #fff; margin-bottom: 2px; }
+    .mode-tagline { font-size: 0.88rem; font-weight: 600; color: rgba(255,255,255,0.85); margin-bottom: 7px; }
+    .mode-desc    { font-size: 0.82rem; color: rgba(255,255,255,0.7); font-weight: 600; }
+    .mode-pill    { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.2); border-radius: 999px; padding: 3px 11px; font-size: 0.76rem; font-weight: 800; color: #fff; margin-top: 9px; }
+    .mode-card--category { background: linear-gradient(135deg, #2563EB, #60A5FA); }
+    .mode-card--category .mode-card-bg { background: #fff; }
+    .mode-card--endless  { background: linear-gradient(135deg, #EA580C, #FB923C); }
+    .mode-card--endless .mode-card-bg  { background: #fff; }
+    .mode-card--god      { background: linear-gradient(135deg, #3B0764, #7C3AED); }
+    .mode-card--god .mode-card-bg      { background: #C084FC; }
+
+    .home-stats { display: flex; justify-content: center; gap: 24px; padding: 12px 24px; background: var(--white); border-top: 2px solid var(--purple-faint); position: relative; z-index: 1; }
+    .home-stat { text-align: center; }
+    .home-stat-num   { display: block; font-size: 1.3rem; font-weight: 900; color: var(--purple); }
+    .home-stat-label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    #screen-categories { background: var(--bg); }
+    .screen-top { background: var(--purple); padding: 18px 22px 24px; position: relative; overflow: hidden; }
+    .screen-top::after { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.08); }
+    .back-btn { background: rgba(255,255,255,0.18); border: none; cursor: pointer; color: #fff; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.88rem; padding: 5px 13px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; transition: background 0.15s; margin-bottom: 12px; }
+    .back-btn:hover { background: rgba(255,255,255,0.28); }
+    .screen-title    { font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 3px; }
+    .screen-subtitle { font-size: 0.86rem; color: rgba(255,255,255,0.8); font-weight: 600; }
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); gap: 11px; padding: 18px 14px 28px; max-width: 600px; margin: 0 auto; }
+    .cat-card { background: var(--white); border-radius: var(--radius); padding: 15px 11px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.15s ease; box-shadow: var(--shadow-card); display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .cat-card:hover { border-color: var(--purple); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,0.15); }
+    .cat-icon  { font-size: 1.8rem; }
+    .cat-name  { font-size: 0.8rem; font-weight: 800; color: var(--text); }
+    .cat-count { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); background: var(--purple-faint); padding: 2px 7px; border-radius: 999px; }
+
+    #screen-quiz { background: var(--bg); display: flex; flex-direction: column; }
+    .quiz-header { padding: 13px 16px 16px; position: relative; overflow: hidden; transition: background 0.4s ease; }
+    .quiz-header::after { content: ''; position: absolute; bottom: -30px; right: -30px; width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,0.07); }
+    .quiz-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+    .quiz-left    { display: flex; align-items: center; gap: 8px; }
+    .quiz-right   { display: flex; align-items: center; gap: 8px; }
+    .stop-btn { background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.35); cursor: pointer; color: #fff; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.78rem; padding: 4px 11px; border-radius: 999px; transition: background 0.15s; white-space: nowrap; }
+    .stop-btn:hover { background: rgba(255,255,255,0.35); }
+    .quiz-category-tag { background: rgba(255,255,255,0.22); color: #fff; font-size: 0.76rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
+    .quiz-score-display { background: var(--yellow); color: #1E1B4B; font-size: 0.8rem; font-weight: 900; padding: 3px 10px; border-radius: 999px; }
+    .quiz-progress-text { color: rgba(255,255,255,0.85); font-size: 0.8rem; font-weight: 700; }
+    .quiz-lives { font-size: 1.25rem; letter-spacing: 3px; min-height: 24px; margin-bottom: 5px; }
+    .progress-track { height: 7px; background: rgba(255,255,255,0.2); border-radius: 999px; overflow: hidden; }
+    .progress-fill  { height: 100%; background: var(--yellow); border-radius: 999px; transition: width 0.4s ease; }
+
+    .quiz-body { flex: 1; padding: 20px 16px 24px; display: flex; flex-direction: column; align-items: center; max-width: 520px; margin: 0 auto; width: 100%; }
+    .quiz-direction { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
+    .quiz-word-card { border-radius: var(--radius-lg); padding: 20px 24px 24px; text-align: center; width: 100%; box-shadow: var(--shadow); margin-bottom: 12px; border: 3px solid transparent; background: var(--white); transition: border-color 0.3s; }
+    .quiz-word-card.flash-correct { animation: flashGreen 0.5s ease; }
+    .quiz-word-card.flash-wrong   { animation: flashRed   0.5s ease; }
+    @keyframes flashGreen { 0%,100% { background:#fff; } 40% { background:#D1FAE5; } }
+    @keyframes flashRed   { 0%,100% { background:#fff; } 40% { background:#FEE2E2; } }
+    .quiz-word-emoji { font-size: 3.2rem; margin-bottom: 8px; display: block; line-height: 1; animation: emojiPop 0.35s ease; }
+    @keyframes emojiPop { 0% { transform: scale(0.5); opacity:0; } 70% { transform: scale(1.15); } 100% { transform: scale(1); opacity:1; } }
+    .quiz-word { font-size: clamp(1.6rem, 5.5vw, 2.2rem); font-weight: 900; color: var(--text); line-height: 1.2; }
+
+    .timer-wrap { width: 100%; margin-bottom: 16px; }
+    .timer-track { height: 12px; background: #E5E7EB; border-radius: 999px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); }
+    .timer-bar   { height: 100%; width: 100%; border-radius: 999px; transition: background 0.3s ease; }
+    .timer-bar.urgent { animation: timerPulse 0.4s ease-in-out infinite; }
+    @keyframes timerPulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+    .timer-time  { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-align: right; margin-top: 3px; }
+
+    .choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+    .choice-btn { background: var(--white); border: 3px solid var(--purple-faint); border-radius: var(--radius); padding: 14px 11px; font-family: 'Nunito', sans-serif; font-size: 0.94rem; font-weight: 800; color: var(--text); cursor: pointer; transition: all 0.12s ease; text-align: center; line-height: 1.3; box-shadow: var(--shadow-card); }
+    @media (hover: hover) { .choice-btn:hover:not(:disabled) { border-color: var(--purple); background: var(--purple-faint); transform: translateY(-2px); } }
+    .choice-btn:disabled { cursor: default; }
+    .choice-btn.correct { background: #D1FAE5; border-color: var(--green); color: #065F46; }
+    .choice-btn.wrong   { background: #FEE2E2; border-color: var(--red);   color: #991B1B; }
+    .choice-btn.correct::before { content: '✓ '; }
+    .choice-btn.wrong::before   { content: '✗ '; }
+
+    .pts-pop { position: fixed; font-size: 1.4rem; font-weight: 900; color: var(--green); pointer-events: none; z-index: 500; animation: ptsFly 1.1s ease forwards; }
+    @keyframes ptsFly { 0% { opacity:1; transform: translateY(0) scale(1); } 100% { opacity:0; transform: translateY(-60px) scale(1.4); } }
+
+    .quiz-feedback { margin-top: 14px; font-size: 0.97rem; font-weight: 800; min-height: 24px; text-align: center; }
+    .feedback-correct { color: var(--green); }
+    .feedback-wrong   { color: var(--red); }
+
+    .milestone-overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 2000; display: flex; align-items: center; justify-content: center; background: rgba(30,5,60,0.88); backdrop-filter: blur(6px); animation: msIn 0.35s ease; }
+    @keyframes msIn { from { opacity:0; } to { opacity:1; } }
+    .milestone-overlay.fade-out { animation: msOut 0.5s ease forwards; }
+    @keyframes msOut { from { opacity:1; } to { opacity:0; } }
+    .milestone-box { text-align: center; position: relative; }
+    .milestone-emoji  { font-size: 5rem; display: block; margin-bottom: 8px; animation: msBounce 0.6s ease infinite alternate; }
+    @keyframes msBounce { from { transform: scale(1) rotate(-5deg); } to { transform: scale(1.15) rotate(5deg); } }
+    .milestone-count  { font-size: clamp(5rem, 20vw, 9rem); font-weight: 900; color: var(--yellow); line-height: 1; display: block; text-shadow: 0 0 40px rgba(245,158,11,0.6); animation: msPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+    @keyframes msPop   { from { transform: scale(0.3); opacity:0; } to { transform: scale(1); opacity:1; } }
+    .milestone-label  { font-size: 1.5rem; font-weight: 900; color: rgba(255,255,255,0.9); margin-top: 4px; display: block; }
+    .milestone-sub    { font-size: 1rem; color: rgba(255,255,255,0.6); font-weight: 700; margin-top: 6px; display: block; }
+
+    #confetti-container { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 400px; height: 500px; pointer-events: none; overflow: visible; }
+    .conf-dot { position: absolute; border-radius: 50%; animation: confFall linear forwards; }
+    @keyframes confFall { 0% { transform: translateY(0) rotate(0deg) scale(1); opacity:1; } 100% { transform: translateY(500px) rotate(720deg) scale(0.5); opacity:0; } }
+
+    .stop-modal { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 1500; display: flex; align-items: center; justify-content: center; background: rgba(30,27,74,0.7); backdrop-filter: blur(4px); }
+    .stop-modal-box { background: #fff; border-radius: var(--radius-lg); padding: 28px 28px 24px; max-width: 300px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .stop-modal-title { font-size: 1.3rem; font-weight: 900; color: var(--text); margin-bottom: 8px; }
+    .stop-modal-sub   { font-size: 0.88rem; font-weight: 600; color: var(--text-mid); margin-bottom: 20px; }
+    .stop-modal-btns  { display: flex; gap: 10px; }
+    .stop-modal-btns button { flex:1; padding: 13px; border-radius: var(--radius); font-family: 'Nunito', sans-serif; font-size: 0.92rem; font-weight: 800; cursor: pointer; border: none; }
+    .stop-cancel { background: var(--purple-faint); color: var(--purple); }
+    .stop-exit   { background: var(--red); color: #fff; }
+
+    #screen-results { background: var(--bg); }
+    .results-hero { background: linear-gradient(135deg, var(--purple-dark), var(--purple)); padding: 40px 22px 52px; text-align: center; position: relative; overflow: hidden; }
+    .results-hero::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .results-title    { font-size: clamp(1.6rem, 5.5vw, 2.4rem); font-weight: 900; color: #fff; margin-bottom: 5px; position: relative; }
+    .results-subtitle { font-size: 0.95rem; color: rgba(255,255,255,0.8); font-weight: 700; position: relative; }
+    .results-score-card { background: var(--white); border-radius: var(--radius-lg); margin: -32px 20px 18px; padding: 22px; box-shadow: 0 12px 40px rgba(124,58,237,0.18); text-align: center; position: relative; }
+    .score-label { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .score-big   { font-size: clamp(2.6rem, 10vw, 4.2rem); font-weight: 900; color: var(--purple); line-height: 1; margin-bottom: 2px; }
+    .score-unit  { font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+    .new-hs-badge  { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #F59E0B, #FBBF24); color: #1E1B4B; border-radius: 999px; padding: 5px 15px; font-weight: 900; font-size: 0.85rem; margin-top: 4px; }
+    .prev-hs-note  { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-top: 4px; }
+    .results-stats { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 0 20px 18px; }
+    .stat-chip  { background: var(--white); border-radius: var(--radius); padding: 11px 14px; text-align: center; min-width: 72px; box-shadow: var(--shadow-card); }
+    .stat-num   { display: block; font-size: 1.45rem; font-weight: 900; color: var(--purple); }
+    .stat-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .results-actions { display: flex; flex-direction: column; gap: 10px; padding: 0 20px 32px; max-width: 480px; margin: 0 auto; }
+    .btn-primary  { width:100%; padding:16px 20px; border-radius:var(--radius); font-family:'Nunito',sans-serif; font-size:0.97rem; font-weight:800; cursor:pointer; border:none; transition:all 0.15s ease; background:var(--purple); color:#fff; box-shadow:0 4px 16px rgba(124,58,237,0.3); }
+    .btn-primary:hover  { background:var(--purple-dark); transform:translateY(-1px); }
+    .btn-secondary { width:100%; padding:16px 20px; border-radius:var(--radius); font-family:'Nunito',sans-serif; font-size:0.97rem; font-weight:800; cursor:pointer; border:3px solid var(--purple-faint); transition:all 0.15s ease; background:var(--white); color:var(--purple); box-shadow:var(--shadow-card); }
+    .btn-secondary:hover { background:var(--purple-faint); transform:translateY(-1px); }
+
+    #screen-cat-complete { background: var(--bg); display:none; flex-direction:column; justify-content:center; align-items:center; min-height:100vh; padding:36px 22px; text-align:center; }
+    #screen-cat-complete.active { display:flex; }
+    .interstitial-icon  { font-size: 4.5rem; margin-bottom: 12px; }
+    .interstitial-title { font-size: 1.8rem; font-weight: 900; color: var(--purple); margin-bottom: 5px; }
+    .interstitial-sub   { font-size: 0.95rem; font-weight: 700; color: var(--text-mid); margin-bottom: 20px; }
+    .interstitial-lives { font-size: 1.9rem; letter-spacing: 5px; }
+
+    @media (max-width: 360px) { .choices-grid { grid-template-columns: 1fr; } }
+    @media (min-width: 480px) { .category-grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 13px; } }
+
+    .difficulty-wrap { max-width: 480px; margin: 10px auto 4px; padding: 0 18px; position: relative; z-index: 1; }
+    .difficulty-toggle { display: flex; align-items: center; gap: 8px; background: var(--white); border-radius: var(--radius); padding: 8px 12px; box-shadow: var(--shadow-card); }
+    .diff-label { font-size: 0.82rem; font-weight: 900; color: var(--text-mid); white-space: nowrap; }
+    .diff-btn { flex: 1; padding: 7px 0; border: 2px solid transparent; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 800; cursor: pointer; transition: all 0.18s; background: transparent; color: var(--text-mid); }
+    .diff-btn.active { background: var(--purple); color: #fff; border-color: var(--purple); box-shadow: 0 2px 8px rgba(124,58,237,0.3); }
+    .diff-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .diff-info-box { border-radius: 14px; padding: 10px 12px; font-size: 0.75rem; border: 2px solid transparent; transition: border-color 0.2s, box-shadow 0.2s; }
+    .diff-info-box--easy { background: #EDE9FE; border-color: #C4B5FD; }
+    .diff-info-box--easy.selected { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(124,58,237,0.18); }
+    .diff-info-box--hard { background: #FFF7ED; border-color: #FED7AA; }
+    .diff-info-box--hard.selected { border-color: #EA580C; box-shadow: 0 0 0 3px rgba(234,88,12,0.18); }
+    .diff-info-title { font-weight: 900; font-size: 0.82rem; margin-bottom: 6px; }
+    .diff-info-box--easy .diff-info-title { color: var(--purple); }
+    .diff-info-box--hard .diff-info-title { color: #EA580C; }
+    .diff-info-item { display: flex; align-items: flex-start; gap: 5px; margin-bottom: 3px; color: var(--text-mid); font-weight: 600; line-height: 1.4; }
+    .diff-info-item::before { content: '•'; font-weight: 900; flex-shrink: 0; }
+    .diff-info-box--easy .diff-info-item::before { color: var(--purple); }
+    .diff-info-box--hard .diff-info-item::before { color: #EA580C; }
+
+    .level-wrap { max-width: 480px; margin: 0 auto 14px; padding: 0 18px; position: relative; z-index: 1; }
+    .level-wrap-inner { background: rgba(255,255,255,0.85); border-radius: 18px; padding: 12px 14px; box-shadow: 0 2px 10px rgba(124,58,237,0.08); }
+    .level-label { font-size: 0.75rem; font-weight: 900; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+    .level-toggle { display: flex; flex-direction: column; gap: 6px; }
+    .level-btn { width: 100%; padding: 10px 4px; border: 2px solid #E9D5FF; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 800; cursor: pointer; transition: all 0.18s; background: transparent; color: var(--text-mid); text-align: center; }
+    .level-btn.active { color: #fff; border-color: transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .level-btn.lv-beginner.active { background: linear-gradient(135deg,#059669,#34D399); }
+    .level-btn.lv-intermediate.active { background: linear-gradient(135deg,#2563EB,#60A5FA); }
+    .level-btn.lv-expert.active { background: linear-gradient(135deg,#DC2626,#F87171); }
+
+    .type-answer-wrap { display: flex; gap: 8px; align-items: stretch; width: 100%; }
+    .type-input { flex: 1; font-family: 'Nunito', sans-serif; font-size: 1.08rem; font-weight: 700; padding: 13px 16px; border: 3px solid var(--purple-light); border-radius: var(--radius); background: var(--white); color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .type-input:focus { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(124,58,237,0.12); }
+    .type-input:disabled { opacity: 0.6; }
+    .type-input::placeholder { color: var(--text-muted); font-weight: 600; }
+    .type-submit-btn { padding: 13px 18px; border-radius: var(--radius); border: none; background: var(--purple); color: #fff; font-size: 1.4rem; font-weight: 900; cursor: pointer; transition: background 0.18s, transform 0.1s; flex-shrink: 0; display: flex; align-items: center; }
+    .type-submit-btn:hover { background: var(--purple-dark); transform: translateY(-1px); }
+    .type-submit-btn:active { transform: scale(0.95); }
+    .type-submit-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+    #quiz-choices.type-mode { display: block; }
+
+    .hard-badge { display: inline-block; background: #EF4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.5px; text-transform: uppercase; vertical-align: middle; margin-left: 4px; }
+
+    #results-confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; overflow: hidden; }
+    .conf-rain { position: absolute; border-radius: 3px; animation: confRain linear forwards; }
+    @keyframes confRain { 0% { transform: translateY(-30px) rotate(0deg); opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(110vh) rotate(900deg); opacity: 0; } }
+    .score-big.counting { color: var(--yellow); }
+    .results-hero.celebrate { background: linear-gradient(135deg, #0F172A, #1D4ED8, #7C3AED); background-size: 200%; animation: heroPulse 2s ease infinite alternate; }
+    @keyframes heroPulse { from { background-position: 0%; } to { background-position: 100%; } }
+    .score-reveal { animation: scoreReveal 0.7s cubic-bezier(0.175,0.885,0.32,1.275) both; }
+    @keyframes scoreReveal { from { transform: scale(0.3) rotate(-10deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
+    .results-hero.game-over { background: linear-gradient(135deg, #1F1F1F, #4B0000, #7C0000); }
+  </style>
+</head>
+<body>
+
+<!-- ░░ HOME ░░ -->
+<div id="screen-home" class="screen active">
+  <div class="blob-bg"></div>
+  <nav class="nav">
+    <a href="index.html" class="lang-home-btn">← Languages</a>
+    <div class="nav-logo"><span class="logo-flag">🇪🇸</span><span class="logo-flash">Flash</span><span class="logo-lingo">lingo</span></div>
+    <div style="width:80px"></div>
+  </nav>
+  <div class="flag-stripe"></div>
+  <div class="home-hero">
+    <img src="Design/Spain_flag_300.png" class="home-lang-flag" alt="Spain flag">
+    <div class="badge" id="level-badge">✨ Beginner · 500 Words · 24 Categories</div>
+    <h1>Welcome to<br><em>Flashlingo!</em></h1>
+    <p>Flash-card quizzes to build your Spanish vocabulary — ¡buena suerte!</p>
+  </div>
+
+  <div id="high-score-bar" class="high-score-bar" style="display:none;">
+    <div class="hs-title">🏆 Personal Best</div>
+    <div class="hs-scores">
+      <div class="hs-chip" id="hs-best">🌟 <span class="hs-pts"></span></div>
+    </div>
+  </div>
+
+  <div class="level-wrap">
+    <div class="level-wrap-inner">
+      <div class="level-label">Vocabulary Level:</div>
+      <div class="level-toggle">
+        <button class="level-btn lv-beginner active" id="btn-lv-beginner"    onclick="setLevel('beginner')">🌱 Beginner</button>
+        <button class="level-btn lv-intermediate"    id="btn-lv-intermediate" onclick="setLevel('intermediate')">📘 Intermediate</button>
+        <button class="level-btn lv-expert"          id="btn-lv-expert"       onclick="setLevel('expert')">🎓 Expert</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="difficulty-wrap">
+    <div class="difficulty-toggle">
+      <span class="diff-label">Difficulty:</span>
+      <button class="diff-btn active" id="btn-easy" onclick="setDifficulty('easy')">⭐ Easy</button>
+      <button class="diff-btn"        id="btn-hard" onclick="setDifficulty('hard')">🔥 Hard</button>
+    </div>
+    <div class="diff-info-grid">
+      <div class="diff-info-box diff-info-box--easy selected" id="diff-box-easy">
+        <div class="diff-info-title">⭐ Easy Mode</div>
+        <div class="diff-info-item">Multiple choice</div>
+      </div>
+      <div class="diff-info-box diff-info-box--hard" id="diff-box-hard">
+        <div class="diff-info-title">🔥 Hard Mode</div>
+        <div class="diff-info-item">Type the answer</div>
+        <div class="diff-info-item">Double points</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mode-grid">
+    <button class="mode-card mode-card--category" onclick="startMode('category')">
+      <div class="mode-card-bg"></div>
+      <span class="mode-icon">📚</span>
+      <div class="mode-name">By Category</div>
+      <div class="mode-tagline">Master one topic at a time</div>
+      <div class="mode-desc">Pick any of 20 topics and answer every word within it.</div>
+      <div class="mode-pill" id="pill-category">🎯 No lives limit · Up to 6 pts/word</div>
+    </button>
+    <button class="mode-card mode-card--endless" onclick="startMode('endless')">
+      <div class="mode-card-bg"></div>
+      <span class="mode-icon">🔥</span>
+      <div class="mode-name">Endless Mode</div>
+      <div class="mode-tagline">Category after category</div>
+      <div class="mode-desc">Complete random categories back-to-back. 3 mistakes and you're out!</div>
+      <div class="mode-pill" id="pill-endless">❤️ 3 lives · Up to 6 pts/word</div>
+    </button>
+    <button class="mode-card mode-card--god" onclick="startMode('god')">
+      <div class="mode-card-bg"></div>
+      <span class="mode-icon">⚡</span>
+      <div class="mode-name">God Mode</div>
+      <div class="mode-tagline">One strike. You're out.</div>
+      <div class="mode-desc">Random words from every category. All 500 words. One mistake ends it.</div>
+      <div class="mode-pill" id="pill-god">💀 1 life · Up to 10 pts/word</div>
+    </button>
+  </div>
+
+  <div class="home-stats">
+    <div class="home-stat"><span class="home-stat-num">500</span><span class="home-stat-label">Words</span></div>
+    <div class="home-stat"><span class="home-stat-num">24</span><span class="home-stat-label">Categories</span></div>
+    <div class="home-stat"><span class="home-stat-num">2×</span><span class="home-stat-label">Hard pts</span></div>
+  </div>
+</div>
+
+
+<!-- ░░ CATEGORIES ░░ -->
+<div id="screen-categories" class="screen">
+  <div class="screen-top">
+    <button class="back-btn" onclick="showScreen('screen-home')">← Back</button>
+    <div class="screen-title">Pick a Category</div>
+    <div class="screen-subtitle">Complete all words · Faster = more points</div>
+  </div>
+  <div id="category-grid" class="category-grid"></div>
+</div>
+
+
+<!-- ░░ QUIZ ░░ -->
+<div id="screen-quiz" class="screen" style="flex-direction:column;">
+  <div class="quiz-header" id="quiz-header">
+    <div class="quiz-top-row">
+      <div class="quiz-left">
+        <button class="stop-btn" onclick="confirmStop()">⏹ Stop</button>
+        <span id="quiz-category-tag" class="quiz-category-tag">Category</span>
+      </div>
+      <div class="quiz-right">
+        <span id="quiz-score-display" class="quiz-score-display">0 pts</span>
+        <span id="quiz-progress-text" class="quiz-progress-text">1/20</span>
+      </div>
+    </div>
+    <div id="quiz-lives" class="quiz-lives"></div>
+    <div class="progress-track">
+      <div id="progress-fill" class="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="quiz-body">
+    <div class="quiz-direction" id="quiz-direction">What is the Spanish translation?</div>
+    <div class="quiz-word-card" id="quiz-word-card">
+      <span class="quiz-word-emoji" id="quiz-word-emoji">❓</span>
+      <div class="quiz-word" id="quiz-word">—</div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-track">
+        <div id="timer-bar" class="timer-bar"></div>
+      </div>
+      <div class="timer-time" id="timer-time">5.0s</div>
+    </div>
+    <div class="choices-grid" id="quiz-choices"></div>
+    <div class="quiz-feedback" id="quiz-feedback"></div>
+  </div>
+</div>
+
+
+<!-- ░░ INTERSTITIAL ░░ -->
+<div id="screen-cat-complete" class="screen">
+  <div class="interstitial-icon"  id="ci-icon">🎉</div>
+  <div class="interstitial-title" id="ci-title">Category Complete!</div>
+  <div class="interstitial-sub"   id="ci-sub">Next up…</div>
+  <div class="interstitial-lives" id="ci-lives"></div>
+</div>
+
+
+<!-- ░░ RESULTS ░░ -->
+<div id="results-confetti"></div>
+<div id="screen-results" class="screen">
+  <div class="results-hero" id="results-hero">
+    <div class="results-title"    id="results-title">Nice work!</div>
+    <div class="results-subtitle" id="results-subtitle"></div>
+  </div>
+  <div class="results-score-card">
+    <div class="score-label">Session Score</div>
+    <div class="score-big" id="results-score-big">0</div>
+    <div class="score-unit">points</div>
+    <div id="results-hs-area"></div>
+  </div>
+  <div class="results-stats"   id="results-stats"></div>
+  <div class="results-actions" id="results-actions"></div>
+</div>
+
+
+<!-- ░░ MILESTONE OVERLAY ░░ -->
+<div id="milestone-overlay" class="milestone-overlay" style="display:none;">
+  <div id="confetti-container"></div>
+  <div class="milestone-box">
+    <span class="milestone-emoji" id="ms-emoji">🎉</span>
+    <span class="milestone-count" id="ms-count">50</span>
+    <span class="milestone-label">words correct!</span>
+    <span class="milestone-sub"   id="ms-sub">Keep going!</span>
+  </div>
+</div>
+
+
+<!-- ░░ STOP CONFIRM ░░ -->
+<div id="stop-modal" class="stop-modal" style="display:none;">
+  <div class="stop-modal-box">
+    <div class="stop-modal-title">End Session?</div>
+    <div class="stop-modal-sub">Your progress will not be saved.</div>
+    <div class="stop-modal-btns">
+      <button class="stop-cancel" onclick="closeStopModal()">Keep Playing</button>
+      <button class="stop-exit"   onclick="exitToHome()">Exit</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+/* ═══════ WORD LIST ═══════════════════════════════════════════════ */
+const WORDS = [
+  {spanish:"cero",english:"zero",category:"numbers",level:"beginner"},{spanish:"uno",english:"one",category:"numbers",level:"beginner"},
+  {spanish:"dos",english:"two",category:"numbers",level:"beginner"},{spanish:"tres",english:"three",category:"numbers",level:"beginner"},
+  {spanish:"cuatro",english:"four",category:"numbers",level:"beginner"},{spanish:"cinco",english:"five",category:"numbers",level:"beginner"},
+  {spanish:"seis",english:"six",category:"numbers",level:"beginner"},{spanish:"siete",english:"seven",category:"numbers",level:"beginner"},
+  {spanish:"ocho",english:"eight",category:"numbers",level:"beginner"},{spanish:"nueve",english:"nine",category:"numbers",level:"beginner"},
+  {spanish:"diez",english:"ten",category:"numbers",level:"beginner"},{spanish:"once",english:"eleven",category:"numbers",level:"beginner"},
+  {spanish:"doce",english:"twelve",category:"numbers",level:"beginner"},{spanish:"trece",english:"thirteen",category:"numbers",level:"beginner"},
+  {spanish:"catorce",english:"fourteen",category:"numbers",level:"beginner"},{spanish:"quince",english:"fifteen",category:"numbers",level:"beginner"},
+  {spanish:"dieciséis",english:"sixteen",category:"numbers",level:"beginner"},{spanish:"diecisiete",english:"seventeen",category:"numbers",level:"beginner"},
+  {spanish:"dieciocho",english:"eighteen",category:"numbers",level:"beginner"},{spanish:"diecinueve",english:"nineteen",category:"numbers",level:"beginner"},
+  {spanish:"veinte",english:"twenty",category:"numbers",level:"beginner"},{spanish:"treinta",english:"thirty",category:"numbers",level:"beginner"},
+  {spanish:"cuarenta",english:"forty",category:"numbers",level:"beginner"},{spanish:"cincuenta",english:"fifty",category:"numbers",level:"beginner"},
+  {spanish:"sesenta",english:"sixty",category:"numbers",level:"beginner"},{spanish:"setenta",english:"seventy",category:"numbers",level:"beginner"},
+  {spanish:"ochenta",english:"eighty",category:"numbers",level:"beginner"},{spanish:"noventa",english:"ninety",category:"numbers",level:"beginner"},
+  {spanish:"cien",english:"hundred",category:"numbers",level:"beginner"},{spanish:"mil",english:"thousand",category:"numbers",level:"beginner"},
+  {spanish:"rojo",english:"red",category:"colors",level:"beginner"},{spanish:"azul",english:"blue",category:"colors",level:"beginner"},
+  {spanish:"verde",english:"green",category:"colors",level:"beginner"},{spanish:"amarillo",english:"yellow",category:"colors",level:"beginner"},
+  {spanish:"naranja",english:"orange",category:"colors",level:"beginner"},{spanish:"morado",english:"purple",category:"colors",level:"beginner"},
+  {spanish:"rosa",english:"pink",category:"colors",level:"beginner"},{spanish:"negro",english:"black",category:"colors",level:"beginner"},
+  {spanish:"blanco",english:"white",category:"colors",level:"beginner"},{spanish:"gris",english:"grey",category:"colors",level:"beginner"},
+  {spanish:"marrón",english:"brown",category:"colors",level:"beginner"},{spanish:"beige",english:"beige",category:"colors",level:"beginner"},
+  {spanish:"lunes",english:"Monday",category:"days",level:"beginner"},{spanish:"martes",english:"Tuesday",category:"days",level:"beginner"},
+  {spanish:"miércoles",english:"Wednesday",category:"days",level:"beginner"},{spanish:"jueves",english:"Thursday",category:"days",level:"beginner"},
+  {spanish:"viernes",english:"Friday",category:"days",level:"beginner"},{spanish:"sábado",english:"Saturday",category:"days",level:"beginner"},
+  {spanish:"domingo",english:"Sunday",category:"days",level:"beginner"},
+  {spanish:"enero",english:"January",category:"months",level:"beginner"},{spanish:"febrero",english:"February",category:"months",level:"beginner"},
+  {spanish:"marzo",english:"March",category:"months",level:"beginner"},{spanish:"abril",english:"April",category:"months",level:"beginner"},
+  {spanish:"mayo",english:"May",category:"months",level:"beginner"},{spanish:"junio",english:"June",category:"months",level:"beginner"},
+  {spanish:"julio",english:"July",category:"months",level:"beginner"},{spanish:"agosto",english:"August",category:"months",level:"beginner"},
+  {spanish:"septiembre",english:"September",category:"months",level:"beginner"},{spanish:"octubre",english:"October",category:"months",level:"beginner"},
+  {spanish:"noviembre",english:"November",category:"months",level:"beginner"},{spanish:"diciembre",english:"December",category:"months",level:"beginner"},
+  {spanish:"la primavera",english:"spring",category:"seasons",level:"beginner"},{spanish:"el verano",english:"summer",category:"seasons",level:"beginner"},
+  {spanish:"el otoño",english:"autumn",category:"seasons",level:"beginner"},{spanish:"el invierno",english:"winter",category:"seasons",level:"beginner"},
+  {spanish:"la familia",english:"family",category:"family",level:"beginner"},{spanish:"el padre",english:"father",category:"family",level:"beginner"},
+  {spanish:"la madre",english:"mother",category:"family",level:"beginner"},{spanish:"el hijo",english:"son",category:"family",level:"beginner"},
+  {spanish:"la hija",english:"daughter",category:"family",level:"beginner"},{spanish:"el hermano",english:"brother",category:"family",level:"beginner"},
+  {spanish:"la hermana",english:"sister",category:"family",level:"beginner"},{spanish:"el abuelo",english:"grandfather",category:"family",level:"beginner"},
+  {spanish:"la abuela",english:"grandmother",category:"family",level:"beginner"},{spanish:"el tío",english:"uncle",category:"family",level:"beginner"},
+  {spanish:"la tía",english:"aunt",category:"family",level:"beginner"},{spanish:"el primo",english:"cousin (male)",category:"family",level:"beginner"},
+  {spanish:"la prima",english:"cousin (female)",category:"family",level:"beginner"},{spanish:"el marido",english:"husband",category:"family",level:"beginner"},
+  {spanish:"la esposa",english:"wife",category:"family",level:"beginner"},{spanish:"el niño",english:"child",category:"family",level:"beginner"},
+  {spanish:"el bebé",english:"baby",category:"family",level:"beginner"},{spanish:"los padres",english:"parents",category:"family",level:"beginner"},
+  {spanish:"la cabeza",english:"head",category:"body",level:"beginner"},{spanish:"la cara",english:"face",category:"body",level:"beginner"},
+  {spanish:"el pelo",english:"hair",category:"body",level:"beginner"},{spanish:"el ojo",english:"eye",category:"body",level:"beginner"},
+  {spanish:"los ojos",english:"eyes",category:"body",level:"beginner"},{spanish:"la nariz",english:"nose",category:"body",level:"beginner"},
+  {spanish:"la boca",english:"mouth",category:"body",level:"beginner"},{spanish:"la oreja",english:"ear",category:"body",level:"beginner"},
+  {spanish:"el cuello",english:"neck",category:"body",level:"beginner"},{spanish:"el hombro",english:"shoulder",category:"body",level:"beginner"},
+  {spanish:"el brazo",english:"arm",category:"body",level:"beginner"},{spanish:"la mano",english:"hand",category:"body",level:"beginner"},
+  {spanish:"el dedo",english:"finger",category:"body",level:"beginner"},{spanish:"el estómago",english:"stomach",category:"body",level:"beginner"},
+  {spanish:"la espalda",english:"back",category:"body",level:"beginner"},{spanish:"la pierna",english:"leg",category:"body",level:"beginner"},
+  {spanish:"la rodilla",english:"knee",category:"body",level:"beginner"},{spanish:"el pie",english:"foot",category:"body",level:"beginner"},
+  {spanish:"el corazón",english:"heart",category:"body",level:"beginner"},{spanish:"el diente",english:"tooth",category:"body",level:"beginner"},
+  {spanish:"la lengua",english:"tongue",category:"body",level:"beginner"},
+  {spanish:"el gato",english:"cat",category:"animals",level:"beginner"},{spanish:"el perro",english:"dog",category:"animals",level:"beginner"},
+  {spanish:"el caballo",english:"horse",category:"animals",level:"beginner"},{spanish:"la vaca",english:"cow",category:"animals",level:"beginner"},
+  {spanish:"el cerdo",english:"pig",category:"animals",level:"beginner"},{spanish:"la oveja",english:"sheep",category:"animals",level:"beginner"},
+  {spanish:"la cabra",english:"goat",category:"animals",level:"beginner"},{spanish:"el pollo",english:"chicken",category:"animals",level:"beginner"},
+  {spanish:"el conejo",english:"rabbit",category:"animals",level:"beginner"},{spanish:"el ratón",english:"mouse",category:"animals",level:"beginner"},
+  {spanish:"el pájaro",english:"bird",category:"animals",level:"beginner"},{spanish:"el pez",english:"fish",category:"animals",level:"beginner"},
+  {spanish:"la rana",english:"frog",category:"animals",level:"beginner"},{spanish:"la serpiente",english:"snake",category:"animals",level:"beginner"},
+  {spanish:"el elefante",english:"elephant",category:"animals",level:"beginner"},{spanish:"el león",english:"lion",category:"animals",level:"beginner"},
+  {spanish:"el tigre",english:"tiger",category:"animals",level:"beginner"},{spanish:"el oso",english:"bear",category:"animals",level:"beginner"},
+  {spanish:"el mono",english:"monkey",category:"animals",level:"beginner"},{spanish:"el pato",english:"duck",category:"animals",level:"beginner"},
+  {spanish:"la gallina",english:"hen",category:"animals",level:"beginner"},
+  {spanish:"el pan",english:"bread",category:"food",level:"beginner"},{spanish:"el queso",english:"cheese",category:"food",level:"beginner"},
+  {spanish:"la mantequilla",english:"butter",category:"food",level:"beginner"},{spanish:"la leche",english:"milk",category:"food",level:"beginner"},
+  {spanish:"el huevo",english:"egg",category:"food",level:"beginner"},{spanish:"la carne",english:"meat",category:"food",level:"beginner"},
+  {spanish:"el puerco",english:"pork",category:"food",level:"beginner"},{spanish:"la ternera",english:"beef",category:"food",level:"beginner"},
+  {spanish:"la manzana",english:"apple",category:"food",level:"beginner"},{spanish:"la pera",english:"pear",category:"food",level:"beginner"},
+  {spanish:"el plátano",english:"banana",category:"food",level:"beginner"},{spanish:"la naranja",english:"orange (fruit)",category:"food",level:"beginner"},
+  {spanish:"la fresa",english:"strawberry",category:"food",level:"beginner"},{spanish:"la uva",english:"grape",category:"food",level:"beginner"},
+  {spanish:"el tomate",english:"tomato",category:"food",level:"beginner"},{spanish:"la zanahoria",english:"carrot",category:"food",level:"beginner"},
+  {spanish:"la patata",english:"potato",category:"food",level:"beginner"},{spanish:"la cebolla",english:"onion",category:"food",level:"beginner"},
+  {spanish:"la ensalada",english:"salad",category:"food",level:"beginner"},{spanish:"el arroz",english:"rice",category:"food",level:"beginner"},
+  {spanish:"la pasta",english:"pasta",category:"food",level:"beginner"},{spanish:"la sopa",english:"soup",category:"food",level:"beginner"},
+  {spanish:"el pastel",english:"cake",category:"food",level:"beginner"},{spanish:"el chocolate",english:"chocolate",category:"food",level:"beginner"},
+  {spanish:"el azúcar",english:"sugar",category:"food",level:"beginner"},{spanish:"la sal",english:"salt",category:"food",level:"beginner"},
+  {spanish:"la pimienta",english:"pepper",category:"food",level:"beginner"},{spanish:"el aceite",english:"oil",category:"food",level:"beginner"},
+  {spanish:"la comida",english:"meal",category:"food",level:"beginner"},{spanish:"el desayuno",english:"breakfast",category:"food",level:"beginner"},
+  {spanish:"el almuerzo",english:"lunch",category:"food",level:"beginner"},{spanish:"la cena",english:"dinner",category:"food",level:"beginner"},
+  {spanish:"el agua",english:"water",category:"drinks",level:"beginner"},{spanish:"el zumo",english:"juice",category:"drinks",level:"beginner"},
+  {spanish:"el café",english:"coffee",category:"drinks",level:"beginner"},{spanish:"el té",english:"tea",category:"drinks",level:"beginner"},
+  {spanish:"el vino",english:"wine",category:"drinks",level:"beginner"},{spanish:"la cerveza",english:"beer",category:"drinks",level:"beginner"},
+  {spanish:"el zumo de naranja",english:"orange juice",category:"drinks",level:"beginner"},
+  {spanish:"la ropa",english:"clothes",category:"clothing",level:"beginner"},{spanish:"la camisa",english:"shirt",category:"clothing",level:"beginner"},
+  {spanish:"los pantalones",english:"trousers",category:"clothing",level:"beginner"},{spanish:"el vestido",english:"dress",category:"clothing",level:"beginner"},
+  {spanish:"la falda",english:"skirt",category:"clothing",level:"beginner"},{spanish:"el abrigo",english:"coat",category:"clothing",level:"beginner"},
+  {spanish:"la chaqueta",english:"jacket",category:"clothing",level:"beginner"},{spanish:"el suéter",english:"sweater",category:"clothing",level:"beginner"},
+  {spanish:"los zapatos",english:"shoes",category:"clothing",level:"beginner"},{spanish:"los calcetines",english:"socks",category:"clothing",level:"beginner"},
+  {spanish:"el sombrero",english:"hat",category:"clothing",level:"beginner"},{spanish:"la corbata",english:"tie",category:"clothing",level:"beginner"},
+  {spanish:"los vaqueros",english:"jeans",category:"clothing",level:"beginner"},{spanish:"la camiseta",english:"t-shirt",category:"clothing",level:"beginner"},
+  {spanish:"el pantalón corto",english:"shorts",category:"clothing",level:"beginner"},{spanish:"los guantes",english:"gloves",category:"clothing",level:"beginner"},
+  {spanish:"la bufanda",english:"scarf",category:"clothing",level:"beginner"},
+  {spanish:"la casa",english:"house",category:"home",level:"beginner"},{spanish:"el apartamento",english:"apartment",category:"home",level:"beginner"},
+  {spanish:"la habitación",english:"room",category:"home",level:"beginner"},{spanish:"el dormitorio",english:"bedroom",category:"home",level:"beginner"},
+  {spanish:"la cocina",english:"kitchen",category:"home",level:"beginner"},{spanish:"el baño",english:"bathroom",category:"home",level:"beginner"},
+  {spanish:"el aseo",english:"toilet",category:"home",level:"beginner"},{spanish:"el salón",english:"living room",category:"home",level:"beginner"},
+  {spanish:"el comedor",english:"dining room",category:"home",level:"beginner"},{spanish:"el jardín",english:"garden",category:"home",level:"beginner"},
+  {spanish:"la puerta",english:"door",category:"home",level:"beginner"},{spanish:"la ventana",english:"window",category:"home",level:"beginner"},
+  {spanish:"la escalera",english:"stairs",category:"home",level:"beginner"},{spanish:"la cama",english:"bed",category:"home",level:"beginner"},
+  {spanish:"la silla",english:"chair",category:"home",level:"beginner"},{spanish:"la mesa",english:"table",category:"home",level:"beginner"},
+  {spanish:"el sofá",english:"sofa",category:"home",level:"beginner"},{spanish:"el armario",english:"wardrobe",category:"home",level:"beginner"},
+  {spanish:"el escritorio",english:"desk",category:"home",level:"beginner"},{spanish:"la lámpara",english:"lamp",category:"home",level:"beginner"},
+  {spanish:"el espejo",english:"mirror",category:"home",level:"beginner"},{spanish:"la alfombra",english:"rug",category:"home",level:"beginner"},
+  {spanish:"el frigorífico",english:"fridge",category:"home",level:"beginner"},{spanish:"el horno",english:"oven",category:"home",level:"beginner"},
+  {spanish:"ser",english:"to be (permanent)",category:"verbs",level:"beginner"},{spanish:"estar",english:"to be (temporary)",category:"verbs",level:"beginner"},
+  {spanish:"tener",english:"to have",category:"verbs",level:"beginner"},{spanish:"ir",english:"to go",category:"verbs",level:"beginner"},
+  {spanish:"hacer",english:"to do / to make",category:"verbs",level:"beginner"},{spanish:"decir",english:"to say",category:"verbs",level:"beginner"},
+  {spanish:"ver",english:"to see",category:"verbs",level:"beginner"},{spanish:"saber",english:"to know (fact)",category:"verbs",level:"beginner"},
+  {spanish:"poder",english:"to be able to",category:"verbs",level:"beginner"},{spanish:"querer",english:"to want",category:"verbs",level:"beginner"},
+  {spanish:"venir",english:"to come",category:"verbs",level:"beginner"},{spanish:"tomar",english:"to take",category:"verbs",level:"beginner"},
+  {spanish:"dar",english:"to give",category:"verbs",level:"beginner"},{spanish:"encontrar",english:"to find",category:"verbs",level:"beginner"},
+  {spanish:"hablar",english:"to speak",category:"verbs",level:"beginner"},{spanish:"comer",english:"to eat",category:"verbs",level:"beginner"},
+  {spanish:"beber",english:"to drink",category:"verbs",level:"beginner"},{spanish:"dormir",english:"to sleep",category:"verbs",level:"beginner"},
+  {spanish:"trabajar",english:"to work",category:"verbs",level:"beginner"},{spanish:"vivir",english:"to live",category:"verbs",level:"beginner"},
+  {spanish:"gustar",english:"to like",category:"verbs",level:"beginner"},{spanish:"leer",english:"to read",category:"verbs",level:"beginner"},
+  {spanish:"escribir",english:"to write",category:"verbs",level:"beginner"},{spanish:"escuchar",english:"to listen",category:"verbs",level:"beginner"},
+  {spanish:"mirar",english:"to watch",category:"verbs",level:"beginner"},{spanish:"comprar",english:"to buy",category:"verbs",level:"beginner"},
+  {spanish:"vender",english:"to sell",category:"verbs",level:"beginner"},{spanish:"abrir",english:"to open",category:"verbs",level:"beginner"},
+  {spanish:"cerrar",english:"to close",category:"verbs",level:"beginner"},{spanish:"empezar",english:"to begin",category:"verbs",level:"beginner"},
+  {spanish:"terminar",english:"to finish",category:"verbs",level:"beginner"},{spanish:"caminar",english:"to walk",category:"verbs",level:"beginner"},
+  {spanish:"correr",english:"to run",category:"verbs",level:"beginner"},{spanish:"jugar",english:"to play",category:"verbs",level:"beginner"},
+  {spanish:"cantar",english:"to sing",category:"verbs",level:"beginner"},{spanish:"bailar",english:"to dance",category:"verbs",level:"beginner"},
+  {spanish:"llamar",english:"to call",category:"verbs",level:"beginner"},{spanish:"responder",english:"to answer",category:"verbs",level:"beginner"},
+  {spanish:"buscar",english:"to look for",category:"verbs",level:"beginner"},{spanish:"ayudar",english:"to help",category:"verbs",level:"beginner"},
+  {spanish:"pensar",english:"to think",category:"verbs",level:"beginner"},{spanish:"creer",english:"to believe",category:"verbs",level:"beginner"},
+  {spanish:"conocer",english:"to know (person/place)",category:"verbs",level:"beginner"},{spanish:"usar",english:"to use",category:"verbs",level:"beginner"},
+  {spanish:"esperar",english:"to wait",category:"verbs",level:"beginner"},{spanish:"salir",english:"to leave / to go out",category:"verbs",level:"beginner"},
+  {spanish:"llegar",english:"to arrive",category:"verbs",level:"beginner"},{spanish:"entrar",english:"to enter",category:"verbs",level:"beginner"},
+  {spanish:"poner",english:"to put",category:"verbs",level:"beginner"},{spanish:"llevar",english:"to carry / to wear",category:"verbs",level:"beginner"},
+  {spanish:"nadar",english:"to swim",category:"verbs",level:"beginner"},{spanish:"cocinar",english:"to cook",category:"verbs",level:"beginner"},
+  {spanish:"conducir",english:"to drive",category:"verbs",level:"beginner"},{spanish:"viajar",english:"to travel",category:"verbs",level:"beginner"},
+  {spanish:"aprender",english:"to learn",category:"verbs",level:"beginner"},{spanish:"entender",english:"to understand",category:"verbs",level:"beginner"},
+  {spanish:"preguntar",english:"to ask",category:"verbs",level:"beginner"},{spanish:"mostrar",english:"to show",category:"verbs",level:"beginner"},
+  {spanish:"reír",english:"to laugh",category:"verbs",level:"beginner"},{spanish:"llorar",english:"to cry",category:"verbs",level:"beginner"},
+  {spanish:"caer",english:"to fall",category:"verbs",level:"beginner"},{spanish:"quedarse",english:"to stay",category:"verbs",level:"beginner"},
+  {spanish:"pagar",english:"to pay",category:"verbs",level:"beginner"},{spanish:"necesitar",english:"to need",category:"verbs",level:"beginner"},
+  {spanish:"grande",english:"big / tall",category:"adjectives",level:"beginner"},{spanish:"pequeño",english:"small / little",category:"adjectives",level:"beginner"},
+  {spanish:"bueno",english:"good",category:"adjectives",level:"beginner"},{spanish:"malo",english:"bad",category:"adjectives",level:"beginner"},
+  {spanish:"hermoso",english:"beautiful",category:"adjectives",level:"beginner"},{spanish:"bonito",english:"pretty",category:"adjectives",level:"beginner"},
+  {spanish:"viejo",english:"old",category:"adjectives",level:"beginner"},{spanish:"joven",english:"young",category:"adjectives",level:"beginner"},
+  {spanish:"nuevo",english:"new",category:"adjectives",level:"beginner"},{spanish:"largo",english:"long",category:"adjectives",level:"beginner"},
+  {spanish:"corto",english:"short",category:"adjectives",level:"beginner"},{spanish:"caliente",english:"hot / warm",category:"adjectives",level:"beginner"},
+  {spanish:"frío",english:"cold",category:"adjectives",level:"beginner"},{spanish:"fácil",english:"easy",category:"adjectives",level:"beginner"},
+  {spanish:"difícil",english:"difficult",category:"adjectives",level:"beginner"},{spanish:"rápido",english:"fast",category:"adjectives",level:"beginner"},
+  {spanish:"lento",english:"slow",category:"adjectives",level:"beginner"},{spanish:"fuerte",english:"strong",category:"adjectives",level:"beginner"},
+  {spanish:"débil",english:"weak",category:"adjectives",level:"beginner"},{spanish:"rico",english:"rich",category:"adjectives",level:"beginner"},
+  {spanish:"pobre",english:"poor",category:"adjectives",level:"beginner"},{spanish:"contento",english:"happy / pleased",category:"adjectives",level:"beginner"},
+  {spanish:"triste",english:"sad",category:"adjectives",level:"beginner"},{spanish:"cansado",english:"tired",category:"adjectives",level:"beginner"},
+  {spanish:"enfermo",english:"ill / sick",category:"adjectives",level:"beginner"},{spanish:"limpio",english:"clean",category:"adjectives",level:"beginner"},
+  {spanish:"sucio",english:"dirty",category:"adjectives",level:"beginner"},{spanish:"abierto",english:"open",category:"adjectives",level:"beginner"},
+  {spanish:"cerrado",english:"closed",category:"adjectives",level:"beginner"},{spanish:"lleno",english:"full",category:"adjectives",level:"beginner"},
+  {spanish:"vacío",english:"empty",category:"adjectives",level:"beginner"},{spanish:"solo",english:"alone",category:"adjectives",level:"beginner"},
+  {spanish:"libre",english:"free",category:"adjectives",level:"beginner"},{spanish:"ocupado",english:"busy",category:"adjectives",level:"beginner"},
+  {spanish:"feliz",english:"happy",category:"adjectives",level:"beginner"},{spanish:"simpático",english:"nice / friendly",category:"adjectives",level:"beginner"},
+  {spanish:"interesante",english:"interesting",category:"adjectives",level:"beginner"},
+  {spanish:"buenos días",english:"good morning",category:"greetings",level:"beginner"},{spanish:"buenas tardes",english:"good afternoon",category:"greetings",level:"beginner"},
+  {spanish:"buenas noches",english:"good night",category:"greetings",level:"beginner"},{spanish:"hola",english:"hello / hi",category:"greetings",level:"beginner"},
+  {spanish:"adiós",english:"goodbye",category:"greetings",level:"beginner"},{spanish:"gracias",english:"thank you",category:"greetings",level:"beginner"},
+  {spanish:"por favor",english:"please",category:"greetings",level:"beginner"},{spanish:"de nada",english:"you're welcome",category:"greetings",level:"beginner"},
+  {spanish:"perdón",english:"excuse me / sorry",category:"greetings",level:"beginner"},{spanish:"disculpe",english:"excuse me (formal)",category:"greetings",level:"beginner"},
+  {spanish:"mucho gusto",english:"nice to meet you",category:"greetings",level:"beginner"},
+  {spanish:"sí",english:"yes",category:"greetings",level:"beginner"},{spanish:"no",english:"no",category:"greetings",level:"beginner"},
+  {spanish:"hoy",english:"today",category:"time",level:"beginner"},{spanish:"mañana",english:"tomorrow",category:"time",level:"beginner"},
+  {spanish:"ayer",english:"yesterday",category:"time",level:"beginner"},{spanish:"ahora",english:"now",category:"time",level:"beginner"},
+  {spanish:"siempre",english:"always",category:"time",level:"beginner"},{spanish:"nunca",english:"never",category:"time",level:"beginner"},
+  {spanish:"a menudo",english:"often",category:"time",level:"beginner"},{spanish:"a veces",english:"sometimes",category:"time",level:"beginner"},
+  {spanish:"temprano",english:"early",category:"time",level:"beginner"},{spanish:"tarde",english:"late",category:"time",level:"beginner"},
+  {spanish:"la hora",english:"hour / time",category:"time",level:"beginner"},{spanish:"el minuto",english:"minute",category:"time",level:"beginner"},
+  {spanish:"el día",english:"day",category:"time",level:"beginner"},{spanish:"la semana",english:"week",category:"time",level:"beginner"},
+  {spanish:"el mes",english:"month",category:"time",level:"beginner"},{spanish:"el año",english:"year",category:"time",level:"beginner"},
+  {spanish:"la mañana",english:"morning",category:"time",level:"beginner"},{spanish:"el mediodía",english:"noon",category:"time",level:"beginner"},
+  {spanish:"la tarde",english:"afternoon",category:"time",level:"beginner"},{spanish:"la noche",english:"night",category:"time",level:"beginner"},
+  {spanish:"el fin de semana",english:"weekend",category:"time",level:"beginner"},
+  {spanish:"el sol",english:"sun",category:"weather",level:"beginner"},{spanish:"la lluvia",english:"rain",category:"weather",level:"beginner"},
+  {spanish:"la nieve",english:"snow",category:"weather",level:"beginner"},{spanish:"el viento",english:"wind",category:"weather",level:"beginner"},
+  {spanish:"la nube",english:"cloud",category:"weather",level:"beginner"},{spanish:"la tormenta",english:"storm",category:"weather",level:"beginner"},
+  {spanish:"la niebla",english:"fog",category:"weather",level:"beginner"},{spanish:"el calor",english:"heat",category:"weather",level:"beginner"},
+  {spanish:"hace buen tiempo",english:"the weather is nice",category:"weather",level:"beginner"},
+  {spanish:"está lloviendo",english:"it is raining",category:"weather",level:"beginner"},{spanish:"está nevando",english:"it is snowing",category:"weather",level:"beginner"},
+  {spanish:"el coche",english:"car",category:"transport",level:"beginner"},{spanish:"el tren",english:"train",category:"transport",level:"beginner"},
+  {spanish:"el autobús",english:"bus",category:"transport",level:"beginner"},{spanish:"el metro",english:"metro / subway",category:"transport",level:"beginner"},
+  {spanish:"el avión",english:"plane",category:"transport",level:"beginner"},{spanish:"el barco",english:"boat",category:"transport",level:"beginner"},
+  {spanish:"el taxi",english:"taxi",category:"transport",level:"beginner"},{spanish:"la bicicleta",english:"bicycle",category:"transport",level:"beginner"},
+  {spanish:"la moto",english:"motorcycle",category:"transport",level:"beginner"},{spanish:"la estación de tren",english:"train station",category:"transport",level:"beginner"},
+  {spanish:"el aeropuerto",english:"airport",category:"transport",level:"beginner"},{spanish:"la parada de autobús",english:"bus stop",category:"transport",level:"beginner"},
+  {spanish:"la escuela",english:"school",category:"places",level:"beginner"},{spanish:"la universidad",english:"university",category:"places",level:"beginner"},
+  {spanish:"la oficina",english:"office",category:"places",level:"beginner"},{spanish:"la tienda",english:"shop / store",category:"places",level:"beginner"},
+  {spanish:"el mercado",english:"market",category:"places",level:"beginner"},{spanish:"el supermercado",english:"supermarket",category:"places",level:"beginner"},
+  {spanish:"el restaurante",english:"restaurant",category:"places",level:"beginner"},{spanish:"el café",english:"café",category:"places",level:"beginner"},
+  {spanish:"el hospital",english:"hospital",category:"places",level:"beginner"},{spanish:"la farmacia",english:"pharmacy",category:"places",level:"beginner"},
+  {spanish:"el banco",english:"bank",category:"places",level:"beginner"},{spanish:"la iglesia",english:"church",category:"places",level:"beginner"},
+  {spanish:"la calle",english:"street",category:"places",level:"beginner"},{spanish:"la ciudad",english:"city",category:"places",level:"beginner"},
+  {spanish:"el pueblo",english:"village",category:"places",level:"beginner"},{spanish:"el país",english:"country",category:"places",level:"beginner"},
+  {spanish:"España",english:"Spain",category:"places",level:"beginner"},{spanish:"el parque",english:"park",category:"places",level:"beginner"},
+  {spanish:"la playa",english:"beach",category:"places",level:"beginner"},{spanish:"la montaña",english:"mountain",category:"places",level:"beginner"},
+  {spanish:"el bosque",english:"forest",category:"places",level:"beginner"},{spanish:"el mar",english:"sea",category:"places",level:"beginner"},
+  {spanish:"el río",english:"river",category:"places",level:"beginner"},
+  {spanish:"el libro",english:"book",category:"objects",level:"beginner"},{spanish:"el bolígrafo",english:"pen",category:"objects",level:"beginner"},
+  {spanish:"el lápiz",english:"pencil",category:"objects",level:"beginner"},{spanish:"el cuaderno",english:"notebook",category:"objects",level:"beginner"},
+  {spanish:"el teléfono",english:"phone",category:"objects",level:"beginner"},{spanish:"el ordenador",english:"computer",category:"objects",level:"beginner"},
+  {spanish:"la llave",english:"key",category:"objects",level:"beginner"},{spanish:"la bolsa",english:"bag",category:"objects",level:"beginner"},
+  {spanish:"el reloj",english:"watch",category:"objects",level:"beginner"},{spanish:"el dinero",english:"money",category:"objects",level:"beginner"},
+  {spanish:"la tarjeta",english:"card",category:"objects",level:"beginner"},{spanish:"el periódico",english:"newspaper",category:"objects",level:"beginner"},
+  {spanish:"la foto",english:"photo",category:"objects",level:"beginner"},{spanish:"la carta",english:"letter",category:"objects",level:"beginner"},
+  {spanish:"el regalo",english:"gift",category:"objects",level:"beginner"},{spanish:"el juguete",english:"toy",category:"objects",level:"beginner"},
+  // Professions (15)
+  {spanish:"el médico",english:"doctor",category:"professions",level:"beginner"},
+  {spanish:"el enfermero",english:"nurse",category:"professions",level:"beginner"},
+  {spanish:"el profesor",english:"teacher",category:"professions",level:"beginner"},
+  {spanish:"el estudiante",english:"student",category:"professions",level:"beginner"},
+  {spanish:"el cocinero",english:"cook",category:"professions",level:"beginner"},
+  {spanish:"el policía",english:"police officer",category:"professions",level:"beginner"},
+  {spanish:"el bombero",english:"firefighter",category:"professions",level:"beginner"},
+  {spanish:"el abogado",english:"lawyer",category:"professions",level:"beginner"},
+  {spanish:"el ingeniero",english:"engineer",category:"professions",level:"beginner"},
+  {spanish:"el camarero",english:"waiter",category:"professions",level:"beginner"},
+  {spanish:"el actor",english:"actor",category:"professions",level:"beginner"},
+  {spanish:"el dentista",english:"dentist",category:"professions",level:"beginner"},
+  {spanish:"el director",english:"manager",category:"professions",level:"beginner"},
+  {spanish:"el periodista",english:"journalist",category:"professions",level:"beginner"},
+  {spanish:"el conductor",english:"driver",category:"professions",level:"beginner"},
+  // School (15)
+  {spanish:"la clase",english:"classroom",category:"school",level:"beginner"},
+  {spanish:"la lección",english:"lesson",category:"school",level:"beginner"},
+  {spanish:"la tarea",english:"homework",category:"school",level:"beginner"},
+  {spanish:"el examen",english:"exam",category:"school",level:"beginner"},
+  {spanish:"la nota",english:"grade",category:"school",level:"beginner"},
+  {spanish:"la pizarra",english:"blackboard",category:"school",level:"beginner"},
+  {spanish:"la biblioteca",english:"library",category:"school",level:"beginner"},
+  {spanish:"el diccionario",english:"dictionary",category:"school",level:"beginner"},
+  {spanish:"la calculadora",english:"calculator",category:"school",level:"beginner"},
+  {spanish:"la regla",english:"ruler",category:"school",level:"beginner"},
+  {spanish:"la pregunta",english:"question",category:"school",level:"beginner"},
+  {spanish:"la respuesta",english:"answer",category:"school",level:"beginner"},
+  {spanish:"la asignatura",english:"subject",category:"school",level:"beginner"},
+  {spanish:"el error",english:"mistake",category:"school",level:"beginner"},
+  {spanish:"el recreo",english:"break / recess",category:"school",level:"beginner"},
+  // Question words (8)
+  {spanish:"quién",english:"who",category:"questions",level:"beginner"},
+  {spanish:"qué",english:"what",category:"questions",level:"beginner"},
+  {spanish:"dónde",english:"where",category:"questions",level:"beginner"},
+  {spanish:"cuándo",english:"when",category:"questions",level:"beginner"},
+  {spanish:"cómo",english:"how",category:"questions",level:"beginner"},
+  {spanish:"por qué",english:"why",category:"questions",level:"beginner"},
+  {spanish:"cuánto",english:"how much / how many",category:"questions",level:"beginner"},
+  {spanish:"cuál",english:"which",category:"questions",level:"beginner"},
+  // Essential words (12)
+  {spanish:"y",english:"and",category:"essentials",level:"beginner"},
+  {spanish:"o",english:"or",category:"essentials",level:"beginner"},
+  {spanish:"pero",english:"but",category:"essentials",level:"beginner"},
+  {spanish:"porque",english:"because",category:"essentials",level:"beginner"},
+  {spanish:"entonces",english:"so / therefore",category:"essentials",level:"beginner"},
+  {spanish:"si",english:"if",category:"essentials",level:"beginner"},
+  {spanish:"también",english:"also / too",category:"essentials",level:"beginner"},
+  {spanish:"muy",english:"very",category:"essentials",level:"beginner"},
+  {spanish:"bastante",english:"quite / enough",category:"essentials",level:"beginner"},
+  {spanish:"quizás",english:"maybe",category:"essentials",level:"beginner"},
+  {spanish:"claro",english:"of course",category:"essentials",level:"beginner"},
+  {spanish:"de acuerdo",english:"ok / agreed",category:"essentials",level:"beginner"},
+  // More verbs (25)
+  {spanish:"limpiar",english:"to clean",category:"verbs",level:"beginner"},
+  {spanish:"elegir",english:"to choose",category:"verbs",level:"beginner"},
+  {spanish:"ganar",english:"to win / to earn",category:"verbs",level:"beginner"},
+  {spanish:"perder",english:"to lose",category:"verbs",level:"beginner"},
+  {spanish:"olvidar",english:"to forget",category:"verbs",level:"beginner"},
+  {spanish:"recordar",english:"to remember",category:"verbs",level:"beginner"},
+  {spanish:"compartir",english:"to share",category:"verbs",level:"beginner"},
+  {spanish:"preparar",english:"to prepare",category:"verbs",level:"beginner"},
+  {spanish:"aceptar",english:"to accept",category:"verbs",level:"beginner"},
+  {spanish:"rechazar",english:"to refuse",category:"verbs",level:"beginner"},
+  {spanish:"explicar",english:"to explain",category:"verbs",level:"beginner"},
+  {spanish:"continuar",english:"to continue",category:"verbs",level:"beginner"},
+  {spanish:"volver",english:"to return",category:"verbs",level:"beginner"},
+  {spanish:"visitar",english:"to visit",category:"verbs",level:"beginner"},
+  {spanish:"cambiar",english:"to change",category:"verbs",level:"beginner"},
+  {spanish:"ofrecer",english:"to offer",category:"verbs",level:"beginner"},
+  {spanish:"permitir",english:"to allow",category:"verbs",level:"beginner"},
+  {spanish:"reservar",english:"to book / to reserve",category:"verbs",level:"beginner"},
+  {spanish:"repetir",english:"to repeat",category:"verbs",level:"beginner"},
+  {spanish:"invitar",english:"to invite",category:"verbs",level:"beginner"},
+  {spanish:"mejorar",english:"to improve",category:"verbs",level:"beginner"},
+  {spanish:"unirse",english:"to join",category:"verbs",level:"beginner"},
+  {spanish:"decidir",english:"to decide",category:"verbs",level:"beginner"},
+  {spanish:"intentar",english:"to try",category:"verbs",level:"beginner"},
+  {spanish:"lograr",english:"to succeed",category:"verbs",level:"beginner"},
+  // More adjectives (15)
+  {spanish:"inteligente",english:"intelligent",category:"adjectives",level:"beginner"},
+  {spanish:"moderno",english:"modern",category:"adjectives",level:"beginner"},
+  {spanish:"natural",english:"natural",category:"adjectives",level:"beginner"},
+  {spanish:"importante",english:"important",category:"adjectives",level:"beginner"},
+  {spanish:"diferente",english:"different",category:"adjectives",level:"beginner"},
+  {spanish:"perfecto",english:"perfect",category:"adjectives",level:"beginner"},
+  {spanish:"delicioso",english:"delicious",category:"adjectives",level:"beginner"},
+  {spanish:"peligroso",english:"dangerous",category:"adjectives",level:"beginner"},
+  {spanish:"tranquilo",english:"calm",category:"adjectives",level:"beginner"},
+  {spanish:"ruidoso",english:"noisy",category:"adjectives",level:"beginner"},
+  {spanish:"especial",english:"special",category:"adjectives",level:"beginner"},
+  {spanish:"último",english:"last",category:"adjectives",level:"beginner"},
+  {spanish:"primero",english:"first",category:"adjectives",level:"beginner"},
+  {spanish:"próximo",english:"next",category:"adjectives",level:"beginner"},
+  {spanish:"mismo",english:"same",category:"adjectives",level:"beginner"},
+  // More places (8)
+  {spanish:"el castillo",english:"castle",category:"places",level:"beginner"},
+  {spanish:"el museo",english:"museum",category:"places",level:"beginner"},
+  {spanish:"el teatro",english:"theatre",category:"places",level:"beginner"},
+  {spanish:"la piscina",english:"swimming pool",category:"places",level:"beginner"},
+  {spanish:"el estadio",english:"stadium",category:"places",level:"beginner"},
+  {spanish:"el centro comercial",english:"shopping centre",category:"places",level:"beginner"},
+  {spanish:"el hotel",english:"hotel",category:"places",level:"beginner"},
+  {spanish:"la catedral",english:"cathedral",category:"places",level:"beginner"},
+  // ── INTERMEDIATE (B1/B2) ──────────────────────────────────────────────────
+  // Work
+  {spanish:"el empleo",english:"employment",category:"work",level:"intermediate"},
+  {spanish:"el desempleo",english:"unemployment",category:"work",level:"intermediate"},
+  {spanish:"la empresa",english:"company",category:"work",level:"intermediate"},
+  {spanish:"el salario",english:"salary",category:"work",level:"intermediate"},
+  {spanish:"el contrato",english:"contract",category:"work",level:"intermediate"},
+  {spanish:"la carrera",english:"career",category:"work",level:"intermediate"},
+  {spanish:"la formación",english:"training",category:"work",level:"intermediate"},
+  {spanish:"el reclutamiento",english:"recruitment",category:"work",level:"intermediate"},
+  {spanish:"el puesto",english:"position",category:"work",level:"intermediate"},
+  {spanish:"el presupuesto",english:"budget",category:"work",level:"intermediate"},
+  {spanish:"el informe",english:"report",category:"work",level:"intermediate"},
+  {spanish:"el plazo",english:"deadline",category:"work",level:"intermediate"},
+  {spanish:"el objetivo",english:"objective",category:"work",level:"intermediate"},
+  {spanish:"la productividad",english:"productivity",category:"work",level:"intermediate"},
+  {spanish:"el contratista",english:"contractor",category:"work",level:"intermediate"},
+  {spanish:"el teletrabajo",english:"remote work",category:"work",level:"intermediate"},
+  {spanish:"el becario",english:"intern",category:"work",level:"intermediate"},
+  {spanish:"el bonus",english:"bonus",category:"work",level:"intermediate"},
+  {spanish:"el sindicato",english:"union",category:"work",level:"intermediate"},
+  {spanish:"la huelga",english:"strike",category:"work",level:"intermediate"},
+  {spanish:"el jefe",english:"employer",category:"work",level:"intermediate"},
+  {spanish:"despedir",english:"to fire",category:"work",level:"intermediate"},
+  {spanish:"dimitir",english:"to resign",category:"work",level:"intermediate"},
+  {spanish:"el currículum",english:"CV",category:"work",level:"intermediate"},
+  {spanish:"la entrevista de trabajo",english:"job interview",category:"work",level:"intermediate"},
+  {spanish:"postularse",english:"to apply",category:"work",level:"intermediate"},
+  {spanish:"la reunión",english:"meeting",category:"work",level:"intermediate"},
+  {spanish:"el equipo",english:"team",category:"work",level:"intermediate"},
+  {spanish:"el proyecto",english:"project",category:"work",level:"intermediate"},
+  {spanish:"el colega",english:"colleague",category:"work",level:"intermediate"},
+  // Politics
+  {spanish:"el presidente",english:"president",category:"politics",level:"intermediate"},
+  {spanish:"el parlamento",english:"parliament",category:"politics",level:"intermediate"},
+  {spanish:"la elección",english:"election",category:"politics",level:"intermediate"},
+  {spanish:"la ley",english:"law",category:"politics",level:"intermediate"},
+  {spanish:"el voto",english:"vote",category:"politics",level:"intermediate"},
+  {spanish:"el partido",english:"party",category:"politics",level:"intermediate"},
+  {spanish:"la democracia",english:"democracy",category:"politics",level:"intermediate"},
+  {spanish:"el ciudadano",english:"citizen",category:"politics",level:"intermediate"},
+  {spanish:"la constitución",english:"constitution",category:"politics",level:"intermediate"},
+  {spanish:"el ministro",english:"minister",category:"politics",level:"intermediate"},
+  {spanish:"el senado",english:"senate",category:"politics",level:"intermediate"},
+  {spanish:"el embajador",english:"ambassador",category:"politics",level:"intermediate"},
+  {spanish:"el acuerdo",english:"agreement",category:"politics",level:"intermediate"},
+  {spanish:"el tratado",english:"treaty",category:"politics",level:"intermediate"},
+  {spanish:"la reforma",english:"reform",category:"politics",level:"intermediate"},
+  {spanish:"el debate",english:"debate",category:"politics",level:"intermediate"},
+  {spanish:"el discurso",english:"speech",category:"politics",level:"intermediate"},
+  {spanish:"la campaña",english:"campaign",category:"politics",level:"intermediate"},
+  {spanish:"el candidato",english:"candidate",category:"politics",level:"intermediate"},
+  {spanish:"la oposición",english:"opposition",category:"politics",level:"intermediate"},
+  {spanish:"la coalición",english:"coalition",category:"politics",level:"intermediate"},
+  {spanish:"la libertad",english:"freedom",category:"politics",level:"intermediate"},
+  {spanish:"el derecho",english:"right",category:"politics",level:"intermediate"},
+  {spanish:"la frontera",english:"border",category:"politics",level:"intermediate"},
+  {spanish:"el gobierno",english:"government",category:"politics",level:"intermediate"},
+  // Health
+  {spanish:"el medicamento",english:"medication",category:"health",level:"intermediate"},
+  {spanish:"la operación",english:"operation",category:"health",level:"intermediate"},
+  {spanish:"la enfermedad",english:"illness",category:"health",level:"intermediate"},
+  {spanish:"el síntoma",english:"symptom",category:"health",level:"intermediate"},
+  {spanish:"el diagnóstico",english:"diagnosis",category:"health",level:"intermediate"},
+  {spanish:"el tratamiento",english:"treatment",category:"health",level:"intermediate"},
+  {spanish:"la recuperación",english:"recovery",category:"health",level:"intermediate"},
+  {spanish:"la cirugía",english:"surgery",category:"health",level:"intermediate"},
+  {spanish:"las urgencias",english:"emergency room",category:"health",level:"intermediate"},
+  {spanish:"la receta",english:"prescription",category:"health",level:"intermediate"},
+  {spanish:"la vacuna",english:"vaccine",category:"health",level:"intermediate"},
+  {spanish:"la alergia",english:"allergy",category:"health",level:"intermediate"},
+  {spanish:"el dolor",english:"pain",category:"health",level:"intermediate"},
+  {spanish:"la fiebre",english:"fever",category:"health",level:"intermediate"},
+  {spanish:"la tensión",english:"blood pressure",category:"health",level:"intermediate"},
+  {spanish:"la diabetes",english:"diabetes",category:"health",level:"intermediate"},
+  {spanish:"el cáncer",english:"cancer",category:"health",level:"intermediate"},
+  {spanish:"la terapia",english:"therapy",category:"health",level:"intermediate"},
+  {spanish:"la herida",english:"injury",category:"health",level:"intermediate"},
+  {spanish:"la fractura",english:"fracture",category:"health",level:"intermediate"},
+  {spanish:"el consultorio",english:"doctor's office",category:"health",level:"intermediate"},
+  {spanish:"la consulta",english:"consultation",category:"health",level:"intermediate"},
+  {spanish:"el seguro médico",english:"health insurance",category:"health",level:"intermediate"},
+  {spanish:"el farmacéutico",english:"pharmacist",category:"health",level:"intermediate"},
+  {spanish:"el remedio",english:"remedy",category:"health",level:"intermediate"},
+  {spanish:"la clínica",english:"clinic",category:"health",level:"intermediate"},
+  {spanish:"el cirujano",english:"surgeon",category:"health",level:"intermediate"},
+  {spanish:"el enfermero",english:"nurse",category:"health",level:"intermediate"},
+  {spanish:"el especialista",english:"specialist",category:"health",level:"intermediate"},
+  {spanish:"la radiografía",english:"X-ray",category:"health",level:"intermediate"},
+  // Environment
+  {spanish:"el medio ambiente",english:"environment",category:"environment",level:"intermediate"},
+  {spanish:"la contaminación",english:"pollution",category:"environment",level:"intermediate"},
+  {spanish:"el calentamiento",english:"warming",category:"environment",level:"intermediate"},
+  {spanish:"la ecología",english:"ecology",category:"environment",level:"intermediate"},
+  {spanish:"el reciclaje",english:"recycling",category:"environment",level:"intermediate"},
+  {spanish:"los residuos",english:"waste",category:"environment",level:"intermediate"},
+  {spanish:"la biodiversidad",english:"biodiversity",category:"environment",level:"intermediate"},
+  {spanish:"el desarrollo sostenible",english:"sustainable development",category:"environment",level:"intermediate"},
+  {spanish:"la huella de carbono",english:"carbon footprint",category:"environment",level:"intermediate"},
+  {spanish:"el aerogenerador",english:"wind turbine",category:"environment",level:"intermediate"},
+  {spanish:"la energía solar",english:"solar energy",category:"environment",level:"intermediate"},
+  {spanish:"las emisiones",english:"emissions",category:"environment",level:"intermediate"},
+  {spanish:"la sequía",english:"drought",category:"environment",level:"intermediate"},
+  {spanish:"la inundación",english:"flood",category:"environment",level:"intermediate"},
+  {spanish:"el terremoto",english:"earthquake",category:"environment",level:"intermediate"},
+  {spanish:"la atmósfera",english:"atmosphere",category:"environment",level:"intermediate"},
+  {spanish:"la capa de ozono",english:"ozone layer",category:"environment",level:"intermediate"},
+  {spanish:"la deforestación",english:"deforestation",category:"environment",level:"intermediate"},
+  {spanish:"la fauna",english:"wildlife",category:"environment",level:"intermediate"},
+  {spanish:"la flora",english:"flora",category:"environment",level:"intermediate"},
+  {spanish:"el compost",english:"compost",category:"environment",level:"intermediate"},
+  {spanish:"el efecto invernadero",english:"greenhouse effect",category:"environment",level:"intermediate"},
+  {spanish:"las energías renovables",english:"renewable energy",category:"environment",level:"intermediate"},
+  {spanish:"el vertido de petróleo",english:"oil spill",category:"environment",level:"intermediate"},
+  {spanish:"el cambio climático",english:"climate change",category:"environment",level:"intermediate"},
+  // Technology
+  {spanish:"la red",english:"network",category:"technology",level:"intermediate"},
+  {spanish:"el software",english:"software",category:"technology",level:"intermediate"},
+  {spanish:"la aplicación",english:"app",category:"technology",level:"intermediate"},
+  {spanish:"los datos",english:"data",category:"technology",level:"intermediate"},
+  {spanish:"lo digital",english:"digital",category:"technology",level:"intermediate"},
+  {spanish:"la inteligencia artificial",english:"artificial intelligence",category:"technology",level:"intermediate"},
+  {spanish:"el robot",english:"robot",category:"technology",level:"intermediate"},
+  {spanish:"descargar",english:"to download",category:"technology",level:"intermediate"},
+  {spanish:"la ciberseguridad",english:"cybersecurity",category:"technology",level:"intermediate"},
+  {spanish:"la innovación",english:"innovation",category:"technology",level:"intermediate"},
+  {spanish:"la pantalla",english:"screen",category:"technology",level:"intermediate"},
+  {spanish:"la tableta",english:"tablet",category:"technology",level:"intermediate"},
+  {spanish:"la copia de seguridad",english:"backup",category:"technology",level:"intermediate"},
+  {spanish:"la nube",english:"cloud",category:"technology",level:"intermediate"},
+  {spanish:"el algoritmo",english:"algorithm",category:"technology",level:"intermediate"},
+  {spanish:"la programación",english:"programming",category:"technology",level:"intermediate"},
+  {spanish:"el código",english:"code",category:"technology",level:"intermediate"},
+  {spanish:"la interfaz",english:"interface",category:"technology",level:"intermediate"},
+  {spanish:"la actualización",english:"update",category:"technology",level:"intermediate"},
+  {spanish:"el hackeo",english:"hacking",category:"technology",level:"intermediate"},
+  {spanish:"la contraseña",english:"password",category:"technology",level:"intermediate"},
+  {spanish:"el servidor",english:"server",category:"technology",level:"intermediate"},
+  {spanish:"la conexión",english:"connection",category:"technology",level:"intermediate"},
+  {spanish:"la red social",english:"social network",category:"technology",level:"intermediate"},
+  {spanish:"el streaming",english:"streaming",category:"technology",level:"intermediate"},
+  // Culture
+  {spanish:"la pintura",english:"painting",category:"culture",level:"intermediate"},
+  {spanish:"la escultura",english:"sculpture",category:"culture",level:"intermediate"},
+  {spanish:"la literatura",english:"literature",category:"culture",level:"intermediate"},
+  {spanish:"la novela",english:"novel",category:"culture",level:"intermediate"},
+  {spanish:"la poesía",english:"poetry",category:"culture",level:"intermediate"},
+  {spanish:"la exposición",english:"exhibition",category:"culture",level:"intermediate"},
+  {spanish:"la galería",english:"gallery",category:"culture",level:"intermediate"},
+  {spanish:"el concierto",english:"concert",category:"culture",level:"intermediate"},
+  {spanish:"el festival",english:"festival",category:"culture",level:"intermediate"},
+  {spanish:"el patrimonio",english:"heritage",category:"culture",level:"intermediate"},
+  {spanish:"la tradición",english:"tradition",category:"culture",level:"intermediate"},
+  {spanish:"la costumbre",english:"custom",category:"culture",level:"intermediate"},
+  {spanish:"el artista",english:"artist",category:"culture",level:"intermediate"},
+  {spanish:"el compositor",english:"composer",category:"culture",level:"intermediate"},
+  {spanish:"el director",english:"director",category:"culture",level:"intermediate"},
+  {spanish:"el personaje",english:"character",category:"culture",level:"intermediate"},
+  {spanish:"la obra maestra",english:"masterpiece",category:"culture",level:"intermediate"},
+  {spanish:"la crítica",english:"review",category:"culture",level:"intermediate"},
+  {spanish:"el espectáculo",english:"show",category:"culture",level:"intermediate"},
+  {spanish:"el escenario",english:"stage",category:"culture",level:"intermediate"},
+  {spanish:"el museo",english:"museum",category:"culture",level:"intermediate"},
+  {spanish:"la obra",english:"work of art",category:"culture",level:"intermediate"},
+  {spanish:"el cuadro",english:"painting",category:"culture",level:"intermediate"},
+  {spanish:"la danza",english:"dance",category:"culture",level:"intermediate"},
+  {spanish:"la ópera",english:"opera",category:"culture",level:"intermediate"},
+  // Travel
+  {spanish:"la reserva",english:"reservation",category:"travel",level:"intermediate"},
+  {spanish:"el billete",english:"ticket",category:"travel",level:"intermediate"},
+  {spanish:"el pasaporte",english:"passport",category:"travel",level:"intermediate"},
+  {spanish:"el visado",english:"visa",category:"travel",level:"intermediate"},
+  {spanish:"la aduana",english:"customs",category:"travel",level:"intermediate"},
+  {spanish:"la maleta",english:"suitcase",category:"travel",level:"intermediate"},
+  {spanish:"el itinerario",english:"itinerary",category:"travel",level:"intermediate"},
+  {spanish:"la excursión",english:"excursion",category:"travel",level:"intermediate"},
+  {spanish:"el guía",english:"guide",category:"travel",level:"intermediate"},
+  {spanish:"el destino",english:"destination",category:"travel",level:"intermediate"},
+  {spanish:"el alojamiento",english:"accommodation",category:"travel",level:"intermediate"},
+  {spanish:"la pensión",english:"guesthouse",category:"travel",level:"intermediate"},
+  {spanish:"el albergue",english:"inn",category:"travel",level:"intermediate"},
+  {spanish:"el alquiler",english:"rental",category:"travel",level:"intermediate"},
+  {spanish:"el crucero",english:"cruise",category:"travel",level:"intermediate"},
+  {spanish:"la escala",english:"stopover",category:"travel",level:"intermediate"},
+  {spanish:"la correspondencia",english:"connection",category:"travel",level:"intermediate"},
+  {spanish:"la estancia",english:"stay",category:"travel",level:"intermediate"},
+  {spanish:"el extranjero",english:"abroad",category:"travel",level:"intermediate"},
+  {spanish:"el turista",english:"tourist",category:"travel",level:"intermediate"},
+  {spanish:"el vuelo",english:"flight",category:"travel",level:"intermediate"},
+  {spanish:"el embarque",english:"boarding",category:"travel",level:"intermediate"},
+  {spanish:"el equipaje",english:"luggage",category:"travel",level:"intermediate"},
+  {spanish:"la tarjeta de embarque",english:"boarding pass",category:"travel",level:"intermediate"},
+  {spanish:"el retraso",english:"delay",category:"travel",level:"intermediate"},
+  // Economy
+  {spanish:"el mercado",english:"market",category:"economy",level:"intermediate"},
+  {spanish:"el comercio",english:"trade",category:"economy",level:"intermediate"},
+  {spanish:"el crecimiento",english:"growth",category:"economy",level:"intermediate"},
+  {spanish:"la inflación",english:"inflation",category:"economy",level:"intermediate"},
+  {spanish:"la recesión",english:"recession",category:"economy",level:"intermediate"},
+  {spanish:"el impuesto",english:"tax",category:"economy",level:"intermediate"},
+  {spanish:"la deuda",english:"debt",category:"economy",level:"intermediate"},
+  {spanish:"la inversión",english:"investment",category:"economy",level:"intermediate"},
+  {spanish:"la bolsa",english:"stock exchange",category:"economy",level:"intermediate"},
+  {spanish:"la acción",english:"share",category:"economy",level:"intermediate"},
+  {spanish:"el dividendo",english:"dividend",category:"economy",level:"intermediate"},
+  {spanish:"la moneda",english:"currency",category:"economy",level:"intermediate"},
+  {spanish:"la exportación",english:"export",category:"economy",level:"intermediate"},
+  {spanish:"la importación",english:"import",category:"economy",level:"intermediate"},
+  {spanish:"el consumidor",english:"consumer",category:"economy",level:"intermediate"},
+  {spanish:"la producción",english:"production",category:"economy",level:"intermediate"},
+  {spanish:"la industria",english:"industry",category:"economy",level:"intermediate"},
+  {spanish:"el libre comercio",english:"free trade",category:"economy",level:"intermediate"},
+  {spanish:"la competencia",english:"competition",category:"economy",level:"intermediate"},
+  {spanish:"el beneficio",english:"profit",category:"economy",level:"intermediate"},
+  {spanish:"la pérdida",english:"loss",category:"economy",level:"intermediate"},
+  {spanish:"los ingresos",english:"income",category:"economy",level:"intermediate"},
+  {spanish:"la riqueza",english:"wealth",category:"economy",level:"intermediate"},
+  {spanish:"el capital",english:"capital",category:"economy",level:"intermediate"},
+  {spanish:"el déficit",english:"deficit",category:"economy",level:"intermediate"},
+  // Emotions
+  {spanish:"la felicidad",english:"happiness",category:"emotions",level:"intermediate"},
+  {spanish:"la ansiedad",english:"anxiety",category:"emotions",level:"intermediate"},
+  {spanish:"el estrés",english:"stress",category:"emotions",level:"intermediate"},
+  {spanish:"la confianza",english:"confidence",category:"emotions",level:"intermediate"},
+  {spanish:"la vergüenza",english:"shame",category:"emotions",level:"intermediate"},
+  {spanish:"los celos",english:"jealousy",category:"emotions",level:"intermediate"},
+  {spanish:"el orgullo",english:"pride",category:"emotions",level:"intermediate"},
+  {spanish:"la nostalgia",english:"nostalgia",category:"emotions",level:"intermediate"},
+  {spanish:"la esperanza",english:"hope",category:"emotions",level:"intermediate"},
+  {spanish:"la desesperación",english:"despair",category:"emotions",level:"intermediate"},
+  {spanish:"el entusiasmo",english:"enthusiasm",category:"emotions",level:"intermediate"},
+  {spanish:"la decepción",english:"disappointment",category:"emotions",level:"intermediate"},
+  {spanish:"el miedo",english:"fear",category:"emotions",level:"intermediate"},
+  {spanish:"el odio",english:"hatred",category:"emotions",level:"intermediate"},
+  {spanish:"la compasión",english:"compassion",category:"emotions",level:"intermediate"},
+  {spanish:"el arrepentimiento",english:"regret",category:"emotions",level:"intermediate"},
+  {spanish:"la alegría",english:"joy",category:"emotions",level:"intermediate"},
+  {spanish:"la frustración",english:"frustration",category:"emotions",level:"intermediate"},
+  {spanish:"el alivio",english:"relief",category:"emotions",level:"intermediate"},
+  {spanish:"la impaciencia",english:"impatience",category:"emotions",level:"intermediate"},
+  {spanish:"la timidez",english:"shyness",category:"emotions",level:"intermediate"},
+  {spanish:"la soledad",english:"loneliness",category:"emotions",level:"intermediate"},
+  {spanish:"la culpa",english:"guilt",category:"emotions",level:"intermediate"},
+  {spanish:"el valor",english:"courage",category:"emotions",level:"intermediate"},
+  {spanish:"la generosidad",english:"generosity",category:"emotions",level:"intermediate"},
+  // Relationships
+  {spanish:"la amistad",english:"friendship",category:"relationships",level:"intermediate"},
+  {spanish:"la pareja",english:"couple",category:"relationships",level:"intermediate"},
+  {spanish:"el matrimonio",english:"marriage",category:"relationships",level:"intermediate"},
+  {spanish:"el divorcio",english:"divorce",category:"relationships",level:"intermediate"},
+  {spanish:"la separación",english:"separation",category:"relationships",level:"intermediate"},
+  {spanish:"el compromiso",english:"engagement",category:"relationships",level:"intermediate"},
+  {spanish:"la ruptura",english:"breakup",category:"relationships",level:"intermediate"},
+  {spanish:"la reconciliación",english:"reconciliation",category:"relationships",level:"intermediate"},
+  {spanish:"el conflicto",english:"conflict",category:"relationships",level:"intermediate"},
+  {spanish:"el respeto",english:"respect",category:"relationships",level:"intermediate"},
+  {spanish:"la solidaridad",english:"solidarity",category:"relationships",level:"intermediate"},
+  {spanish:"el apoyo mutuo",english:"mutual support",category:"relationships",level:"intermediate"},
+  {spanish:"el apoyo",english:"support",category:"relationships",level:"intermediate"},
+  {spanish:"la traición",english:"betrayal",category:"relationships",level:"intermediate"},
+  {spanish:"la lealtad",english:"loyalty",category:"relationships",level:"intermediate"},
+  {spanish:"la complicidad",english:"complicity",category:"relationships",level:"intermediate"},
+  {spanish:"el afecto",english:"affection",category:"relationships",level:"intermediate"},
+  {spanish:"la ternura",english:"tenderness",category:"relationships",level:"intermediate"},
+  {spanish:"el compañero",english:"partner",category:"relationships",level:"intermediate"},
+  {spanish:"la confianza mutua",english:"mutual trust",category:"relationships",level:"intermediate"},
+  // Sports
+  {spanish:"el campeonato",english:"championship",category:"sports",level:"intermediate"},
+  {spanish:"la competición",english:"competition",category:"sports",level:"intermediate"},
+  {spanish:"el entrenamiento",english:"training",category:"sports",level:"intermediate"},
+  {spanish:"el árbitro",english:"referee",category:"sports",level:"intermediate"},
+  {spanish:"la victoria",english:"victory",category:"sports",level:"intermediate"},
+  {spanish:"la derrota",english:"defeat",category:"sports",level:"intermediate"},
+  {spanish:"el torneo",english:"tournament",category:"sports",level:"intermediate"},
+  {spanish:"la medalla",english:"medal",category:"sports",level:"intermediate"},
+  {spanish:"el atleta",english:"athlete",category:"sports",level:"intermediate"},
+  {spanish:"el récord",english:"record",category:"sports",level:"intermediate"},
+  {spanish:"el penalti",english:"penalty",category:"sports",level:"intermediate"},
+  {spanish:"el gol",english:"goal",category:"sports",level:"intermediate"},
+  {spanish:"el campo",english:"field",category:"sports",level:"intermediate"},
+  {spanish:"la natación",english:"swimming",category:"sports",level:"intermediate"},
+  {spanish:"el ciclismo",english:"cycling",category:"sports",level:"intermediate"},
+  {spanish:"el tenis",english:"tennis",category:"sports",level:"intermediate"},
+  {spanish:"el fútbol",english:"football",category:"sports",level:"intermediate"},
+  {spanish:"el rugby",english:"rugby",category:"sports",level:"intermediate"},
+  {spanish:"el boxeo",english:"boxing",category:"sports",level:"intermediate"},
+  {spanish:"la escalada",english:"climbing",category:"sports",level:"intermediate"},
+  {spanish:"la carrera",english:"race",category:"sports",level:"intermediate"},
+  {spanish:"el salto",english:"jump",category:"sports",level:"intermediate"},
+  {spanish:"el lanzamiento",english:"throw",category:"sports",level:"intermediate"},
+  {spanish:"el sprint",english:"sprint",category:"sports",level:"intermediate"},
+  {spanish:"el entrenador",english:"coach",category:"sports",level:"intermediate"},
+  // Science
+  {spanish:"el experimento",english:"experiment",category:"science",level:"intermediate"},
+  {spanish:"la investigación",english:"research",category:"science",level:"intermediate"},
+  {spanish:"el laboratorio",english:"laboratory",category:"science",level:"intermediate"},
+  {spanish:"la teoría",english:"theory",category:"science",level:"intermediate"},
+  {spanish:"la hipótesis",english:"hypothesis",category:"science",level:"intermediate"},
+  {spanish:"el descubrimiento",english:"discovery",category:"science",level:"intermediate"},
+  {spanish:"la biología",english:"biology",category:"science",level:"intermediate"},
+  {spanish:"la química",english:"chemistry",category:"science",level:"intermediate"},
+  {spanish:"la física",english:"physics",category:"science",level:"intermediate"},
+  {spanish:"la astronomía",english:"astronomy",category:"science",level:"intermediate"},
+  {spanish:"la geología",english:"geology",category:"science",level:"intermediate"},
+  {spanish:"la evolución",english:"evolution",category:"science",level:"intermediate"},
+  {spanish:"la genética",english:"genetics",category:"science",level:"intermediate"},
+  {spanish:"la célula",english:"cell",category:"science",level:"intermediate"},
+  {spanish:"el átomo",english:"atom",category:"science",level:"intermediate"},
+  {spanish:"la molécula",english:"molecule",category:"science",level:"intermediate"},
+  {spanish:"la gravedad",english:"gravity",category:"science",level:"intermediate"},
+  {spanish:"la electricidad",english:"electricity",category:"science",level:"intermediate"},
+  {spanish:"el microscopio",english:"microscope",category:"science",level:"intermediate"},
+  {spanish:"el ADN",english:"DNA",category:"science",level:"intermediate"},
+  // Education (advanced)
+  {spanish:"el bachillerato",english:"baccalaureate",category:"education_adv",level:"intermediate"},
+  {spanish:"el diploma",english:"diploma",category:"education_adv",level:"intermediate"},
+  {spanish:"los estudios",english:"studies",category:"education_adv",level:"intermediate"},
+  {spanish:"la oposición",english:"competitive exam",category:"education_adv",level:"intermediate"},
+  {spanish:"el plan de estudios",english:"curriculum",category:"education_adv",level:"intermediate"},
+  {spanish:"la asignatura",english:"subject",category:"education_adv",level:"intermediate"},
+  {spanish:"el conocimiento",english:"knowledge",category:"education_adv",level:"intermediate"},
+  {spanish:"la competencia",english:"skill",category:"education_adv",level:"intermediate"},
+  {spanish:"el aprendizaje",english:"learning",category:"education_adv",level:"intermediate"},
+  {spanish:"la beca",english:"scholarship",category:"education_adv",level:"intermediate"},
+  {spanish:"la tesis",english:"thesis",category:"education_adv",level:"intermediate"},
+  {spanish:"la facultad",english:"faculty",category:"education_adv",level:"intermediate"},
+  {spanish:"el trabajo de fin de máster",english:"dissertation",category:"education_adv",level:"intermediate"},
+  {spanish:"el anfiteatro",english:"lecture hall",category:"education_adv",level:"intermediate"},
+  {spanish:"la clase magistral",english:"lecture",category:"education_adv",level:"intermediate"},
+  {spanish:"el máster",english:"master's degree",category:"education_adv",level:"intermediate"},
+  {spanish:"la licenciatura",english:"bachelor's degree",category:"education_adv",level:"intermediate"},
+  {spanish:"el doctorado",english:"doctorate",category:"education_adv",level:"intermediate"},
+  // Food (advanced)
+  {spanish:"la receta",english:"recipe",category:"food_adv",level:"intermediate"},
+  {spanish:"el ingrediente",english:"ingredient",category:"food_adv",level:"intermediate"},
+  {spanish:"la especia",english:"spice",category:"food_adv",level:"intermediate"},
+  {spanish:"la salsa",english:"sauce",category:"food_adv",level:"intermediate"},
+  {spanish:"el entrante",english:"starter",category:"food_adv",level:"intermediate"},
+  {spanish:"la gastronomía",english:"gastronomy",category:"food_adv",level:"intermediate"},
+  {spanish:"el régimen",english:"diet",category:"food_adv",level:"intermediate"},
+  {spanish:"el vegetariano",english:"vegetarian",category:"food_adv",level:"intermediate"},
+  {spanish:"el vegano",english:"vegan",category:"food_adv",level:"intermediate"},
+  {spanish:"lo ecológico",english:"organic",category:"food_adv",level:"intermediate"},
+  {spanish:"el nutriente",english:"nutrient",category:"food_adv",level:"intermediate"},
+  {spanish:"la caloría",english:"calorie",category:"food_adv",level:"intermediate"},
+  {spanish:"el sabor",english:"flavour",category:"food_adv",level:"intermediate"},
+  {spanish:"la textura",english:"texture",category:"food_adv",level:"intermediate"},
+  {spanish:"el aroma",english:"aroma",category:"food_adv",level:"intermediate"},
+  {spanish:"el plato principal",english:"main course",category:"food_adv",level:"intermediate"},
+  {spanish:"el bufé",english:"buffet",category:"food_adv",level:"intermediate"},
+  {spanish:"la marinada",english:"marinade",category:"food_adv",level:"intermediate"},
+  {spanish:"el condimento",english:"condiment",category:"food_adv",level:"intermediate"},
+  {spanish:"la levadura",english:"yeast",category:"food_adv",level:"intermediate"},
+  // Housing
+  {spanish:"la vivienda",english:"housing",category:"housing",level:"intermediate"},
+  {spanish:"el alquiler",english:"rent",category:"housing",level:"intermediate"},
+  {spanish:"el propietario",english:"landlord",category:"housing",level:"intermediate"},
+  {spanish:"el inquilino",english:"tenant",category:"housing",level:"intermediate"},
+  {spanish:"el contrato de arrendamiento",english:"lease",category:"housing",level:"intermediate"},
+  {spanish:"el edificio",english:"apartment building",category:"housing",level:"intermediate"},
+  {spanish:"la residencia",english:"residence",category:"housing",level:"intermediate"},
+  {spanish:"el barrio",english:"neighbourhood",category:"housing",level:"intermediate"},
+  {spanish:"la reforma",english:"renovation",category:"housing",level:"intermediate"},
+  {spanish:"el arquitecto",english:"architect",category:"housing",level:"intermediate"},
+  {spanish:"la construcción",english:"construction",category:"housing",level:"intermediate"},
+  {spanish:"el ascensor",english:"lift",category:"housing",level:"intermediate"},
+  {spanish:"la comunidad de propietarios",english:"co-ownership",category:"housing",level:"intermediate"},
+  {spanish:"los gastos de comunidad",english:"service charges",category:"housing",level:"intermediate"},
+  {spanish:"la mudanza",english:"moving",category:"housing",level:"intermediate"},
+  {spanish:"amueblado",english:"furnished",category:"housing",level:"intermediate"},
+  {spanish:"el sótano",english:"basement",category:"housing",level:"intermediate"},
+  {spanish:"el ático",english:"attic",category:"housing",level:"intermediate"},
+  {spanish:"la terraza",english:"terrace",category:"housing",level:"intermediate"},
+  {spanish:"el vecindario",english:"neighbourhood",category:"housing",level:"intermediate"},
+  // Law
+  {spanish:"el tribunal",english:"court",category:"law",level:"intermediate"},
+  {spanish:"el juez",english:"judge",category:"law",level:"intermediate"},
+  {spanish:"el abogado",english:"lawyer",category:"law",level:"intermediate"},
+  {spanish:"el juicio",english:"trial",category:"law",level:"intermediate"},
+  {spanish:"el acusado",english:"accused",category:"law",level:"intermediate"},
+  {spanish:"el testigo",english:"witness",category:"law",level:"intermediate"},
+  {spanish:"la sentencia",english:"sentence",category:"law",level:"intermediate"},
+  {spanish:"la pena",english:"punishment",category:"law",level:"intermediate"},
+  {spanish:"la multa",english:"fine",category:"law",level:"intermediate"},
+  {spanish:"la cárcel",english:"prison",category:"law",level:"intermediate"},
+  {spanish:"el crimen",english:"crime",category:"law",level:"intermediate"},
+  {spanish:"la víctima",english:"victim",category:"law",level:"intermediate"},
+  {spanish:"la investigación",english:"investigation",category:"law",level:"intermediate"},
+  {spanish:"la prueba",english:"evidence",category:"law",level:"intermediate"},
+  {spanish:"el reglamento",english:"regulation",category:"law",level:"intermediate"},
+  {spanish:"la denuncia",english:"complaint",category:"law",level:"intermediate"},
+  {spanish:"la detención",english:"arrest",category:"law",level:"intermediate"},
+  {spanish:"la pena de muerte",english:"death penalty",category:"law",level:"intermediate"},
+  {spanish:"la inocencia",english:"innocence",category:"law",level:"intermediate"},
+  {spanish:"el infractor",english:"offender",category:"law",level:"intermediate"},
+  // Media
+  {spanish:"el periódico",english:"newspaper",category:"media",level:"intermediate"},
+  {spanish:"el reportaje",english:"report",category:"media",level:"intermediate"},
+  {spanish:"el periodista",english:"journalist",category:"media",level:"intermediate"},
+  {spanish:"el programa",english:"programme",category:"media",level:"intermediate"},
+  {spanish:"el canal",english:"channel",category:"media",level:"intermediate"},
+  {spanish:"el artículo",english:"article",category:"media",level:"intermediate"},
+  {spanish:"la entrevista",english:"interview",category:"media",level:"intermediate"},
+  {spanish:"el titular",english:"headline",category:"media",level:"intermediate"},
+  {spanish:"la publicidad",english:"advertising",category:"media",level:"intermediate"},
+  {spanish:"el suscriptor",english:"subscriber",category:"media",level:"intermediate"},
+  {spanish:"el comentario",english:"comment",category:"media",level:"intermediate"},
+  {spanish:"el blog",english:"blog",category:"media",level:"intermediate"},
+  {spanish:"el podcast",english:"podcast",category:"media",level:"intermediate"},
+  {spanish:"la emisión",english:"broadcast",category:"media",level:"intermediate"},
+  {spanish:"el directo",english:"live broadcast",category:"media",level:"intermediate"},
+  {spanish:"la censura",english:"censorship",category:"media",level:"intermediate"},
+  {spanish:"la libertad de prensa",english:"press freedom",category:"media",level:"intermediate"},
+  {spanish:"el editor",english:"editor",category:"media",level:"intermediate"},
+  {spanish:"la redacción",english:"newsroom",category:"media",level:"intermediate"},
+  {spanish:"el corresponsal",english:"correspondent",category:"media",level:"intermediate"},
+  // Advanced verbs
+  {spanish:"obtener",english:"to obtain",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"resolver",english:"to resolve",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"alcanzar",english:"to reach",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"descuidar",english:"to neglect",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"cumplir",english:"to accomplish",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"realizar",english:"to achieve",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"mantener",english:"to maintain",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"desarrollar",english:"to develop",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"proponer",english:"to propose",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"establecer",english:"to establish",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"apoyar",english:"to support",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"promover",english:"to promote",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"reconocer",english:"to recognise",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"analizar",english:"to analyse",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"evaluar",english:"to evaluate",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"mejorar",english:"to improve",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"planificar",english:"to plan",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"gestionar",english:"to manage",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"adaptarse",english:"to adapt",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"prevenir",english:"to prevent",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"supervisar",english:"to monitor",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"participar",english:"to participate",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"contribuir",english:"to contribute",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"aprobar",english:"to approve",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"exigir",english:"to demand",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"asesorar",english:"to advise",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"proteger",english:"to protect",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"reducir",english:"to reduce",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"aumentar",english:"to increase",category:"advanced_verbs",level:"intermediate"},
+  {spanish:"invertir",english:"to invest",category:"advanced_verbs",level:"intermediate"},
+  // Advanced adjectives
+  {spanish:"complejo",english:"complex",category:"advanced_adj",level:"intermediate"},
+  {spanish:"preciso",english:"precise",category:"advanced_adj",level:"intermediate"},
+  {spanish:"eficaz",english:"effective",category:"advanced_adj",level:"intermediate"},
+  {spanish:"considerable",english:"considerable",category:"advanced_adj",level:"intermediate"},
+  {spanish:"fundamental",english:"fundamental",category:"advanced_adj",level:"intermediate"},
+  {spanish:"esencial",english:"essential",category:"advanced_adj",level:"intermediate"},
+  {spanish:"notable",english:"remarkable",category:"advanced_adj",level:"intermediate"},
+  {spanish:"excepcional",english:"exceptional",category:"advanced_adj",level:"intermediate"},
+  {spanish:"profundo",english:"deep",category:"advanced_adj",level:"intermediate"},
+  {spanish:"superficial",english:"superficial",category:"advanced_adj",level:"intermediate"},
+  {spanish:"sincero",english:"sincere",category:"advanced_adj",level:"intermediate"},
+  {spanish:"ambicioso",english:"ambitious",category:"advanced_adj",level:"intermediate"},
+  {spanish:"responsable",english:"responsible",category:"advanced_adj",level:"intermediate"},
+  {spanish:"creativo",english:"creative",category:"advanced_adj",level:"intermediate"},
+  {spanish:"lógico",english:"logical",category:"advanced_adj",level:"intermediate"},
+  {spanish:"riguroso",english:"rigorous",category:"advanced_adj",level:"intermediate"},
+  {spanish:"equitativo",english:"fair",category:"advanced_adj",level:"intermediate"},
+  {spanish:"sostenible",english:"sustainable",category:"advanced_adj",level:"intermediate"},
+  {spanish:"progresivo",english:"progressive",category:"advanced_adj",level:"intermediate"},
+  {spanish:"contemporáneo",english:"contemporary",category:"advanced_adj",level:"intermediate"},
+  {spanish:"innovador",english:"innovative",category:"advanced_adj",level:"intermediate"},
+  {spanish:"pertinente",english:"relevant",category:"advanced_adj",level:"intermediate"},
+  {spanish:"legítimo",english:"legitimate",category:"advanced_adj",level:"intermediate"},
+  {spanish:"global",english:"global",category:"advanced_adj",level:"intermediate"},
+  {spanish:"específico",english:"specific",category:"advanced_adj",level:"intermediate"},
+  // ── CHALLENGING (C1/C2) ──────────────────────────────────────────────────
+  // Abstract concepts
+  {spanish:"el matiz",english:"nuance",category:"abstract",level:"expert"},
+  {spanish:"la sutileza",english:"subtlety",category:"abstract",level:"expert"},
+  {spanish:"la paradoja",english:"paradox",category:"abstract",level:"expert"},
+  {spanish:"el dilema",english:"dilemma",category:"abstract",level:"expert"},
+  {spanish:"la ambigüedad",english:"ambiguity",category:"abstract",level:"expert"},
+  {spanish:"la restricción",english:"constraint",category:"abstract",level:"expert"},
+  {spanish:"el desfase",english:"gap",category:"abstract",level:"expert"},
+  {spanish:"el prejuicio",english:"prejudice",category:"abstract",level:"expert"},
+  {spanish:"el estereotipo",english:"stereotype",category:"abstract",level:"expert"},
+  {spanish:"el cliché",english:"cliché",category:"abstract",level:"expert"},
+  {spanish:"el eufemismo",english:"euphemism",category:"abstract",level:"expert"},
+  {spanish:"la alegoría",english:"allegory",category:"abstract",level:"expert"},
+  {spanish:"la metáfora",english:"metaphor",category:"abstract",level:"expert"},
+  {spanish:"la ironía",english:"irony",category:"abstract",level:"expert"},
+  {spanish:"el sarcasmo",english:"sarcasm",category:"abstract",level:"expert"},
+  {spanish:"el cinismo",english:"cynicism",category:"abstract",level:"expert"},
+  {spanish:"el empirismo",english:"empiricism",category:"abstract",level:"expert"},
+  {spanish:"el racionalismo",english:"rationalism",category:"abstract",level:"expert"},
+  {spanish:"el dogmatismo",english:"dogmatism",category:"abstract",level:"expert"},
+  {spanish:"el pragmatismo",english:"pragmatism",category:"abstract",level:"expert"},
+  {spanish:"el relativismo",english:"relativism",category:"abstract",level:"expert"},
+  {spanish:"el nihilismo",english:"nihilism",category:"abstract",level:"expert"},
+  {spanish:"el escepticismo",english:"scepticism",category:"abstract",level:"expert"},
+  {spanish:"la dialéctica",english:"dialectics",category:"abstract",level:"expert"},
+  {spanish:"el sofisma",english:"sophism",category:"abstract",level:"expert"},
+  {spanish:"la antítesis",english:"antithesis",category:"abstract",level:"expert"},
+  {spanish:"el axioma",english:"axiom",category:"abstract",level:"expert"},
+  {spanish:"el postulado",english:"postulate",category:"abstract",level:"expert"},
+  {spanish:"el paradigma",english:"paradigm",category:"abstract",level:"expert"},
+  {spanish:"el equívoco",english:"equivoque",category:"abstract",level:"expert"},
+  // Politics (advanced)
+  {spanish:"el plebiscito",english:"plebiscite",category:"politics_adv",level:"expert"},
+  {spanish:"la democracia directa",english:"direct democracy",category:"politics_adv",level:"expert"},
+  {spanish:"el sufragio universal",english:"universal suffrage",category:"politics_adv",level:"expert"},
+  {spanish:"el estado de derecho",english:"rule of law",category:"politics_adv",level:"expert"},
+  {spanish:"la separación de poderes",english:"separation of powers",category:"politics_adv",level:"expert"},
+  {spanish:"la laicidad",english:"secularism",category:"politics_adv",level:"expert"},
+  {spanish:"el federalismo",english:"federalism",category:"politics_adv",level:"expert"},
+  {spanish:"la descentralización",english:"decentralisation",category:"politics_adv",level:"expert"},
+  {spanish:"la soberanía",english:"sovereignty",category:"politics_adv",level:"expert"},
+  {spanish:"la autonomía",english:"autonomy",category:"politics_adv",level:"expert"},
+  {spanish:"la geopolítica",english:"geopolitics",category:"politics_adv",level:"expert"},
+  {spanish:"la globalización",english:"globalisation",category:"politics_adv",level:"expert"},
+  {spanish:"el multilateralismo",english:"multilateralism",category:"politics_adv",level:"expert"},
+  {spanish:"la no injerencia",english:"non-interference",category:"politics_adv",level:"expert"},
+  {spanish:"el embargo",english:"embargo",category:"politics_adv",level:"expert"},
+  {spanish:"la ratificación",english:"ratification",category:"politics_adv",level:"expert"},
+  {spanish:"la abstención",english:"abstention",category:"politics_adv",level:"expert"},
+  {spanish:"la disolución",english:"dissolution",category:"politics_adv",level:"expert"},
+  {spanish:"el mandato",english:"mandate",category:"politics_adv",level:"expert"},
+  {spanish:"la impunidad",english:"impunity",category:"politics_adv",level:"expert"},
+  {spanish:"la disidencia",english:"dissidence",category:"politics_adv",level:"expert"},
+  {spanish:"el totalitarismo",english:"totalitarianism",category:"politics_adv",level:"expert"},
+  {spanish:"la democracia participativa",english:"participatory democracy",category:"politics_adv",level:"expert"},
+  {spanish:"la oligarquía",english:"oligarchy",category:"politics_adv",level:"expert"},
+  {spanish:"la tecnocracia",english:"technocracy",category:"politics_adv",level:"expert"},
+  {spanish:"el referéndum",english:"referendum",category:"politics_adv",level:"expert"},
+  {spanish:"el bicameralismo",english:"bicameralism",category:"politics_adv",level:"expert"},
+  {spanish:"la desconfianza",english:"mistrust",category:"politics_adv",level:"expert"},
+  {spanish:"la representación proporcional",english:"proportional representation",category:"politics_adv",level:"expert"},
+  {spanish:"la representatividad",english:"representativeness",category:"politics_adv",level:"expert"},
+  // Law (advanced)
+  {spanish:"la jurisprudencia",english:"case law",category:"law_adv",level:"expert"},
+  {spanish:"la constitucionalidad",english:"constitutionality",category:"law_adv",level:"expert"},
+  {spanish:"la prerrogativa",english:"prerogative",category:"law_adv",level:"expert"},
+  {spanish:"la jurisdicción",english:"jurisdiction",category:"law_adv",level:"expert"},
+  {spanish:"el litigio",english:"dispute",category:"law_adv",level:"expert"},
+  {spanish:"el contencioso",english:"litigation",category:"law_adv",level:"expert"},
+  {spanish:"el recurso",english:"legal appeal",category:"law_adv",level:"expert"},
+  {spanish:"la casación",english:"annulment",category:"law_adv",level:"expert"},
+  {spanish:"el imputado",english:"defendant",category:"law_adv",level:"expert"},
+  {spanish:"la absolución",english:"acquittal",category:"law_adv",level:"expert"},
+  {spanish:"las circunstancias atenuantes",english:"mitigating circumstances",category:"law_adv",level:"expert"},
+  {spanish:"las circunstancias agravantes",english:"aggravating circumstances",category:"law_adv",level:"expert"},
+  {spanish:"la reincidencia",english:"reoffending",category:"law_adv",level:"expert"},
+  {spanish:"la presunción de inocencia",english:"presumption of innocence",category:"law_adv",level:"expert"},
+  {spanish:"la inmunidad",english:"immunity",category:"law_adv",level:"expert"},
+  {spanish:"la extradición",english:"extradition",category:"law_adv",level:"expert"},
+  {spanish:"la prescripción",english:"statute of limitations",category:"law_adv",level:"expert"},
+  {spanish:"la amnistía",english:"amnesty",category:"law_adv",level:"expert"},
+  {spanish:"el indulto",english:"pardon",category:"law_adv",level:"expert"},
+  {spanish:"el fiscal",english:"prosecutor",category:"law_adv",level:"expert"},
+  {spanish:"el alegato",english:"plea",category:"law_adv",level:"expert"},
+  {spanish:"el escrito de acusación",english:"indictment",category:"law_adv",level:"expert"},
+  {spanish:"el veredicto",english:"verdict",category:"law_adv",level:"expert"},
+  {spanish:"la apelación",english:"appeal",category:"law_adv",level:"expert"},
+  {spanish:"el tribunal de justicia",english:"crown court",category:"law_adv",level:"expert"},
+  {spanish:"el juez de instrucción",english:"investigating judge",category:"law_adv",level:"expert"},
+  {spanish:"la libertad provisional",english:"bail",category:"law_adv",level:"expert"},
+  {spanish:"los daños y perjuicios",english:"damages",category:"law_adv",level:"expert"},
+  {spanish:"el delito",english:"offence",category:"law_adv",level:"expert"},
+  {spanish:"el recurso de amparo",english:"constitutional appeal",category:"law_adv",level:"expert"},
+  // Science (advanced)
+  {spanish:"el genoma",english:"genome",category:"science_adv",level:"expert"},
+  {spanish:"la secuenciación",english:"sequencing",category:"science_adv",level:"expert"},
+  {spanish:"la nanotecnología",english:"nanotechnology",category:"science_adv",level:"expert"},
+  {spanish:"la biotecnología",english:"biotechnology",category:"science_adv",level:"expert"},
+  {spanish:"la robótica",english:"robotics",category:"science_adv",level:"expert"},
+  {spanish:"la cibernética",english:"cybernetics",category:"science_adv",level:"expert"},
+  {spanish:"el cuántico",english:"quantum",category:"science_adv",level:"expert"},
+  {spanish:"el semiconductor",english:"semiconductor",category:"science_adv",level:"expert"},
+  {spanish:"el superconductor",english:"superconductor",category:"science_adv",level:"expert"},
+  {spanish:"la neurociencia",english:"neuroscience",category:"science_adv",level:"expert"},
+  {spanish:"la epigenética",english:"epigenetics",category:"science_adv",level:"expert"},
+  {spanish:"el microbioma",english:"microbiome",category:"science_adv",level:"expert"},
+  {spanish:"la entropía",english:"entropy",category:"science_adv",level:"expert"},
+  {spanish:"la termodinámica",english:"thermodynamics",category:"science_adv",level:"expert"},
+  {spanish:"la relatividad",english:"relativity",category:"science_adv",level:"expert"},
+  {spanish:"la fusión nuclear",english:"nuclear fusion",category:"science_adv",level:"expert"},
+  {spanish:"la fisión",english:"fission",category:"science_adv",level:"expert"},
+  {spanish:"la antimateria",english:"antimatter",category:"science_adv",level:"expert"},
+  {spanish:"la fotosíntesis",english:"photosynthesis",category:"science_adv",level:"expert"},
+  {spanish:"la catálisis",english:"catalysis",category:"science_adv",level:"expert"},
+  {spanish:"la ósmosis",english:"osmosis",category:"science_adv",level:"expert"},
+  {spanish:"la difracción",english:"diffraction",category:"science_adv",level:"expert"},
+  {spanish:"la espectrometría",english:"spectrometry",category:"science_adv",level:"expert"},
+  {spanish:"la cromatografía",english:"chromatography",category:"science_adv",level:"expert"},
+  {spanish:"el quark",english:"quark",category:"science_adv",level:"expert"},
+  {spanish:"el agujero negro",english:"black hole",category:"science_adv",level:"expert"},
+  {spanish:"la singularidad",english:"singularity",category:"science_adv",level:"expert"},
+  {spanish:"la biofarma",english:"biopharmaceutics",category:"science_adv",level:"expert"},
+  {spanish:"el transhumanismo",english:"transhumanism",category:"science_adv",level:"expert"},
+  {spanish:"la red neuronal",english:"neural network",category:"science_adv",level:"expert"},
+  // Philosophy
+  {spanish:"la epistemología",english:"epistemology",category:"philosophy",level:"expert"},
+  {spanish:"la ontología",english:"ontology",category:"philosophy",level:"expert"},
+  {spanish:"la fenomenología",english:"phenomenology",category:"philosophy",level:"expert"},
+  {spanish:"la hermenéutica",english:"hermeneutics",category:"philosophy",level:"expert"},
+  {spanish:"la deontología",english:"deontology",category:"philosophy",level:"expert"},
+  {spanish:"el utilitarismo",english:"utilitarianism",category:"philosophy",level:"expert"},
+  {spanish:"el consecuencialismo",english:"consequentialism",category:"philosophy",level:"expert"},
+  {spanish:"la trascendencia",english:"transcendence",category:"philosophy",level:"expert"},
+  {spanish:"la inmanencia",english:"immanence",category:"philosophy",level:"expert"},
+  {spanish:"la alienación",english:"alienation",category:"philosophy",level:"expert"},
+  {spanish:"la cosificación",english:"reification",category:"philosophy",level:"expert"},
+  {spanish:"la intersubjetividad",english:"intersubjectivity",category:"philosophy",level:"expert"},
+  {spanish:"la alteridad",english:"alterity",category:"philosophy",level:"expert"},
+  {spanish:"el existencialismo",english:"existentialism",category:"philosophy",level:"expert"},
+  {spanish:"el estructuralismo",english:"structuralism",category:"philosophy",level:"expert"},
+  {spanish:"el posmodernismo",english:"postmodernism",category:"philosophy",level:"expert"},
+  {spanish:"la deconstrucción",english:"deconstruction",category:"philosophy",level:"expert"},
+  {spanish:"la teleología",english:"teleology",category:"philosophy",level:"expert"},
+  {spanish:"el fatalismo",english:"fatalism",category:"philosophy",level:"expert"},
+  {spanish:"el libre albedrío",english:"free will",category:"philosophy",level:"expert"},
+  {spanish:"el determinismo",english:"determinism",category:"philosophy",level:"expert"},
+  {spanish:"la intencionalidad",english:"intentionality",category:"philosophy",level:"expert"},
+  {spanish:"la conciencia",english:"consciousness",category:"philosophy",level:"expert"},
+  {spanish:"la ética normativa",english:"normative ethics",category:"philosophy",level:"expert"},
+  {spanish:"la metafísica",english:"metaphysics",category:"philosophy",level:"expert"},
+  {spanish:"el nominalismo",english:"nominalism",category:"philosophy",level:"expert"},
+  {spanish:"el dualismo",english:"dualism",category:"philosophy",level:"expert"},
+  {spanish:"el materialismo",english:"materialism",category:"philosophy",level:"expert"},
+  {spanish:"el reduccionismo",english:"reductionism",category:"philosophy",level:"expert"},
+  {spanish:"la virtud",english:"virtue",category:"philosophy",level:"expert"},
+  // Economy (advanced)
+  {spanish:"la liquidez",english:"liquidity",category:"economy_adv",level:"expert"},
+  {spanish:"la solvencia",english:"solvency",category:"economy_adv",level:"expert"},
+  {spanish:"la capitalización bursátil",english:"market capitalisation",category:"economy_adv",level:"expert"},
+  {spanish:"la fusión y adquisición",english:"merger and acquisition",category:"economy_adv",level:"expert"},
+  {spanish:"la oferta pública de adquisición",english:"takeover bid",category:"economy_adv",level:"expert"},
+  {spanish:"el tráfico de información privilegiada",english:"insider trading",category:"economy_adv",level:"expert"},
+  {spanish:"el fondo de cobertura",english:"hedge fund",category:"economy_adv",level:"expert"},
+  {spanish:"la diversificación",english:"diversification",category:"economy_adv",level:"expert"},
+  {spanish:"el arbitraje",english:"arbitrage",category:"economy_adv",level:"expert"},
+  {spanish:"el apalancamiento",english:"financial leverage",category:"economy_adv",level:"expert"},
+  {spanish:"la amortización",english:"amortisation",category:"economy_adv",level:"expert"},
+  {spanish:"la depreciación",english:"depreciation",category:"economy_adv",level:"expert"},
+  {spanish:"la tesorería",english:"treasury",category:"economy_adv",level:"expert"},
+  {spanish:"el flujo de caja",english:"cash flow",category:"economy_adv",level:"expert"},
+  {spanish:"el balance",english:"balance sheet",category:"economy_adv",level:"expert"},
+  {spanish:"la cuenta de resultados",english:"income statement",category:"economy_adv",level:"expert"},
+  {spanish:"el margen de beneficio",english:"profit margin",category:"economy_adv",level:"expert"},
+  {spanish:"el valor añadido",english:"added value",category:"economy_adv",level:"expert"},
+  {spanish:"el índice bursátil",english:"stock index",category:"economy_adv",level:"expert"},
+  {spanish:"la estanflación",english:"stagflation",category:"economy_adv",level:"expert"},
+  {spanish:"la deflación",english:"deflation",category:"economy_adv",level:"expert"},
+  {spanish:"la hiperinflación",english:"hyperinflation",category:"economy_adv",level:"expert"},
+  {spanish:"el riesgo moral",english:"moral hazard",category:"economy_adv",level:"expert"},
+  {spanish:"la externalidad",english:"externality",category:"economy_adv",level:"expert"},
+  {spanish:"el rendimiento",english:"yield",category:"economy_adv",level:"expert"},
+  {spanish:"el activo",english:"asset",category:"economy_adv",level:"expert"},
+  {spanish:"el pasivo",english:"liability",category:"economy_adv",level:"expert"},
+  {spanish:"el bono",english:"bond",category:"economy_adv",level:"expert"},
+  {spanish:"el capitalismo financiero",english:"financial capitalism",category:"economy_adv",level:"expert"},
+  {spanish:"la especulación",english:"speculation",category:"economy_adv",level:"expert"},
+  // Rhetoric
+  {spanish:"el prólogo",english:"prologue",category:"rhetoric",level:"expert"},
+  {spanish:"el epílogo",english:"epilogue",category:"rhetoric",level:"expert"},
+  {spanish:"el desenlace",english:"denouement",category:"rhetoric",level:"expert"},
+  {spanish:"la peripecia",english:"plot twist",category:"rhetoric",level:"expert"},
+  {spanish:"el protagonista",english:"protagonist",category:"rhetoric",level:"expert"},
+  {spanish:"el antagonista",english:"antagonist",category:"rhetoric",level:"expert"},
+  {spanish:"el narrador",english:"narrator",category:"rhetoric",level:"expert"},
+  {spanish:"la focalización",english:"focalisation",category:"rhetoric",level:"expert"},
+  {spanish:"la elipsis",english:"ellipsis",category:"rhetoric",level:"expert"},
+  {spanish:"el anacronismo",english:"anachronism",category:"rhetoric",level:"expert"},
+  {spanish:"el oxímoron",english:"oxymoron",category:"rhetoric",level:"expert"},
+  {spanish:"el pleonasmo",english:"pleonasm",category:"rhetoric",level:"expert"},
+  {spanish:"la lítote",english:"litotes",category:"rhetoric",level:"expert"},
+  {spanish:"la hipérbole",english:"hyperbole",category:"rhetoric",level:"expert"},
+  {spanish:"la perífrasis",english:"periphrasis",category:"rhetoric",level:"expert"},
+  {spanish:"el quiasmo",english:"chiasmus",category:"rhetoric",level:"expert"},
+  {spanish:"la anáfora",english:"anaphora",category:"rhetoric",level:"expert"},
+  {spanish:"la epífora",english:"epiphora",category:"rhetoric",level:"expert"},
+  {spanish:"la aliteración",english:"alliteration",category:"rhetoric",level:"expert"},
+  {spanish:"la asonancia",english:"assonance",category:"rhetoric",level:"expert"},
+  {spanish:"la onomatopeya",english:"onomatopoeia",category:"rhetoric",level:"expert"},
+  {spanish:"la epopeya",english:"epic poem",category:"rhetoric",level:"expert"},
+  {spanish:"la tragedia",english:"tragedy",category:"rhetoric",level:"expert"},
+  {spanish:"la comedia",english:"comedy",category:"rhetoric",level:"expert"},
+  {spanish:"la sátira",english:"satire",category:"rhetoric",level:"expert"},
+  // Arts (advanced)
+  {spanish:"el impresionismo",english:"impressionism",category:"arts_adv",level:"expert"},
+  {spanish:"el cubismo",english:"cubism",category:"arts_adv",level:"expert"},
+  {spanish:"el surrealismo",english:"surrealism",category:"arts_adv",level:"expert"},
+  {spanish:"el dadaísmo",english:"dadaism",category:"arts_adv",level:"expert"},
+  {spanish:"el expresionismo",english:"expressionism",category:"arts_adv",level:"expert"},
+  {spanish:"la vanguardia",english:"avant-garde",category:"arts_adv",level:"expert"},
+  {spanish:"el iconoclasta",english:"iconoclast",category:"arts_adv",level:"expert"},
+  {spanish:"el barroco",english:"baroque",category:"arts_adv",level:"expert"},
+  {spanish:"el clasicismo",english:"classicism",category:"arts_adv",level:"expert"},
+  {spanish:"el romanticismo",english:"romanticism",category:"arts_adv",level:"expert"},
+  {spanish:"el naturalismo",english:"naturalism",category:"arts_adv",level:"expert"},
+  {spanish:"el realismo",english:"realism",category:"arts_adv",level:"expert"},
+  {spanish:"el simbolismo",english:"symbolism",category:"arts_adv",level:"expert"},
+  {spanish:"el neoclasicismo",english:"neoclassicism",category:"arts_adv",level:"expert"},
+  {spanish:"el fauvismo",english:"fauvism",category:"arts_adv",level:"expert"},
+  {spanish:"la abstracción",english:"abstraction",category:"arts_adv",level:"expert"},
+  {spanish:"el minimalismo",english:"minimalism",category:"arts_adv",level:"expert"},
+  {spanish:"el conceptualismo",english:"conceptualism",category:"arts_adv",level:"expert"},
+  {spanish:"la instalación artística",english:"art installation",category:"arts_adv",level:"expert"},
+  {spanish:"la performance",english:"performance art",category:"arts_adv",level:"expert"},
+  {spanish:"la bienal",english:"biennale",category:"arts_adv",level:"expert"},
+  {spanish:"el mecenas",english:"patron",category:"arts_adv",level:"expert"},
+  {spanish:"la retrospectiva",english:"retrospective",category:"arts_adv",level:"expert"},
+  {spanish:"la iconografía",english:"iconography",category:"arts_adv",level:"expert"},
+  {spanish:"el muralismo",english:"muralism",category:"arts_adv",level:"expert"},
+  // Environment (advanced)
+  {spanish:"el geosistema",english:"geosystem",category:"environment_adv",level:"expert"},
+  {spanish:"la biosfera",english:"biosphere",category:"environment_adv",level:"expert"},
+  {spanish:"la litosfera",english:"lithosphere",category:"environment_adv",level:"expert"},
+  {spanish:"la hidrósfera",english:"hydrosphere",category:"environment_adv",level:"expert"},
+  {spanish:"la criosfera",english:"cryosphere",category:"environment_adv",level:"expert"},
+  {spanish:"la cadena alimentaria",english:"food chain",category:"environment_adv",level:"expert"},
+  {spanish:"el nicho ecológico",english:"ecological niche",category:"environment_adv",level:"expert"},
+  {spanish:"la biomasa",english:"biomass",category:"environment_adv",level:"expert"},
+  {spanish:"el fitoplancton",english:"phytoplankton",category:"environment_adv",level:"expert"},
+  {spanish:"el zooplancton",english:"zooplankton",category:"environment_adv",level:"expert"},
+  {spanish:"la acidificación",english:"acidification",category:"environment_adv",level:"expert"},
+  {spanish:"la eutrofización",english:"eutrophication",category:"environment_adv",level:"expert"},
+  {spanish:"la desertificación",english:"desertification",category:"environment_adv",level:"expert"},
+  {spanish:"la lixiviación",english:"leaching",category:"environment_adv",level:"expert"},
+  {spanish:"el acuífero",english:"aquifer",category:"environment_adv",level:"expert"},
+  {spanish:"la capa freática",english:"water table",category:"environment_adv",level:"expert"},
+  {spanish:"el permafrost",english:"permafrost",category:"environment_adv",level:"expert"},
+  {spanish:"el metano",english:"methane",category:"environment_adv",level:"expert"},
+  {spanish:"el dióxido de carbono",english:"carbon dioxide",category:"environment_adv",level:"expert"},
+  {spanish:"el óxido nítrico",english:"nitrous oxide",category:"environment_adv",level:"expert"},
+  {spanish:"el albedo",english:"albedo",category:"environment_adv",level:"expert"},
+  {spanish:"la bioluminiscencia",english:"bioluminescence",category:"environment_adv",level:"expert"},
+  {spanish:"la resiliencia ecológica",english:"ecological resilience",category:"environment_adv",level:"expert"},
+  {spanish:"la especie invasora",english:"invasive species",category:"environment_adv",level:"expert"},
+  {spanish:"la extinción masiva",english:"mass extinction",category:"environment_adv",level:"expert"},
+  // Psychology (advanced)
+  {spanish:"la esquizofrenia",english:"schizophrenia",category:"psychology_adv",level:"expert"},
+  {spanish:"el trastorno bipolar",english:"bipolar disorder",category:"psychology_adv",level:"expert"},
+  {spanish:"la ansiedad generalizada",english:"generalised anxiety",category:"psychology_adv",level:"expert"},
+  {spanish:"el trastorno obsesivo compulsivo",english:"OCD",category:"psychology_adv",level:"expert"},
+  {spanish:"el trastorno de la personalidad",english:"personality disorder",category:"psychology_adv",level:"expert"},
+  {spanish:"el narcisismo",english:"narcissism",category:"psychology_adv",level:"expert"},
+  {spanish:"la psicosis",english:"psychosis",category:"psychology_adv",level:"expert"},
+  {spanish:"la neurosis",english:"neurosis",category:"psychology_adv",level:"expert"},
+  {spanish:"la terapia cognitivo conductual",english:"cognitive behavioural therapy",category:"psychology_adv",level:"expert"},
+  {spanish:"el psicoanálisis",english:"psychoanalysis",category:"psychology_adv",level:"expert"},
+  {spanish:"el inconsciente colectivo",english:"collective unconscious",category:"psychology_adv",level:"expert"},
+  {spanish:"el arquetipo",english:"archetype",category:"psychology_adv",level:"expert"},
+  {spanish:"la represión",english:"repression",category:"psychology_adv",level:"expert"},
+  {spanish:"la proyección",english:"projection",category:"psychology_adv",level:"expert"},
+  {spanish:"la sublimación",english:"sublimation",category:"psychology_adv",level:"expert"},
+  {spanish:"la transferencia",english:"transference",category:"psychology_adv",level:"expert"},
+  {spanish:"la contratransferencia",english:"countertransference",category:"psychology_adv",level:"expert"},
+  {spanish:"la disociación",english:"dissociation",category:"psychology_adv",level:"expert"},
+  {spanish:"la alexitimia",english:"alexithymia",category:"psychology_adv",level:"expert"},
+  {spanish:"la resiliencia",english:"resilience",category:"psychology_adv",level:"expert"},
+  {spanish:"el traumatismo",english:"trauma",category:"psychology_adv",level:"expert"},
+  {spanish:"la anamnesis",english:"anamnesis",category:"psychology_adv",level:"expert"},
+  {spanish:"la etiología",english:"aetiology",category:"psychology_adv",level:"expert"},
+  {spanish:"la comorbilidad",english:"comorbidity",category:"psychology_adv",level:"expert"},
+  {spanish:"la hipervigilancia",english:"hypervigilance",category:"psychology_adv",level:"expert"},
+  // Social issues (advanced)
+  {spanish:"la desigualdad",english:"inequality",category:"social_adv",level:"expert"},
+  {spanish:"la discriminación",english:"discrimination",category:"social_adv",level:"expert"},
+  {spanish:"el racismo sistémico",english:"systemic racism",category:"social_adv",level:"expert"},
+  {spanish:"el antisemitismo",english:"antisemitism",category:"social_adv",level:"expert"},
+  {spanish:"la islamofobia",english:"islamophobia",category:"social_adv",level:"expert"},
+  {spanish:"la xenofobia",english:"xenophobia",category:"social_adv",level:"expert"},
+  {spanish:"la homofobia",english:"homophobia",category:"social_adv",level:"expert"},
+  {spanish:"la transfobia",english:"transphobia",category:"social_adv",level:"expert"},
+  {spanish:"el sexismo",english:"sexism",category:"social_adv",level:"expert"},
+  {spanish:"la misoginia",english:"misogyny",category:"social_adv",level:"expert"},
+  {spanish:"el patriarcado",english:"patriarchy",category:"social_adv",level:"expert"},
+  {spanish:"el feminismo",english:"feminism",category:"social_adv",level:"expert"},
+  {spanish:"la interseccionalidad",english:"intersectionality",category:"social_adv",level:"expert"},
+  {spanish:"la exclusión social",english:"social exclusion",category:"social_adv",level:"expert"},
+  {spanish:"la precariedad",english:"precariousness",category:"social_adv",level:"expert"},
+  {spanish:"la marginalización",english:"marginalisation",category:"social_adv",level:"expert"},
+  {spanish:"la estigmatización",english:"stigmatisation",category:"social_adv",level:"expert"},
+  {spanish:"el desclasamiento",english:"downward mobility",category:"social_adv",level:"expert"},
+  {spanish:"la movilidad social",english:"social mobility",category:"social_adv",level:"expert"},
+  {spanish:"el proletariado",english:"proletariat",category:"social_adv",level:"expert"},
+  {spanish:"la burguesía",english:"bourgeoisie",category:"social_adv",level:"expert"},
+  {spanish:"el neoliberalismo",english:"neoliberalism",category:"social_adv",level:"expert"},
+  {spanish:"la gentrificación",english:"gentrification",category:"social_adv",level:"expert"},
+  {spanish:"el comunitarismo",english:"communitarianism",category:"social_adv",level:"expert"},
+  {spanish:"el multiculturalismo",english:"multiculturalism",category:"social_adv",level:"expert"},
+  {spanish:"la asimilación",english:"assimilation",category:"social_adv",level:"expert"},
+  {spanish:"la integración",english:"integration",category:"social_adv",level:"expert"},
+  {spanish:"la desegregación",english:"desegregation",category:"social_adv",level:"expert"},
+  {spanish:"la emancipación",english:"emancipation",category:"social_adv",level:"expert"},
+  {spanish:"la afirmación identitaria",english:"identity affirmation",category:"social_adv",level:"expert"},
+  // Challenging verbs
+  {spanish:"acentuar",english:"to accentuate",category:"expert_verbs",level:"expert"},
+  {spanish:"ampliar",english:"to amplify",category:"expert_verbs",level:"expert"},
+  {spanish:"atenuar",english:"to attenuate",category:"expert_verbs",level:"expert"},
+  {spanish:"florecer",english:"to flourish",category:"expert_verbs",level:"expert"},
+  {spanish:"detectar",english:"to detect",category:"expert_verbs",level:"expert"},
+  {spanish:"denotar",english:"to denote",category:"expert_verbs",level:"expert"},
+  {spanish:"contrarrestar",english:"to thwart",category:"expert_verbs",level:"expert"},
+  {spanish:"incumplir",english:"to breach",category:"expert_verbs",level:"expert"},
+  {spanish:"emanciparse",english:"to free oneself",category:"expert_verbs",level:"expert"},
+  {spanish:"profundizar",english:"to deepen",category:"expert_verbs",level:"expert"},
+  {spanish:"sintetizar",english:"to synthesise",category:"expert_verbs",level:"expert"},
+  {spanish:"apuntalar",english:"to substantiate",category:"expert_verbs",level:"expert"},
+  {spanish:"refutar",english:"to rebut",category:"expert_verbs",level:"expert"},
+  {spanish:"corroborar",english:"to corroborate",category:"expert_verbs",level:"expert"},
+  {spanish:"matizar",english:"to nuance",category:"expert_verbs",level:"expert"},
+  {spanish:"relativizar",english:"to put in perspective",category:"expert_verbs",level:"expert"},
+  {spanish:"ponderar",english:"to weigh up",category:"expert_verbs",level:"expert"},
+  {spanish:"arbitrar",english:"to arbitrate",category:"expert_verbs",level:"expert"},
+  {spanish:"constreñir",english:"to compel",category:"expert_verbs",level:"expert"},
+  {spanish:"infringir",english:"to infringe",category:"expert_verbs",level:"expert"},
+  {spanish:"transgredir",english:"to transgress",category:"expert_verbs",level:"expert"},
+  {spanish:"extralimitarse",english:"to overstep",category:"expert_verbs",level:"expert"},
+  {spanish:"injerirse",english:"to interfere",category:"expert_verbs",level:"expert"},
+  {spanish:"entrometerse",english:"to meddle",category:"expert_verbs",level:"expert"},
+  {spanish:"reivindicar",english:"to claim",category:"expert_verbs",level:"expert"},
+  {spanish:"prevalecer",english:"to prevail",category:"expert_verbs",level:"expert"},
+  {spanish:"ratificar",english:"to ratify",category:"expert_verbs",level:"expert"},
+  {spanish:"avalar",english:"to endorse",category:"expert_verbs",level:"expert"},
+  {spanish:"coaccionar",english:"to coerce",category:"expert_verbs",level:"expert"},
+  {spanish:"salvaguardar",english:"to safeguard",category:"expert_verbs",level:"expert"},
+  // Challenging adjectives
+  {spanish:"inalienable",english:"inalienable",category:"expert_adj",level:"expert"},
+  {spanish:"inmutable",english:"immutable",category:"expert_adj",level:"expert"},
+  {spanish:"irrefutable",english:"irrefutable",category:"expert_adj",level:"expert"},
+  {spanish:"irrevocable",english:"irrevocable",category:"expert_adj",level:"expert"},
+  {spanish:"preponderante",english:"preponderant",category:"expert_adj",level:"expert"},
+  {spanish:"concomitante",english:"concomitant",category:"expert_adj",level:"expert"},
+  {spanish:"inherente",english:"inherent",category:"expert_adj",level:"expert"},
+  {spanish:"intrínseco",english:"intrinsic",category:"expert_adj",level:"expert"},
+  {spanish:"extrínseco",english:"extrinsic",category:"expert_adj",level:"expert"},
+  {spanish:"ineludible",english:"inescapable",category:"expert_adj",level:"expert"},
+  {spanish:"inevitable",english:"unavoidable",category:"expert_adj",level:"expert"},
+  {spanish:"inaprensible",english:"elusive",category:"expert_adj",level:"expert"},
+  {spanish:"indefectible",english:"unfailing",category:"expert_adj",level:"expert"},
+  {spanish:"recurrente",english:"recurring",category:"expert_adj",level:"expert"},
+  {spanish:"intangible",english:"intangible",category:"expert_adj",level:"expert"},
+  {spanish:"ambivalente",english:"ambivalent",category:"expert_adj",level:"expert"},
+  {spanish:"certero",english:"accurate",category:"expert_adj",level:"expert"},
+  {spanish:"perentorio",english:"peremptory",category:"expert_adj",level:"expert"},
+  {spanish:"vehemente",english:"vehement",category:"expert_adj",level:"expert"},
+  {spanish:"acre",english:"acrid",category:"expert_adj",level:"expert"},
+  {spanish:"elíptico",english:"elliptical",category:"expert_adj",level:"expert"},
+  {spanish:"quimérico",english:"chimerical",category:"expert_adj",level:"expert"},
+  {spanish:"falaz",english:"fallacious",category:"expert_adj",level:"expert"},
+  {spanish:"fehaciente",english:"reliable",category:"expert_adj",level:"expert"},
+  {spanish:"coercitivo",english:"coercive",category:"expert_adj",level:"expert"},
+  // Challenging nouns
+  {spanish:"la coyuntura",english:"conjuncture",category:"expert_nouns",level:"expert"},
+  {spanish:"la circunscripción",english:"constituency",category:"expert_nouns",level:"expert"},
+  {spanish:"el decreto",english:"decree",category:"expert_nouns",level:"expert"},
+  {spanish:"el reglamento",english:"regulation",category:"expert_nouns",level:"expert"},
+  {spanish:"la equidad",english:"equity",category:"expert_nouns",level:"expert"},
+  {spanish:"el precedente",english:"precedent",category:"expert_nouns",level:"expert"},
+  {spanish:"la derogación",english:"derogation",category:"expert_nouns",level:"expert"},
+  {spanish:"la concesión",english:"concession",category:"expert_nouns",level:"expert"},
+  {spanish:"la cláusula",english:"clause",category:"expert_nouns",level:"expert"},
+  {spanish:"la estipulación",english:"stipulation",category:"expert_nouns",level:"expert"},
+  {spanish:"la modalidad",english:"modality",category:"expert_nouns",level:"expert"},
+  {spanish:"la exigencia",english:"requirement",category:"expert_nouns",level:"expert"},
+  {spanish:"el prerrequisito",english:"prerequisite",category:"expert_nouns",level:"expert"},
+  {spanish:"el reto",english:"issue at stake",category:"expert_nouns",level:"expert"},
+  {spanish:"el denominador común",english:"common denominator",category:"expert_nouns",level:"expert"},
+  {spanish:"el vector",english:"vector",category:"expert_nouns",level:"expert"},
+  {spanish:"el catalizador",english:"catalyst",category:"expert_nouns",level:"expert"},
+  {spanish:"la piedra angular",english:"cornerstone",category:"expert_nouns",level:"expert"},
+  {spanish:"el indicador",english:"indicator",category:"expert_nouns",level:"expert"},
+  {spanish:"la metodología",english:"methodology",category:"expert_nouns",level:"expert"},
+  {spanish:"la nomenclatura",english:"nomenclature",category:"expert_nouns",level:"expert"},
+  {spanish:"el umbral",english:"threshold",category:"expert_nouns",level:"expert"},
+  {spanish:"la correlación",english:"correlation",category:"expert_nouns",level:"expert"},
+  {spanish:"la referencia comparativa",english:"benchmark",category:"expert_nouns",level:"expert"},
+  {spanish:"el marco analítico",english:"analytical framework",category:"expert_nouns",level:"expert"},
+  // Medicine (advanced)
+  {spanish:"la mucosa",english:"mucous membrane",category:"medicine_adv",level:"expert"},
+  {spanish:"la tiroides",english:"thyroid",category:"medicine_adv",level:"expert"},
+  {spanish:"la adrenalina",english:"adrenaline",category:"medicine_adv",level:"expert"},
+  {spanish:"el cortisol",english:"cortisol",category:"medicine_adv",level:"expert"},
+  {spanish:"la serotonina",english:"serotonin",category:"medicine_adv",level:"expert"},
+  {spanish:"la dopamina",english:"dopamine",category:"medicine_adv",level:"expert"},
+  {spanish:"la insulina",english:"insulin",category:"medicine_adv",level:"expert"},
+  {spanish:"el glucagón",english:"glucagon",category:"medicine_adv",level:"expert"},
+  {spanish:"la hemoglobina",english:"haemoglobin",category:"medicine_adv",level:"expert"},
+  {spanish:"la plaqueta",english:"platelet",category:"medicine_adv",level:"expert"},
+  {spanish:"el linfocito",english:"lymphocyte",category:"medicine_adv",level:"expert"},
+  {spanish:"el leucocito",english:"leukocyte",category:"medicine_adv",level:"expert"},
+  {spanish:"el eritrocito",english:"red blood cell",category:"medicine_adv",level:"expert"},
+  {spanish:"la mitosis",english:"mitosis",category:"medicine_adv",level:"expert"},
+  {spanish:"la meiosis",english:"meiosis",category:"medicine_adv",level:"expert"},
+  {spanish:"la patología",english:"pathology",category:"medicine_adv",level:"expert"},
+  {spanish:"el inmunosupresor",english:"immunosuppressant",category:"medicine_adv",level:"expert"},
+  {spanish:"la quimioterapia",english:"chemotherapy",category:"medicine_adv",level:"expert"},
+  {spanish:"la radioterapia",english:"radiotherapy",category:"medicine_adv",level:"expert"},
+  {spanish:"la biopsia",english:"biopsy",category:"medicine_adv",level:"expert"},
+  // Geography (advanced)
+  {spanish:"el meandro",english:"meander",category:"geography_adv",level:"expert"},
+  {spanish:"el estuario",english:"estuary",category:"geography_adv",level:"expert"},
+  {spanish:"el promontorio",english:"promontory",category:"geography_adv",level:"expert"},
+  {spanish:"la laguna",english:"lagoon",category:"geography_adv",level:"expert"},
+  {spanish:"el archipiélago",english:"archipelago",category:"geography_adv",level:"expert"},
+  {spanish:"la península",english:"peninsula",category:"geography_adv",level:"expert"},
+  {spanish:"el istmo",english:"isthmus",category:"geography_adv",level:"expert"},
+  {spanish:"el estrecho",english:"strait",category:"geography_adv",level:"expert"},
+  {spanish:"el arrecife de coral",english:"coral reef",category:"geography_adv",level:"expert"},
+  {spanish:"el manglar",english:"mangrove",category:"geography_adv",level:"expert"},
+  {spanish:"la turbera",english:"peat bog",category:"geography_adv",level:"expert"},
+  {spanish:"la tundra",english:"tundra",category:"geography_adv",level:"expert"},
+  {spanish:"la sabana",english:"savanna",category:"geography_adv",level:"expert"},
+  {spanish:"la cuenca hidrográfica",english:"watershed",category:"geography_adv",level:"expert"},
+  {spanish:"la plataforma continental",english:"continental shelf",category:"geography_adv",level:"expert"},
+  // Human sciences
+  {spanish:"la antropología",english:"anthropology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la sociología",english:"sociology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la demografía",english:"demography",category:"sciences_humanas",level:"expert"},
+  {spanish:"la epidemiología",english:"epidemiology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la toxicología",english:"toxicology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la inmunología",english:"immunology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la farmacología",english:"pharmacology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la virología",english:"virology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la bacteriología",english:"bacteriology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la parasitología",english:"parasitology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la endocrinología",english:"endocrinology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la arqueología",english:"archaeology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la epigrafía",english:"epigraphy",category:"sciences_humanas",level:"expert"},
+  {spanish:"la paleontología",english:"palaeontology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la etnología",english:"ethnology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la lingüística",english:"linguistics",category:"sciences_humanas",level:"expert"},
+  {spanish:"la semiología",english:"semiology",category:"sciences_humanas",level:"expert"},
+  {spanish:"la psicolingüística",english:"psycholinguistics",category:"sciences_humanas",level:"expert"},
+  {spanish:"la sociolingüística",english:"sociolinguistics",category:"sciences_humanas",level:"expert"},
+  {spanish:"la dialectología",english:"dialectology",category:"sciences_humanas",level:"expert"}
+];
+
+/* ═══════ WORD EMOJI MAP ══════════════════════════════════════════ */
+const WORD_EMOJI = {
+  "zero":"0️⃣","one":"1️⃣","two":"2️⃣","three":"3️⃣","four":"4️⃣","five":"5️⃣",
+  "six":"6️⃣","seven":"7️⃣","eight":"8️⃣","nine":"9️⃣","ten":"🔟",
+  "eleven":"1️⃣1️⃣","twelve":"1️⃣2️⃣","thirteen":"1️⃣3️⃣","fourteen":"1️⃣4️⃣","fifteen":"1️⃣5️⃣",
+  "sixteen":"1️⃣6️⃣","seventeen":"1️⃣7️⃣","eighteen":"1️⃣8️⃣","nineteen":"1️⃣9️⃣",
+  "twenty":"2️⃣0️⃣","thirty":"3️⃣0️⃣","forty":"4️⃣0️⃣","fifty":"5️⃣0️⃣","sixty":"6️⃣0️⃣",
+  "seventy":"7️⃣0️⃣","eighty":"8️⃣0️⃣","ninety":"9️⃣0️⃣","hundred":"💯","thousand":"🔢",
+  "red":"🔴","blue":"🔵","green":"🟢","yellow":"🟡","orange":"🟠","purple":"🟣",
+  "pink":"🩷","black":"⚫","white":"⚪","grey":"🩶","brown":"🟤","beige":"🏜️",
+  "Monday":"📅","Tuesday":"📅","Wednesday":"📅","Thursday":"📅",
+  "Friday":"🎉","Saturday":"🎊","Sunday":"⛪",
+  "January":"❄️","February":"💕","March":"🌱","April":"🌸","May":"🌷",
+  "June":"☀️","July":"🏖️","August":"🌊","September":"🍂","October":"🎃",
+  "November":"🍁","December":"🎄",
+  "spring":"🌸","summer":"☀️","autumn":"🍂","winter":"❄️",
+  "family":"👨‍👩‍👧‍👦","father":"👨","mother":"👩","son":"👦","daughter":"👧",
+  "brother":"🧑","sister":"👧","grandfather":"👴","grandmother":"👵",
+  "uncle":"🧔","aunt":"👩‍🦱","cousin (male)":"🧑","cousin (female)":"👩",
+  "husband":"💍","wife":"💍","child":"🧒","baby":"👶","parents":"👨‍👩‍👧",
+  "head":"🧠","face":"😊","hair":"💇","eye":"👁️","eyes":"👀","nose":"👃",
+  "mouth":"👄","ear":"👂","neck":"🦒","shoulder":"🦾","arm":"💪",
+  "hand":"🖐️","finger":"☝️","stomach":"🫃","back":"🔙","leg":"🦵",
+  "knee":"🦵","foot":"🦶","heart":"❤️","tooth":"🦷","tongue":"👅",
+  "cat":"🐱","dog":"🐶","horse":"🐴","cow":"🐄","pig":"🐷","sheep":"🐑",
+  "goat":"🐐","chicken":"🐔","rabbit":"🐰","mouse":"🐭","bird":"🐦","fish":"🐟",
+  "frog":"🐸","snake":"🐍","elephant":"🐘","lion":"🦁","tiger":"🐯","bear":"🐻",
+  "monkey":"🐒","duck":"🦆","hen":"🐓",
+  "bread":"🍞","cheese":"🧀","butter":"🧈","milk":"🥛","egg":"🥚","meat":"🥩",
+  "pork":"🥓","beef":"🥩","apple":"🍎","pear":"🍐","banana":"🍌",
+  "orange (fruit)":"🍊","strawberry":"🍓","grape":"🍇","tomato":"🍅","carrot":"🥕",
+  "potato":"🥔","onion":"🧅","salad":"🥗","rice":"🍚","pasta":"🍝","soup":"🍜",
+  "cake":"🎂","chocolate":"🍫","sugar":"🍬","salt":"🧂","pepper":"🌶️","oil":"🫒",
+  "meal":"🍽️","breakfast":"🌅","lunch":"🥪","dinner":"🍽️",
+  "water":"💧","juice":"🧃","coffee":"☕","tea":"🍵","wine":"🍷",
+  "beer":"🍺","orange juice":"🍊",
+  "clothes":"👗","shirt":"👔","trousers":"👖","dress":"👗","skirt":"🩱",
+  "coat":"🧥","jacket":"🧥","sweater":"🧶","shoes":"👟","socks":"🧦",
+  "hat":"🎩","tie":"👔","jeans":"👖","t-shirt":"👕","shorts":"🩳",
+  "gloves":"🧤","scarf":"🧣",
+  "house":"🏠","apartment":"🏢","room":"🚪","bedroom":"🛏️","kitchen":"🍳",
+  "bathroom":"🛁","toilet":"🚽","living room":"🛋️","dining room":"🍽️",
+  "garden":"🌿","door":"🚪","window":"🪟","stairs":"🪜","bed":"🛏️",
+  "chair":"🪑","table":"🪑","sofa":"🛋️","wardrobe":"👚","desk":"🖥️",
+  "lamp":"💡","mirror":"🪞","rug":"🏠","fridge":"🧊","oven":"🍳",
+  "to be (permanent)":"💫","to be (temporary)":"⏱️","to have":"🤲","to go":"🚶",
+  "to do / to make":"🔨","to say":"💬","to see":"👀","to know (fact)":"🧠",
+  "to be able to":"💪","to want":"💝","to come":"🤝","to take":"✊","to give":"🎁",
+  "to find":"🔍","to speak":"🗣️","to eat":"🍽️","to drink":"🥤","to sleep":"😴",
+  "to work":"💼","to live":"🏡","to like":"❤️","to read":"📖","to write":"✍️",
+  "to listen":"👂","to watch":"👁️","to buy":"🛒","to sell":"💰",
+  "to open":"🔓","to close":"🔒","to begin":"🚀","to finish":"🏁",
+  "to walk":"🚶","to run":"🏃","to play":"🎮","to sing":"🎤","to dance":"💃",
+  "to call":"📞","to answer":"💬","to look for":"🔍","to help":"🤝",
+  "to think":"🤔","to believe":"🙏","to know (person/place)":"🧑","to use":"🔧",
+  "to wait":"⏳","to leave / to go out":"🚪","to arrive":"🛬","to enter":"🚪",
+  "to put":"📦","to carry / to wear":"👜","to swim":"🏊","to cook":"👨‍🍳",
+  "to drive":"🚗","to travel":"✈️","to learn":"📚","to understand":"💡",
+  "to ask":"❓","to show":"👇","to laugh":"😂","to cry":"😢","to fall":"⬇️",
+  "to stay":"🪑","to pay":"💳","to need":"🤲",
+  "big / tall":"🏔️","small / little":"🐜","good":"👍","bad":"👎","beautiful":"✨",
+  "pretty":"🌸","old":"👴","young":"👶","new":"🆕","long":"📏","short":"📏",
+  "hot / warm":"🔥","cold":"🧊","easy":"✅","difficult":"😤","fast":"⚡",
+  "slow":"🐢","strong":"💪","weak":"🍃","rich":"💰","poor":"🏚️",
+  "happy / pleased":"😊","sad":"😢","tired":"😴","ill / sick":"🤒",
+  "clean":"🧹","dirty":"🪣","open":"🔓","closed":"🔒","full":"🫙",
+  "empty":"📭","alone":"🧍","free":"🕊️","busy":"😰","happy":"😄",
+  "nice / friendly":"🤗","interesting":"💭",
+  "good morning":"🌄","good afternoon":"🌅","good night":"🌙",
+  "hello / hi":"👋","goodbye":"👋","thank you":"🙏","please":"🤲",
+  "you're welcome":"😊","excuse me / sorry":"🙏","excuse me (formal)":"🙏",
+  "nice to meet you":"🤝","yes":"✅","no":"❌",
+  "today":"📅","tomorrow":"⏭️","yesterday":"⏮️","now":"⚡","always":"♾️",
+  "never":"🚫","often":"🔄","sometimes":"⏳","early":"🌅","late":"🌙",
+  "hour / time":"⏰","minute":"⏱️","day":"☀️","week":"📅","month":"🗓️",
+  "year":"🗓️","morning":"🌄","noon":"☀️","afternoon":"🌤️","night":"🌙",
+  "weekend":"🎊",
+  "sun":"☀️","rain":"🌧️","snow":"❄️","wind":"💨","cloud":"☁️","storm":"⛈️",
+  "fog":"🌫️","heat":"🔥","the weather is nice":"🌤️","it is raining":"🌧️","it is snowing":"❄️",
+  "car":"🚗","train":"🚂","bus":"🚌","metro / subway":"🚇","plane":"✈️",
+  "boat":"⛵","taxi":"🚕","bicycle":"🚲","motorcycle":"🏍️",
+  "train station":"🚉","airport":"✈️","bus stop":"🚏",
+  "school":"🏫","university":"🎓","office":"🏢","shop / store":"🏪",
+  "market":"🏬","supermarket":"🛒","restaurant":"🍽️","café":"☕",
+  "hospital":"🏥","pharmacy":"💊","bank":"🏦","church":"⛪",
+  "street":"🛣️","city":"🏙️","village":"🏘️","country":"🌍","Spain":"🇪🇸",
+  "park":"🌳","beach":"🏖️","mountain":"⛰️","forest":"🌲","sea":"🌊","river":"🏞️",
+  "book":"📚","pen":"🖊️","pencil":"✏️","notebook":"📔","phone":"📱",
+  "computer":"💻","key":"🔑","bag":"👜","watch":"⌚","money":"💰",
+  "card":"🗂️","newspaper":"📰","photo":"📷","letter":"✉️",
+  "gift":"🎁","toy":"🪀",
+  // Professions
+  "doctor":"👨‍⚕️","nurse":"👩‍⚕️","teacher":"👨‍🏫","student":"👨‍🎓",
+  "cook":"👨‍🍳","police officer":"👮","firefighter":"🚒","lawyer":"⚖️",
+  "engineer":"👷","waiter":"🤵","actor":"🎭","dentist":"🦷",
+  "manager":"💼","journalist":"📰","driver":"🚗",
+  // School
+  "classroom":"🏫","lesson":"📖","homework":"📝","exam":"🧪",
+  "grade":"🏅","blackboard":"📋","library":"📚","dictionary":"📓",
+  "calculator":"🔢","ruler":"📏","question":"❓","answer":"💡",
+  "subject":"📚","mistake":"⚠️","break / recess":"☕",
+  // Question words
+  "who":"🙋","what":"🤷","where":"📍","when":"⏰","how":"🤔",
+  "why":"💭","how much / how many":"🔢","which":"👉",
+  // Essentials
+  "and":"➕","or":"🔀","but":"↩️","because":"🔍",
+  "so / therefore":"➡️","if":"🎲","also / too":"✅","very":"💯",
+  "quite / enough":"👌","maybe":"🤔","of course":"💫","ok / agreed":"🤝",
+  // New verbs
+  "to clean":"🧹","to choose":"🎯","to win / to earn":"🏆","to lose":"📉",
+  "to forget":"🌫️","to remember":"🧠","to share":"📤","to prepare":"🍳",
+  "to accept":"✅","to refuse":"🙅","to explain":"📢","to continue":"▶️",
+  "to return":"↩️","to visit":"🗺️","to change":"🔄","to offer":"🎀",
+  "to allow":"✔️","to book / to reserve":"📅","to repeat":"🔁",
+  "to invite":"💌","to improve":"📈","to join":"🔗","to decide":"💡",
+  "to try":"🤞","to succeed":"🏅",
+  // New adjectives
+  "intelligent":"🧠","modern":"🏙️","natural":"🌿","important":"❗",
+  "different":"🌈","perfect":"⭐","delicious":"😋","dangerous":"⚠️",
+  "calm":"😌","noisy":"📢","special":"🌟","last":"🔚","first":"🥇",
+  "next":"👉","same":"↔️",
+  // New places
+  "castle":"🏰","museum":"🏛️","theatre":"🎪","swimming pool":"🏊",
+  "stadium":"🏟️","shopping centre":"🛍️","hotel":"🏨","cathedral":"⛪"
+};
+
+/* ═══════ CATEGORY META ═══════════════════════════════════════════ */
+const CAT_DISPLAY = {
+  numbers:"Numbers", colors:"Colours", days:"Days of the Week",
+  months:"Months", seasons:"Seasons", family:"Family", body:"Body Parts",
+  animals:"Animals", food:"Food", drinks:"Drinks", clothing:"Clothing",
+  home:"Home & Furniture", verbs:"Verbs", adjectives:"Adjectives",
+  greetings:"Greetings", time:"Time & When", weather:"Weather",
+  transport:"Transport", places:"Places", objects:"Objects",
+  professions:"Professions", school:"School & Study",
+  questions:"Question Words", essentials:"Essential Words",
+  // Intermediate
+  work:"Work & Career", politics:"Politics", health:"Health & Medicine",
+  environment:"Environment", technology:"Technology", culture:"Culture & Arts",
+  travel:"Travel", economy:"Economy & Finance", emotions:"Emotions",
+  relationships:"Relationships", sports:"Sports", science:"Science",
+  education_adv:"Education (Advanced)", food_adv:"Food & Cuisine (Advanced)",
+  housing:"Housing & Urban Life", law:"Law & Justice", media:"Media & Communication",
+  advanced_verbs:"Verbs (Advanced)", advanced_adj:"Adjectives (Advanced)",
+  // Expert
+  abstract:"Abstract Concepts", politics_adv:"Politics (Expert)", law_adv:"Law (Expert)",
+  science_adv:"Science (Expert)", philosophy:"Philosophy", economy_adv:"Economy (Expert)",
+  rhetoric:"Rhetoric & Language", arts_adv:"Arts & Literature (Expert)",
+  environment_adv:"Environment (Expert)", psychology_adv:"Psychology (Expert)",
+  formal_lang:"Formal Language", social_adv:"Social Sciences (Expert)",
+  expert_verbs:"Verbs (Expert)", expert_adj:"Adjectives (Expert)",
+  expert_nouns:"Nouns (Expert)", formal_expressions:"Formal Expressions",
+  medicine_adv:"Medicine (Expert)", geography_adv:"Geography (Expert)",
+  sciences_humaines:"Human Sciences"
+};
+const CAT_ICONS = {
+  numbers:"🔢", colors:"🎨", days:"📅", months:"🗓️", seasons:"🌸",
+  family:"👨‍👩‍👧", body:"💪", animals:"🐾", food:"🍎", drinks:"🥤",
+  clothing:"👕", home:"🏠", verbs:"⚡", adjectives:"✨", greetings:"👋",
+  time:"⏰", weather:"☀️", transport:"🚗", places:"📍", objects:"📦",
+  professions:"👔", school:"🏫", questions:"❓", essentials:"💬",
+  // Intermediate
+  work:"💼", politics:"🏛️", health:"🏥", environment:"🌿", technology:"💻",
+  culture:"🎭", travel:"✈️", economy:"📈", emotions:"❤️", relationships:"🤝",
+  sports:"⚽", science:"🔬", education_adv:"🎓", food_adv:"👨‍🍳",
+  housing:"🏘️", law:"⚖️", media:"📺", advanced_verbs:"🔤", advanced_adj:"💫",
+  // Expert
+  abstract:"🧠", politics_adv:"🗳️", law_adv:"📜", science_adv:"⚛️",
+  philosophy:"🦉", economy_adv:"💹", rhetoric:"📖", arts_adv:"🎨",
+  environment_adv:"🌍", psychology_adv:"🧬", formal_lang:"🎩",
+  social_adv:"👥", expert_verbs:"⚡", expert_adj:"💎", expert_nouns:"📚",
+  formal_expressions:"🖊️", medicine_adv:"🩺", geography_adv:"🗺️",
+  sciences_humaines:"🔭"
+};
+const CAT_BG = {
+  numbers:"linear-gradient(135deg,#1D4ED8,#60A5FA)",
+  colors:"linear-gradient(135deg,#7C3AED,#C084FC)",
+  days:"linear-gradient(135deg,#9D174D,#F472B6)",
+  months:"linear-gradient(135deg,#0E7490,#22D3EE)",
+  seasons:"linear-gradient(135deg,#15803D,#86EFAC)",
+  family:"linear-gradient(135deg,#B91C1C,#F87171)",
+  body:"linear-gradient(135deg,#C2410C,#FB923C)",
+  animals:"linear-gradient(135deg,#166534,#4ADE80)",
+  food:"linear-gradient(135deg,#B45309,#FCD34D)",
+  drinks:"linear-gradient(135deg,#0369A1,#38BDF8)",
+  clothing:"linear-gradient(135deg,#6B21A8,#C084FC)",
+  home:"linear-gradient(135deg,#92400E,#FBBF24)",
+  verbs:"linear-gradient(135deg,#4C1D95,#8B5CF6)",
+  adjectives:"linear-gradient(135deg,#9D174D,#F472B6)",
+  greetings:"linear-gradient(135deg,#064E3B,#34D399)",
+  time:"linear-gradient(135deg,#312E81,#818CF8)",
+  weather:"linear-gradient(135deg,#0C4A6E,#38BDF8)",
+  transport:"linear-gradient(135deg,#991B1B,#F87171)",
+  places:"linear-gradient(135deg,#1E3A8A,#93C5FD)",
+  objects:"linear-gradient(135deg,#4C1D95,#A78BFA)",
+  professions:"linear-gradient(135deg,#0C4A6E,#0EA5E9)",
+  school:"linear-gradient(135deg,#1E1B4B,#6366F1)",
+  questions:"linear-gradient(135deg,#7C2D12,#F97316)",
+  essentials:"linear-gradient(135deg,#1F2937,#6B7280)",
+  // Intermediate
+  work:"linear-gradient(135deg,#1E40AF,#3B82F6)",
+  politics:"linear-gradient(135deg,#312E81,#6366F1)",
+  health:"linear-gradient(135deg,#065F46,#34D399)",
+  environment:"linear-gradient(135deg,#14532D,#86EFAC)",
+  technology:"linear-gradient(135deg,#1E3A5F,#38BDF8)",
+  culture:"linear-gradient(135deg,#701A75,#E879F9)",
+  travel:"linear-gradient(135deg,#0C4A6E,#7DD3FC)",
+  economy:"linear-gradient(135deg,#14532D,#4ADE80)",
+  emotions:"linear-gradient(135deg,#9F1239,#FB7185)",
+  relationships:"linear-gradient(135deg,#7C2D12,#FDBA74)",
+  sports:"linear-gradient(135deg,#1D4ED8,#93C5FD)",
+  science:"linear-gradient(135deg,#0E7490,#67E8F9)",
+  education_adv:"linear-gradient(135deg,#1E1B4B,#818CF8)",
+  food_adv:"linear-gradient(135deg,#92400E,#FDE68A)",
+  housing:"linear-gradient(135deg,#78350F,#FCD34D)",
+  law:"linear-gradient(135deg,#1F2937,#9CA3AF)",
+  media:"linear-gradient(135deg,#4C1D95,#C4B5FD)",
+  advanced_verbs:"linear-gradient(135deg,#3B0764,#A855F7)",
+  advanced_adj:"linear-gradient(135deg,#831843,#F9A8D4)",
+  // Expert
+  abstract:"linear-gradient(135deg,#0F172A,#475569)",
+  politics_adv:"linear-gradient(135deg,#1E1B4B,#4338CA)",
+  law_adv:"linear-gradient(135deg,#111827,#6B7280)",
+  science_adv:"linear-gradient(135deg,#0C4A6E,#0284C7)",
+  philosophy:"linear-gradient(135deg,#3B0764,#6D28D9)",
+  economy_adv:"linear-gradient(135deg,#064E3B,#059669)",
+  rhetoric:"linear-gradient(135deg,#451A03,#B45309)",
+  arts_adv:"linear-gradient(135deg,#6B21A8,#D946EF)",
+  environment_adv:"linear-gradient(135deg,#14532D,#16A34A)",
+  psychology_adv:"linear-gradient(135deg,#4C1D95,#7C3AED)",
+  formal_lang:"linear-gradient(135deg,#1F2937,#374151)",
+  social_adv:"linear-gradient(135deg,#0C4A6E,#1D4ED8)",
+  expert_verbs:"linear-gradient(135deg,#2E1065,#7E22CE)",
+  expert_adj:"linear-gradient(135deg,#701A75,#A21CAF)",
+  expert_nouns:"linear-gradient(135deg,#1E3A8A,#2563EB)",
+  formal_expressions:"linear-gradient(135deg,#0F172A,#1E293B)",
+  medicine_adv:"linear-gradient(135deg,#065F46,#0D9488)",
+  geography_adv:"linear-gradient(135deg,#1C3D5A,#0EA5E9)",
+  sciences_humaines:"linear-gradient(135deg,#312E81,#4F46E5)"
+};
+const CAT_BG_DEFAULT = "linear-gradient(135deg,#3B0764,#7C3AED)";
+
+/* ═══════ AUDIO ENGINE ════════════════════════════════════════════ */
+let _audioCtx = null;
+function getCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+function tone(freq, type, vol, dur, t0=0) {
+  try {
+    const ctx = getCtx();
+    const osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.connect(g); g.connect(ctx.destination);
+    osc.type = type; osc.frequency.value = freq;
+    const t = ctx.currentTime + t0;
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.start(t); osc.stop(t + dur + 0.01);
+  } catch(e){}
+}
+function sfxCorrect() {
+  tone(659.25, 'sine', 0.55, 0.18, 0.00);
+  tone(987.77, 'sine', 0.55, 0.18, 0.11);
+  tone(1318.5, 'sine', 0.55, 0.28, 0.22);
+  tone(1318.5*1.5,'sine', 0.28, 0.22, 0.22);
+}
+function sfxWrong() {
+  [0, 0.26].forEach(delay => {
+    try {
+      const ctx = getCtx();
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination);
+      osc.type = 'square';
+      const t = ctx.currentTime + delay;
+      osc.frequency.setValueAtTime(185, t);
+      osc.frequency.linearRampToValueAtTime(130, t + 0.22);
+      g.gain.setValueAtTime(0.6, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+      osc.start(t); osc.stop(t + 0.24);
+    } catch(e){}
+  });
+}
+function sfxTick(timeRemaining) {
+  const urgency = 1 - (timeRemaining / getTimerDur());
+  const vol  = 0.25 + urgency * 0.45;
+  const freq = 700 + urgency * 600;
+  tone(freq, 'square', vol, 0.055);
+}
+function sfxMilestone() {
+  [0,0.12,0.24,0.36,0.48].forEach((d,i) => {
+    const freqs = [523.25, 659.25, 783.99, 1046.5, 1318.5];
+    tone(freqs[i], 'sine', 0.5, 0.3, d);
+  });
+}
+
+/* ═══════ TIMER ═══════════════════════════════════════════════════ */
+function getTimerDur() { return difficulty === 'hard' ? 10.0 : 5.0; }
+let timerInterval = null, timeLeft = 5.0, lastTickSec = -1;
+
+function startTimer() {
+  const dur = getTimerDur();
+  timeLeft = dur; lastTickSec = Math.ceil(dur);
+  updateTimerUI();
+  sfxTick(dur);
+  timerInterval = setInterval(() => {
+    timeLeft = Math.max(0, parseFloat((timeLeft - 0.05).toFixed(2)));
+    updateTimerUI();
+    const w = Math.ceil(timeLeft);
+    if (w < lastTickSec && w >= 1) { lastTickSec = w; sfxTick(timeLeft); }
+    if (timeLeft <= 0) { stopTimer(); handleTimeout(); }
+  }, 50);
+}
+function stopTimer() { clearInterval(timerInterval); timerInterval = null; }
+function updateTimerUI() {
+  const dur = getTimerDur();
+  const pct = (timeLeft / dur) * 100;
+  const bar = document.getElementById('timer-bar');
+  const lbl = document.getElementById('timer-time');
+  if (!bar) return;
+  bar.style.width = pct + '%';
+  const urgentThresh = dur * 0.3;
+  const yellowThresh = dur * 0.6;
+  bar.classList.toggle('urgent', timeLeft <= urgentThresh);
+  bar.style.background = timeLeft > yellowThresh ? '#10B981' : timeLeft > urgentThresh ? '#F59E0B' : '#EF4444';
+  if (lbl) lbl.textContent = timeLeft.toFixed(1) + 's';
+}
+
+/* ═══════ SCORING ═════════════════════════════════════════════════ */
+function calcPoints(tLeft, isNearMiss = false) {
+  const baseMax = gameMode === 'god' ? 10 : 6;
+  const dur = getTimerDur();
+  const ratio = tLeft / dur;
+  let pts;
+  if (ratio >= 0.70) pts = baseMax;
+  else if (ratio >= 0.50) pts = Math.max(baseMax - 2, 2);
+  else if (ratio >= 0.30) pts = Math.max(baseMax - 4, 2);
+  else if (ratio >= 0.10) pts = Math.max(baseMax - 6, 2);
+  else pts = 2;
+  if (difficulty === 'hard') pts *= 2;
+  if (isNearMiss) pts = Math.max(Math.round(pts * 0.6 / 2) * 2, 2);
+  return pts;
+}
+
+let wordLevel = 'beginner';
+
+function getLevelWords() { return WORDS.filter(w => w.level === wordLevel); }
+
+const LEVEL_META = {
+  beginner:     { label:'✨ Beginner',     cats:24, words:500 },
+  intermediate: { label:'📘 Intermediate', cats:19, words:500 },
+  expert:  { label:'🎓 Expert',  cats:19, words:500 }
+};
+
+function setLevel(lv) {
+  wordLevel = lv;
+  ['beginner','intermediate','expert'].forEach(l => {
+    document.getElementById('btn-lv-'+l).classList.toggle('active', l === lv);
+  });
+  const lw = getLevelWords();
+  const cats = [...new Set(lw.map(w=>w.category))].length;
+  const m = LEVEL_META[lv];
+  document.getElementById('level-badge').textContent = m.label + ' · ' + lw.length + ' Words · ' + cats + ' Categories';
+  loadHS();
+  updateHomeHS();
+}
+
+function hsKey() { return 'spanishQuizHS_' + wordLevel; }
+
+let sessionScore = 0, highScores = {};
+function loadHS()  { try { highScores = JSON.parse(localStorage.getItem(hsKey())||'{}'); } catch(e){highScores={};} }
+function saveHS()  { try { localStorage.setItem(hsKey(), JSON.stringify(highScores)); } catch(e){} }
+function globalBest() {
+  const vals = Object.values(highScores).filter(v => typeof v === 'number' && v > 0);
+  return vals.length ? Math.max(...vals) : 0;
+}
+function updateHomeHS() {
+  const best = globalBest();
+  const bar  = document.getElementById('high-score-bar');
+  if (best > 0) {
+    bar.style.display = 'flex';
+    document.getElementById('hs-best').querySelector('.hs-pts').textContent = best.toLocaleString() + ' pts';
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+/* ═══════ MILESTONES ══════════════════════════════════════════════ */
+const MILESTONES     = [20,50,100,150,200,250,300,350,400];
+const MS_EMOJI       = {20:'🎉',50:'⭐',100:'🌟',150:'💫',200:'🏆',250:'👑',300:'🔥',350:'⚡',400:'🎯'};
+const MS_SUB         = {20:'¡Estás en racha!',50:'Halfway to 100!',100:'Century!',150:'¡Increíble!',200:'¡Imparable!',250:'¡Legendario!',300:'¡Increíble!',350:'Almost at 400!',400:'¡Perfecto!'};
+let shownMilestones  = new Set();
+
+function checkMilestone(callback) {
+  const hit = MILESTONES.find(m => m === correctCount && !shownMilestones.has(m));
+  if (!hit) return false;
+  shownMilestones.add(hit);
+  showMilestone(hit, callback);
+  return true;
+}
+function spawnConfetti() {
+  const c = document.getElementById('confetti-container');
+  c.innerHTML = '';
+  const colors = ['#AA151B','#F1BF00','#7C3AED','#10B981','#3B82F6','#EC4899','#fff','#FDE68A'];
+  for (let i = 0; i < 40; i++) {
+    const d = document.createElement('div');
+    const size = 8 + Math.random()*10;
+    d.className = 'conf-dot';
+    d.style.cssText = `left:${Math.random()*400}px;top:0;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'3px'};animation-duration:${1.2+Math.random()*1.2}s;animation-delay:${Math.random()*0.6}s;`;
+    c.appendChild(d);
+  }
+}
+function showMilestone(count, callback) {
+  sfxMilestone(); spawnConfetti();
+  document.getElementById('ms-emoji').textContent = MS_EMOJI[count]||'🎉';
+  document.getElementById('ms-count').textContent = count;
+  document.getElementById('ms-sub').textContent   = MS_SUB[count]||'¡Asombroso!';
+  const overlay = document.getElementById('milestone-overlay');
+  overlay.style.display = 'flex'; overlay.classList.remove('fade-out');
+  setTimeout(() => {
+    overlay.classList.add('fade-out');
+    setTimeout(() => { overlay.style.display='none'; overlay.classList.remove('fade-out'); if(callback)callback(); }, 500);
+  }, 2600);
+}
+
+/* ═══════ STOP MODAL ══════════════════════════════════════════════ */
+function confirmStop() { stopTimer(); document.getElementById('stop-modal').style.display='flex'; }
+function closeStopModal() { document.getElementById('stop-modal').style.display='none'; if(!answerLocked)startTimer(); }
+function exitToHome() { document.getElementById('stop-modal').style.display='none'; showScreen('screen-home'); }
+
+/* ═══════ GAME STATE ══════════════════════════════════════════════ */
+let gameMode='',difficulty='easy',lives=0,questions=[],currentQIdx=0,correctCount=0,
+    totalAnswered=0,completedCats=[],currentCat=null,godStreak=0,answerLocked=false;
+
+function setDifficulty(d) {
+  difficulty = d;
+  document.getElementById('btn-easy').classList.toggle('active', d === 'easy');
+  document.getElementById('btn-hard').classList.toggle('active', d === 'hard');
+  document.getElementById('diff-box-easy').classList.toggle('selected', d === 'easy');
+  document.getElementById('diff-box-hard').classList.toggle('selected', d === 'hard');
+  const catMax = d === 'hard' ? 12 : 6;
+  const godMax = d === 'hard' ? 20 : 10;
+  document.getElementById('pill-category').textContent = `🎯 No lives limit · Up to ${catMax} pts/word`;
+  document.getElementById('pill-endless').textContent  = `❤️ 3 lives · Up to ${catMax} pts/word`;
+  document.getElementById('pill-god').textContent      = `💀 1 life · Up to ${godMax} pts/word`;
+}
+
+const _DIACRITICS = new RegExp('[\\u0300-\\u036f]', 'g');
+function stripAccents(s) {
+  return s.normalize('NFD').replace(_DIACRITICS, '').toLowerCase().replace(/\s+/g,' ').trim();
+}
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function getCategories(){return[...new Set(getLevelWords().map(w=>w.category))];}
+function getWordsByCat(cat){return getLevelWords().filter(w=>w.category===cat);}
+function randomCat(exc=[]){const a=getCategories().filter(c=>!exc.includes(c));return a.length?a[Math.floor(Math.random()*a.length)]:null;}
+function buildQuestions(words){return shuffle(words).map(word=>{const d=shuffle(getLevelWords().filter(w=>w.spanish!==word.spanish)).slice(0,3);const c=shuffle([word,...d]);return{word,choices:c,correctIdx:c.indexOf(word)};});}
+function getWordEmoji(word){return WORD_EMOJI[word.english]||CAT_ICONS[word.category]||'❓';}
+
+function showScreen(id) {
+  stopTimer();
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
+  const el=document.getElementById(id);
+  el.style.display=(id==='screen-quiz'||id==='screen-cat-complete')?'flex':'block';
+  el.classList.add('active');
+  if(id==='screen-home')updateHomeHS();
+}
+
+function startMode(mode) {
+  gameMode=mode; correctCount=0; totalAnswered=0; completedCats=[];
+  godStreak=0; sessionScore=0; shownMilestones=new Set();
+  if(mode==='category'){lives=Infinity;buildCategoryGrid();showScreen('screen-categories');}
+  else if(mode==='endless'){lives=3;launchEndlessRound();}
+  else{lives=1;launchGodMode();}
+}
+
+function buildCategoryGrid(){
+  const grid=document.getElementById('category-grid');grid.innerHTML='';
+  getCategories().forEach(cat=>{
+    const count=getWordsByCat(cat).length;
+    const card=document.createElement('div');card.className='cat-card';
+    card.innerHTML=`<span class="cat-icon">${CAT_ICONS[cat]||'📖'}</span><span class="cat-name">${CAT_DISPLAY[cat]||cat}</span><span class="cat-count">${count} words</span>`;
+    card.onclick=()=>startCategory(cat);grid.appendChild(card);
+  });
+}
+function startCategory(cat){currentCat=cat;questions=buildQuestions(getWordsByCat(cat));currentQIdx=0;showScreen('screen-quiz');renderQuestion();}
+
+function launchEndlessRound(forcedCat){
+  const cat=forcedCat||randomCat(completedCats);if(!cat){showResults('all-complete');return;}
+  currentCat=cat;questions=buildQuestions(getWordsByCat(cat));currentQIdx=0;showScreen('screen-quiz');renderQuestion();
+}
+function launchGodMode(){currentCat=null;questions=buildQuestions(getLevelWords());currentQIdx=0;showScreen('screen-quiz');renderQuestion();}
+
+function renderQuestion() {
+  answerLocked=false;
+  if(document.activeElement) document.activeElement.blur();
+  const q=questions[currentQIdx];
+  document.getElementById('quiz-header').style.background = currentCat?(CAT_BG[currentCat]||CAT_BG_DEFAULT):CAT_BG_DEFAULT;
+  const catLabel=currentCat?(CAT_DISPLAY[currentCat]||currentCat):'All Categories';
+  document.getElementById('quiz-category-tag').textContent=catLabel;
+  document.getElementById('quiz-progress-text').textContent=`${currentQIdx+1}/${questions.length}`;
+  document.getElementById('progress-fill').style.width=((currentQIdx/questions.length)*100)+'%';
+  document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+  renderLives();
+  document.getElementById('quiz-word-emoji').textContent=getWordEmoji(q.word);
+  document.getElementById('quiz-word').textContent=q.word.english;
+  const card=document.getElementById('quiz-word-card');
+  card.classList.remove('flash-correct','flash-wrong');card.style.borderColor='transparent';
+  const dirEl=document.getElementById('quiz-direction');
+  dirEl.innerHTML=difficulty==='hard'?'Type the Spanish translation: <span class="hard-badge">Hard</span>':'What is the Spanish translation?';
+  const choicesEl=document.getElementById('quiz-choices');choicesEl.innerHTML='';
+  if(difficulty==='hard'){
+    choicesEl.className='type-mode';
+    const wrap=document.createElement('div');wrap.className='type-answer-wrap';
+    const inp=document.createElement('input');inp.type='text';inp.id='type-input';inp.className='type-input';
+    inp.placeholder='Type Spanish translation…';inp.autocomplete='off';inp.spellcheck=false;
+    inp.setAttribute('autocorrect','off');inp.setAttribute('autocapitalize','none');
+    inp.onkeydown=e=>{if(e.key==='Enter')submitTypedAnswer();};
+    const sub=document.createElement('button');sub.className='type-submit-btn';sub.textContent='→';sub.onclick=submitTypedAnswer;
+    wrap.appendChild(inp);wrap.appendChild(sub);choicesEl.appendChild(wrap);
+    setTimeout(()=>inp.focus(),120);
+  } else {
+    choicesEl.className='choices-grid';
+    q.choices.forEach((choice,i)=>{
+      const btn=document.createElement('button');btn.className='choice-btn';
+      btn.textContent=choice.spanish;btn.onclick=()=>handleAnswer(i);choicesEl.appendChild(btn);
+    });
+  }
+  const fb=document.getElementById('quiz-feedback');fb.textContent='';fb.className='quiz-feedback';
+  startTimer();
+}
+
+function renderLives(){
+  const el=document.getElementById('quiz-lives');
+  if(!el||gameMode==='category'){if(el)el.innerHTML='';return;}
+  const max=gameMode==='god'?1:3;let h='';
+  for(let i=0;i<max;i++)h+=i<lives?'❤️':'🖤';
+  el.innerHTML=h;
+}
+
+function handleTimeout(){
+  if(answerLocked)return;answerLocked=true;sfxWrong();
+  const q=questions[currentQIdx];
+  if(difficulty==='easy'){document.querySelectorAll('.choice-btn').forEach((btn,i)=>{btn.disabled=true;if(i===q.correctIdx)btn.classList.add('correct');});}
+  else{const inp=document.getElementById('type-input');const sub=document.querySelector('.type-submit-btn');if(inp)inp.disabled=true;if(sub)sub.disabled=true;}
+  if(lives!==Infinity)lives--;totalAnswered++;
+  document.getElementById('quiz-word-card').classList.add('flash-wrong');
+  const fb=document.getElementById('quiz-feedback');
+  fb.innerHTML=`⏱️ Too slow! Answer: <strong>${q.word.spanish}</strong>`;fb.className='quiz-feedback feedback-wrong';
+  renderLives();advanceAfterDelay();
+}
+
+function handleAnswer(choiceIdx){
+  if(answerLocked)return;answerLocked=true;stopTimer();
+  const q=questions[currentQIdx];const correct=choiceIdx===q.correctIdx;
+  const fb=document.getElementById('quiz-feedback');
+  document.querySelectorAll('.choice-btn').forEach((btn,i)=>{
+    btn.disabled=true;if(i===q.correctIdx)btn.classList.add('correct');else if(i===choiceIdx&&!correct)btn.classList.add('wrong');
+  });
+  if(correct){
+    const pts=calcPoints(timeLeft);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
+    fb.textContent=`✅ +${pts} pts`;fb.className='quiz-feedback feedback-correct';
+    document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+    const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
+    popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
+  } else {
+    if(lives!==Infinity)lives--;sfxWrong();
+    document.getElementById('quiz-word-card').classList.add('flash-wrong');
+    fb.innerHTML=`❌ Answer: <strong>${q.word.spanish}</strong>`;fb.className='quiz-feedback feedback-wrong';
+  }
+  totalAnswered++;renderLives();advanceAfterDelay();
+}
+
+function submitTypedAnswer(){
+  if(answerLocked)return;
+  const inp=document.getElementById('type-input');if(!inp)return;
+  const typed=inp.value.trim();if(!typed)return;
+  answerLocked=true;stopTimer();
+  const q=questions[currentQIdx];const correct=q.word.spanish;
+  const typedClean=typed.toLowerCase();const correctClean=correct.toLowerCase();
+  const exactMatch=typedClean===correctClean;
+  const nearMiss=!exactMatch&&stripAccents(typedClean)===stripAccents(correctClean);
+  inp.disabled=true;const sub=document.querySelector('.type-submit-btn');if(sub)sub.disabled=true;
+  const fb=document.getElementById('quiz-feedback');
+  if(exactMatch){
+    const pts=calcPoints(timeLeft,false);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
+    fb.textContent=`✅ +${pts} pts`;fb.className='quiz-feedback feedback-correct';
+    document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+    const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
+    popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
+  } else if(nearMiss){
+    const pts=calcPoints(timeLeft,true);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
+    fb.innerHTML=`✅ +${pts} pts &nbsp;·&nbsp; Exact spelling: <strong>${correct}</strong>`;fb.className='quiz-feedback feedback-correct';
+    document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+    const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
+    popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
+  } else {
+    if(lives!==Infinity)lives--;sfxWrong();
+    document.getElementById('quiz-word-card').classList.add('flash-wrong');
+    fb.innerHTML=`❌ Answer: <strong>${correct}</strong>`;fb.className='quiz-feedback feedback-wrong';
+  }
+  totalAnswered++;renderLives();advanceAfterDelay();
+}
+
+function advanceAfterDelay(){
+  setTimeout(()=>{
+    if(lives===0){showResults('game-over');return;}
+    currentQIdx++;
+    const doNext=()=>{
+      if(currentQIdx>=questions.length){
+        if(gameMode==='category')showResults('category-complete');
+        else if(gameMode==='endless'){completedCats.push(currentCat);showCatInterstitial();}
+        else showResults('all-complete');
+      } else renderQuestion();
+    };
+    if(!checkMilestone(doNext))doNext();
+  },1500);
+}
+
+function showCatInterstitial(){
+  showScreen('screen-cat-complete');
+  document.getElementById('ci-icon').textContent='🎉';
+  document.getElementById('ci-title').textContent=`${CAT_DISPLAY[currentCat]||currentCat} done!`;
+  const nextCat=randomCat(completedCats);
+  if(!nextCat){document.getElementById('ci-sub').textContent='¡Todas las categorías!';document.getElementById('ci-lives').innerHTML='';setTimeout(()=>showResults('all-complete'),1800);return;}
+  let lh='';for(let i=0;i<3;i++)lh+=i<lives?'❤️':'🖤';
+  document.getElementById('ci-lives').innerHTML=lh;
+  document.getElementById('ci-sub').textContent=`Next: ${CAT_DISPLAY[nextCat]||nextCat}`;
+  setTimeout(()=>launchEndlessRound(nextCat),2000);
+}
+
+function showResults(type){
+  showScreen('screen-results');
+  const prevBest=globalBest();
+  const prevModeBest=highScores[gameMode]||0;
+  if(sessionScore>prevModeBest&&sessionScore>0){highScores[gameMode]=sessionScore;saveHS();}
+  const isNew=sessionScore>0&&sessionScore>prevBest;
+  const pct=totalAnswered>0?Math.round((correctCount/totalAnswered)*100):0;
+  const isGameOver=type==='game-over';
+  const titles={'game-over':gameMode==='god'?'💀 ¡Game Over!':'💔 Out of Lives!','category-complete':'🎉 ¡Categoría completada!','all-complete':'🏆 ¡Increíble!'};
+  document.getElementById('results-title').textContent=titles[type]||'✅ Done!';
+  document.getElementById('results-subtitle').textContent={'game-over':gameMode==='god'?`Streak: ${godStreak} words`:`${completedCats.length} categor${completedCats.length===1?'y':'ies'} done`,'category-complete':CAT_DISPLAY[currentCat]||currentCat,'all-complete':'¡Conquistaste todas las categorías!'}[type]||'';
+  const hero=document.getElementById('results-hero');
+  hero.classList.remove('celebrate','game-over');
+  if(isGameOver){hero.classList.add('game-over');}else{hero.classList.add('celebrate');launchResultsConfetti();}
+  const scoreBig=document.getElementById('results-score-big');
+  scoreBig.classList.add('score-reveal');setTimeout(()=>scoreBig.classList.remove('score-reveal'),800);
+  animateScore(sessionScore);sfxCelebration(isGameOver);
+  const hsArea=document.getElementById('results-hs-area');
+  const curBest=globalBest();
+  hsArea.innerHTML=isNew?'<div class="new-hs-badge">🏆 New Personal Best!</div>':(curBest>0?`<div class="prev-hs-note">Best: ${curBest.toLocaleString()} pts</div>`:'');
+  let stats=`<div class="stat-chip"><span class="stat-num">${pct}%</span><span class="stat-label">Accuracy</span></div><div class="stat-chip"><span class="stat-num">${correctCount}</span><span class="stat-label">Correct</span></div><div class="stat-chip"><span class="stat-num">${totalAnswered-correctCount}</span><span class="stat-label">Wrong</span></div>`;
+  if(gameMode==='endless')stats+=`<div class="stat-chip"><span class="stat-num">${completedCats.length}</span><span class="stat-label">Categories</span></div>`;
+  if(gameMode==='god')stats+=`<div class="stat-chip"><span class="stat-num">${godStreak}</span><span class="stat-label">Streak</span></div>`;
+  document.getElementById('results-stats').innerHTML=stats;
+  const actEl=document.getElementById('results-actions');actEl.innerHTML='';
+  const btn=(label,cls,fn)=>{const b=document.createElement('button');b.className=cls;b.textContent=label;b.onclick=fn;actEl.appendChild(b);};
+  if(type==='category-complete'){btn('🔄 Try Again','btn-secondary',()=>startCategory(currentCat));btn('📚 Pick Category','btn-secondary',()=>showScreen('screen-categories'));}
+  if(type==='game-over'&&gameMode==='endless')btn('🔥 Play Again','btn-secondary',()=>startMode('endless'));
+  if(type==='game-over'&&gameMode==='god')btn('⚡ God Mode Again','btn-secondary',()=>startMode('god'));
+  btn('🏠 Back to Home','btn-primary',()=>showScreen('screen-home'));
+}
+
+function sfxCelebration(isGameOver){
+  if(isGameOver){tone(392.00,'sine',0.38,0.32,0.00);tone(349.23,'sine',0.38,0.32,0.36);tone(329.63,'sine',0.38,0.55,0.72);}
+  else{[523.25,659.25,783.99,1046.50,1318.50].forEach((f,i)=>tone(f,'sine',0.48,0.22,i*0.10));[523.25,659.25,783.99,1046.50].forEach(f=>tone(f,'sine',0.42,0.75,0.65));tone(1567.98,'sine',0.28,0.55,0.80);}
+}
+
+function animateScore(target){
+  const el=document.getElementById('results-score-big');el.classList.add('counting');el.textContent='0';
+  const dur=Math.min(1800,400+target*6);const start=Date.now();
+  const tick=()=>{const p=Math.min((Date.now()-start)/dur,1);const eased=1-Math.pow(1-p,3);el.textContent=Math.round(eased*target).toLocaleString();if(p<1)requestAnimationFrame(tick);else{el.textContent=target.toLocaleString();el.classList.remove('counting');}};
+  requestAnimationFrame(tick);
+}
+
+function launchResultsConfetti(count=70){
+  const c=document.getElementById('results-confetti');c.innerHTML='';
+  const colors=['#AA151B','#F1BF00','#7C3AED','#10B981','#EF4444','#3B82F6','#ffffff','#FDE68A','#A78BFA'];
+  for(let i=0;i<count;i++){const d=document.createElement('div');const size=7+Math.random()*13;const isCircle=Math.random()>0.45;d.className='conf-rain';d.style.cssText=`left:${Math.random()*100}%;top:-25px;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${isCircle?'50%':'2px'};animation-duration:${1.6+Math.random()*1.8}s;animation-delay:${Math.random()*1.0}s;`;c.appendChild(d);}
+  setTimeout(()=>{c.innerHTML='';},4500);
+}
+
+loadHS();
+showScreen('screen-home');
+</script>
+</body>
+</html>

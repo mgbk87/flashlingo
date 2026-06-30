@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashlingo — Language Quiz Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:       #7C3AED;
+      --purple-light: #A78BFA;
+      --purple-faint: #F3EEFF;
+      --purple-dark:  #5B21B6;
+      --yellow:       #F59E0B;
+      --yellow-light: #FDE68A;
+      --green:        #10B981;
+      --red:          #EF4444;
+      --bg:           #FAF9FF;
+      --white:        #FFFFFF;
+      --text:         #1E1B4B;
+      --text-mid:     #4B5563;
+      --text-muted:   #9CA3AF;
+      --radius:       20px;
+      --radius-lg:    28px;
+      --shadow:       0 8px 32px rgba(124,58,237,0.12);
+      --shadow-card:  0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    html, body { height: 100%; font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    /* ── BLOB BG ── */
+    .blob-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+    .blob-bg::before { content: ''; position: absolute; top: -120px; right: -100px; width: 420px; height: 420px; border-radius: 60% 40% 50% 70% / 50% 60% 40% 60%; background: var(--purple-faint); opacity: 0.7; }
+    .blob-bg::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 320px; height: 320px; border-radius: 70% 30% 60% 40% / 40% 70% 30% 60%; background: var(--yellow-light); opacity: 0.4; }
+
+    /* ── NAV ── */
+    .nav { display: flex; align-items: center; justify-content: center; padding: 16px 24px; background: var(--white); border-bottom: 3px solid var(--purple-faint); position: relative; z-index: 10; }
+    .nav-logo { font-size: 1.6rem; font-weight: 900; color: var(--purple); display: flex; align-items: center; gap: 6px; letter-spacing: -0.5px; }
+    .nav-logo .logo-flash { color: var(--purple); }
+    .nav-logo .logo-lingo { font-style: italic; color: var(--yellow); }
+
+    /* ── HERO ── */
+    .cover-hero { text-align: center; padding: 40px 24px 20px; position: relative; z-index: 1; }
+    .badge { display: inline-block; background: var(--yellow); color: var(--text); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.5px; padding: 4px 12px; border-radius: 999px; margin-bottom: 14px; text-transform: uppercase; }
+    .cover-hero h1 { font-size: clamp(1.9rem, 6vw, 3rem); font-weight: 900; line-height: 1.15; margin-bottom: 12px; }
+    .cover-hero h1 em { font-style: italic; color: var(--purple); }
+    .cover-hero p { font-size: 1rem; color: var(--text-mid); font-weight: 600; max-width: 400px; margin: 0 auto; }
+
+    /* ── LANGUAGE CARDS ── */
+    .lang-grid { display: flex; flex-direction: column; gap: 14px; max-width: 420px; margin: 28px auto; padding: 0 20px; position: relative; z-index: 1; }
+    .lang-card { display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius-lg); padding: 28px 24px; cursor: pointer; text-decoration: none; border: none; text-align: center; transition: transform 0.18s ease, box-shadow 0.18s ease; box-shadow: 0 6px 28px rgba(0,0,0,0.14); position: relative; overflow: hidden; }
+    .lang-card:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(0,0,0,0.18); }
+    .lang-card:active { transform: translateY(0); }
+    .lang-card-glow { position: absolute; top: -40px; right: -40px; width: 160px; height: 160px; border-radius: 50%; opacity: 0.15; background: #fff; }
+    .lang-flag { width: 72px; height: auto; margin-bottom: 10px; display: block; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .lang-name { font-size: 1.7rem; font-weight: 900; color: #fff; margin-bottom: 4px; }
+    .lang-meta { font-size: 0.84rem; font-weight: 700; color: rgba(255,255,255,0.82); margin-bottom: 6px; }
+    .lang-levels { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+    .lang-level { display: inline-flex; align-items: center; background: rgba(255,255,255,0.2); border-radius: 999px; padding: 3px 12px; font-size: 0.76rem; font-weight: 800; color: #fff; }
+    .lang-card--french  { background: linear-gradient(135deg, #002395, #4F7BE8); }
+    .lang-card--spanish { background: linear-gradient(135deg, #AA151B, #D4A017); }
+
+    /* ── FEATURES ── */
+    .cover-features { display: flex; justify-content: center; gap: 0; flex-wrap: wrap; padding: 12px 20px 40px; max-width: 480px; margin: 0 auto; position: relative; z-index: 1; }
+    .feat-chip { display: flex; align-items: center; gap: 6px; background: var(--white); border-radius: 999px; padding: 6px 14px; font-size: 0.8rem; font-weight: 800; color: var(--text-mid); box-shadow: var(--shadow-card); margin: 5px; white-space: nowrap; }
+
+    /* ── TAGLINE ── */
+    .cover-tagline { text-align: center; padding: 0 20px 8px; position: relative; z-index: 1; }
+    .cover-tagline p { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); }
+
+    @media (min-width: 480px) {
+      .lang-grid { flex-direction: row; max-width: 520px; }
+      .lang-card { flex: 1; }
+    }
+
+    /* ── COMING SOON CARD ── */
+    .lang-card--coming { background: linear-gradient(135deg, #374151, #6B7280); cursor: default; opacity: 0.7; }
+    .lang-card--coming:hover { transform: none; box-shadow: 0 6px 28px rgba(0,0,0,0.14); }
+  </style>
+</head>
+<body>
+
+<div class="blob-bg"></div>
+
+<nav class="nav">
+  <div class="nav-logo"><span class="logo-flash">Flash</span><span class="logo-lingo">lingo</span></div>
+</nav>
+
+<div class="cover-hero">
+  <div class="badge">🌍 Language Quiz Platform</div>
+  <h1>Learn languages<br>with <em>Flashlingo</em></h1>
+  <p>Flash-card quizzes to build your vocabulary — one word at a time</p>
+</div>
+
+<div class="lang-grid">
+  <a href="french.html" class="lang-card lang-card--french">
+    <div class="lang-card-glow"></div>
+    <img src="Design/Flag_of_France.png" class="lang-flag" alt="France flag">
+    <div class="lang-name">French</div>
+    <div class="lang-meta">1500 words · 3 levels</div>
+    <div class="lang-levels">
+      <div class="lang-level">🌱 Beginner</div>
+      <div class="lang-level">📘 Intermediate</div>
+      <div class="lang-level">🎓 Expert</div>
+    </div>
+  </a>
+  <a href="spanish.html" class="lang-card lang-card--spanish">
+    <div class="lang-card-glow"></div>
+    <img src="Design/Spain_flag_300.png" class="lang-flag" alt="Spain flag">
+    <div class="lang-name">Spanish</div>
+    <div class="lang-meta">1500 words · 3 levels</div>
+    <div class="lang-levels">
+      <div class="lang-level">🌱 Beginner</div>
+      <div class="lang-level">📘 Intermediate</div>
+      <div class="lang-level">🎓 Expert</div>
+    </div>
+  </a>
+</div>
+
+<div class="cover-features">
+  <div class="feat-chip">⏱️ Beat the timer</div>
+  <div class="feat-chip">🎯 3 game modes</div>
+  <div class="feat-chip">🔥 Easy &amp; Hard difficulty</div>
+  <div class="feat-chip">🏆 Personal best tracking</div>
+</div>
+
+<div class="cover-tagline">
+  <p>More languages coming soon</p>
+</div>
+
+</body>
+</html>

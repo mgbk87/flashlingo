@@ -1,0 +1,2398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashlingo 🇫🇷</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:       #7C3AED;
+      --purple-light: #A78BFA;
+      --purple-faint: #F3EEFF;
+      --purple-dark:  #5B21B6;
+      --yellow:       #F59E0B;
+      --yellow-light: #FDE68A;
+      --green:        #10B981;
+      --red:          #EF4444;
+      --bg:           #FAF9FF;
+      --white:        #FFFFFF;
+      --text:         #1E1B4B;
+      --text-mid:     #4B5563;
+      --text-muted:   #9CA3AF;
+      --radius:       20px;
+      --radius-lg:    28px;
+      --shadow:       0 8px 32px rgba(124,58,237,0.12);
+      --shadow-card:  0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    html, body { height: 100%; font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: block; }
+
+    .blob-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+    .blob-bg::before { content: ''; position: absolute; top: -120px; right: -100px; width: 420px; height: 420px; border-radius: 60% 40% 50% 70% / 50% 60% 40% 60%; background: #BFDBFE; opacity: 0.7; }
+    .blob-bg::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 320px; height: 320px; border-radius: 70% 30% 60% 40% / 40% 70% 30% 60%; background: #FECACA; opacity: 0.4; }
+
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: var(--white); border-bottom: 3px solid var(--purple-faint); position: relative; z-index: 10; }
+    .nav-logo { font-size: 1.4rem; font-weight: 900; color: var(--purple); display: flex; align-items: center; gap: 6px; letter-spacing: -0.5px; }
+    .nav-logo .logo-flash { color: var(--purple); }
+    .nav-logo .logo-lingo { font-style: italic; color: var(--yellow); }
+    .nav-logo .logo-flag  { font-style: normal; }
+    .lang-home-btn { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.82rem; color: var(--purple); text-decoration: none; background: var(--purple-faint); padding: 5px 12px; border-radius: 999px; white-space: nowrap; }
+    .lang-home-btn:hover { background: #DDD6FE; }
+    .flag-stripe { height: 6px; background: linear-gradient(90deg, #002395 33%, #fff 33% 66%, #ED2939 66%); }
+    .home-lang-flag { width: 90px; height: auto; margin-bottom: 6px; display: block; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+
+    #screen-home { background: #EEF4FF; }
+    .home-hero { text-align: center; padding: 28px 24px 14px; position: relative; z-index: 1; }
+    .home-hero h1 { font-size: clamp(1.8rem, 5.5vw, 2.8rem); font-weight: 900; line-height: 1.15; margin-bottom: 10px; }
+    .home-hero h1 em { font-style: italic; color: var(--purple); }
+    .home-hero p { font-size: 1rem; color: var(--text-mid); font-weight: 600; max-width: 420px; margin: 0 auto; }
+    .badge { display: inline-block; background: var(--yellow); color: var(--text); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.5px; padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; text-transform: uppercase; }
+
+    .high-score-bar { background: linear-gradient(135deg, #3B0764, #7C3AED); margin: 0 18px 4px; border-radius: var(--radius-lg); padding: 12px 18px; position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .hs-title { font-size: 0.78rem; font-weight: 900; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+    .hs-scores { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
+    .hs-chip { background: rgba(255,255,255,0.15); color: #fff; border-radius: 999px; padding: 4px 11px; font-size: 0.8rem; font-weight: 800; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
+    .hs-chip .hs-pts { color: var(--yellow-light); }
+
+    .mode-grid { display: flex; flex-direction: column; gap: 12px; max-width: 480px; margin: 14px auto 28px; padding: 0 18px; position: relative; z-index: 1; }
+    .mode-card { border-radius: var(--radius-lg); padding: 20px 24px; cursor: pointer; position: relative; overflow: hidden; border: none; text-align: left; transition: transform 0.18s ease, box-shadow 0.18s ease; box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+    .mode-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,0.16); }
+    .mode-card:active { transform: translateY(0); }
+    .mode-card-bg { position: absolute; top: -40px; right: -40px; width: 150px; height: 150px; border-radius: 50%; opacity: 0.18; }
+    .mode-icon    { font-size: 2rem; margin-bottom: 7px; display: block; }
+    .mode-name    { font-size: 1.4rem; font-weight: 900; color: #fff; margin-bottom: 2px; }
+    .mode-tagline { font-size: 0.88rem; font-weight: 600; color: rgba(255,255,255,0.85); margin-bottom: 7px; }
+    .mode-desc    { font-size: 0.82rem; color: rgba(255,255,255,0.7); font-weight: 600; }
+    .mode-pill    { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.2); border-radius: 999px; padding: 3px 11px; font-size: 0.76rem; font-weight: 800; color: #fff; margin-top: 9px; }
+    .mode-card--category { background: linear-gradient(135deg, #2563EB, #60A5FA); }
+    .mode-card--category .mode-card-bg { background: #fff; }
+    .mode-card--endless  { background: linear-gradient(135deg, #EA580C, #FB923C); }
+    .mode-card--endless .mode-card-bg  { background: #fff; }
+    .mode-card--god      { background: linear-gradient(135deg, #3B0764, #7C3AED); }
+    .mode-card--god .mode-card-bg      { background: #C084FC; }
+
+    .home-stats { display: flex; justify-content: center; gap: 24px; padding: 12px 24px; background: var(--white); border-top: 2px solid var(--purple-faint); position: relative; z-index: 1; }
+    .home-stat { text-align: center; }
+    .home-stat-num   { display: block; font-size: 1.3rem; font-weight: 900; color: var(--purple); }
+    .home-stat-label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    #screen-categories { background: var(--bg); }
+    .screen-top { background: var(--purple); padding: 18px 22px 24px; position: relative; overflow: hidden; }
+    .screen-top::after { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.08); }
+    .back-btn { background: rgba(255,255,255,0.18); border: none; cursor: pointer; color: #fff; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.88rem; padding: 5px 13px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; transition: background 0.15s; margin-bottom: 12px; }
+    .back-btn:hover { background: rgba(255,255,255,0.28); }
+    .screen-title    { font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 3px; }
+    .screen-subtitle { font-size: 0.86rem; color: rgba(255,255,255,0.8); font-weight: 600; }
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); gap: 11px; padding: 18px 14px 28px; max-width: 600px; margin: 0 auto; }
+    .cat-card { background: var(--white); border-radius: var(--radius); padding: 15px 11px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.15s ease; box-shadow: var(--shadow-card); display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .cat-card:hover { border-color: var(--purple); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,0.15); }
+    .cat-icon  { font-size: 1.8rem; }
+    .cat-name  { font-size: 0.8rem; font-weight: 800; color: var(--text); }
+    .cat-count { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); background: var(--purple-faint); padding: 2px 7px; border-radius: 999px; }
+
+    #screen-quiz { background: var(--bg); display: flex; flex-direction: column; }
+    .quiz-header { padding: 13px 16px 16px; position: relative; overflow: hidden; transition: background 0.4s ease; }
+    .quiz-header::after { content: ''; position: absolute; bottom: -30px; right: -30px; width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,0.07); }
+    .quiz-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+    .quiz-left    { display: flex; align-items: center; gap: 8px; }
+    .quiz-right   { display: flex; align-items: center; gap: 8px; }
+    .stop-btn { background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.35); cursor: pointer; color: #fff; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.78rem; padding: 4px 11px; border-radius: 999px; transition: background 0.15s; white-space: nowrap; }
+    .stop-btn:hover { background: rgba(255,255,255,0.35); }
+    .quiz-category-tag { background: rgba(255,255,255,0.22); color: #fff; font-size: 0.76rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
+    .quiz-score-display { background: var(--yellow); color: #1E1B4B; font-size: 0.8rem; font-weight: 900; padding: 3px 10px; border-radius: 999px; }
+    .quiz-progress-text { color: rgba(255,255,255,0.85); font-size: 0.8rem; font-weight: 700; }
+    .quiz-lives { font-size: 1.25rem; letter-spacing: 3px; min-height: 24px; margin-bottom: 5px; }
+    .progress-track { height: 7px; background: rgba(255,255,255,0.2); border-radius: 999px; overflow: hidden; }
+    .progress-fill  { height: 100%; background: var(--yellow); border-radius: 999px; transition: width 0.4s ease; }
+
+    .quiz-body { flex: 1; padding: 20px 16px 24px; display: flex; flex-direction: column; align-items: center; max-width: 520px; margin: 0 auto; width: 100%; }
+    .quiz-direction { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
+    .quiz-word-card { border-radius: var(--radius-lg); padding: 20px 24px 24px; text-align: center; width: 100%; box-shadow: var(--shadow); margin-bottom: 12px; border: 3px solid transparent; background: var(--white); transition: border-color 0.3s; }
+    .quiz-word-card.flash-correct { animation: flashGreen 0.5s ease; }
+    .quiz-word-card.flash-wrong   { animation: flashRed   0.5s ease; }
+    @keyframes flashGreen { 0%,100% { background:#fff; } 40% { background:#D1FAE5; } }
+    @keyframes flashRed   { 0%,100% { background:#fff; } 40% { background:#FEE2E2; } }
+    .quiz-word-emoji { font-size: 3.2rem; margin-bottom: 8px; display: block; line-height: 1; animation: emojiPop 0.35s ease; }
+    @keyframes emojiPop { 0% { transform: scale(0.5); opacity:0; } 70% { transform: scale(1.15); } 100% { transform: scale(1); opacity:1; } }
+    .quiz-word { font-size: clamp(1.6rem, 5.5vw, 2.2rem); font-weight: 900; color: var(--text); line-height: 1.2; }
+
+    .timer-wrap { width: 100%; margin-bottom: 16px; }
+    .timer-track { height: 12px; background: #E5E7EB; border-radius: 999px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); }
+    .timer-bar   { height: 100%; width: 100%; border-radius: 999px; transition: background 0.3s ease; }
+    .timer-bar.urgent { animation: timerPulse 0.4s ease-in-out infinite; }
+    @keyframes timerPulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+    .timer-time  { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-align: right; margin-top: 3px; }
+
+    .choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+    .choice-btn { background: var(--white); border: 3px solid var(--purple-faint); border-radius: var(--radius); padding: 14px 11px; font-family: 'Nunito', sans-serif; font-size: 0.94rem; font-weight: 800; color: var(--text); cursor: pointer; transition: all 0.12s ease; text-align: center; line-height: 1.3; box-shadow: var(--shadow-card); }
+    @media (hover: hover) { .choice-btn:hover:not(:disabled) { border-color: var(--purple); background: var(--purple-faint); transform: translateY(-2px); } }
+    .choice-btn:disabled { cursor: default; }
+    .choice-btn.correct { background: #D1FAE5; border-color: var(--green); color: #065F46; }
+    .choice-btn.wrong   { background: #FEE2E2; border-color: var(--red);   color: #991B1B; }
+    .choice-btn.correct::before { content: '✓ '; }
+    .choice-btn.wrong::before   { content: '✗ '; }
+
+    .pts-pop { position: fixed; font-size: 1.4rem; font-weight: 900; color: var(--green); pointer-events: none; z-index: 500; animation: ptsFly 1.1s ease forwards; }
+    @keyframes ptsFly { 0% { opacity:1; transform: translateY(0) scale(1); } 100% { opacity:0; transform: translateY(-60px) scale(1.4); } }
+
+    .quiz-feedback { margin-top: 14px; font-size: 0.97rem; font-weight: 800; min-height: 24px; text-align: center; }
+    .feedback-correct { color: var(--green); }
+    .feedback-wrong   { color: var(--red); }
+
+    .milestone-overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 2000; display: flex; align-items: center; justify-content: center; background: rgba(30,5,60,0.88); backdrop-filter: blur(6px); animation: msIn 0.35s ease; }
+    @keyframes msIn { from { opacity:0; } to { opacity:1; } }
+    .milestone-overlay.fade-out { animation: msOut 0.5s ease forwards; }
+    @keyframes msOut { from { opacity:1; } to { opacity:0; } }
+    .milestone-box { text-align: center; position: relative; }
+    .milestone-emoji  { font-size: 5rem; display: block; margin-bottom: 8px; animation: msBounce 0.6s ease infinite alternate; }
+    @keyframes msBounce { from { transform: scale(1) rotate(-5deg); } to { transform: scale(1.15) rotate(5deg); } }
+    .milestone-count  { font-size: clamp(5rem, 20vw, 9rem); font-weight: 900; color: var(--yellow); line-height: 1; display: block; text-shadow: 0 0 40px rgba(245,158,11,0.6); animation: msPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+    @keyframes msPop   { from { transform: scale(0.3); opacity:0; } to { transform: scale(1); opacity:1; } }
+    .milestone-label  { font-size: 1.5rem; font-weight: 900; color: rgba(255,255,255,0.9); margin-top: 4px; display: block; }
+    .milestone-sub    { font-size: 1rem; color: rgba(255,255,255,0.6); font-weight: 700; margin-top: 6px; display: block; }
+
+    #confetti-container { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 400px; height: 500px; pointer-events: none; overflow: visible; }
+    .conf-dot { position: absolute; border-radius: 50%; animation: confFall linear forwards; }
+    @keyframes confFall { 0% { transform: translateY(0) rotate(0deg) scale(1); opacity:1; } 100% { transform: translateY(500px) rotate(720deg) scale(0.5); opacity:0; } }
+
+    .stop-modal { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 1500; display: flex; align-items: center; justify-content: center; background: rgba(30,27,74,0.7); backdrop-filter: blur(4px); }
+    .stop-modal-box { background: #fff; border-radius: var(--radius-lg); padding: 28px 28px 24px; max-width: 300px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .stop-modal-title { font-size: 1.3rem; font-weight: 900; color: var(--text); margin-bottom: 8px; }
+    .stop-modal-sub   { font-size: 0.88rem; font-weight: 600; color: var(--text-mid); margin-bottom: 20px; }
+    .stop-modal-btns  { display: flex; gap: 10px; }
+    .stop-modal-btns button { flex:1; padding: 13px; border-radius: var(--radius); font-family: 'Nunito', sans-serif; font-size: 0.92rem; font-weight: 800; cursor: pointer; border: none; }
+    .stop-cancel { background: var(--purple-faint); color: var(--purple); }
+    .stop-exit   { background: var(--red); color: #fff; }
+
+    #screen-results { background: var(--bg); }
+    .results-hero { background: linear-gradient(135deg, var(--purple-dark), var(--purple)); padding: 40px 22px 52px; text-align: center; position: relative; overflow: hidden; }
+    .results-hero::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .results-title    { font-size: clamp(1.6rem, 5.5vw, 2.4rem); font-weight: 900; color: #fff; margin-bottom: 5px; position: relative; }
+    .results-subtitle { font-size: 0.95rem; color: rgba(255,255,255,0.8); font-weight: 700; position: relative; }
+    .results-score-card { background: var(--white); border-radius: var(--radius-lg); margin: -32px 20px 18px; padding: 22px; box-shadow: 0 12px 40px rgba(124,58,237,0.18); text-align: center; position: relative; }
+    .score-label { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .score-big   { font-size: clamp(2.6rem, 10vw, 4.2rem); font-weight: 900; color: var(--purple); line-height: 1; margin-bottom: 2px; }
+    .score-unit  { font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+    .new-hs-badge  { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #F59E0B, #FBBF24); color: #1E1B4B; border-radius: 999px; padding: 5px 15px; font-weight: 900; font-size: 0.85rem; margin-top: 4px; }
+    .prev-hs-note  { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-top: 4px; }
+    .god-streak-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #3B0764, #7C3AED); color: #fff; border-radius: 999px; padding: 5px 16px; font-weight: 900; font-size: 0.9rem; margin-top: 6px; }
+    .results-stats { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 0 20px 18px; }
+    .stat-chip  { background: var(--white); border-radius: var(--radius); padding: 11px 14px; text-align: center; min-width: 72px; box-shadow: var(--shadow-card); }
+    .stat-num   { display: block; font-size: 1.45rem; font-weight: 900; color: var(--purple); }
+    .stat-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .results-actions { display: flex; flex-direction: column; gap: 10px; padding: 0 20px 32px; max-width: 480px; margin: 0 auto; }
+    .btn-primary  { width:100%; padding:16px 20px; border-radius:var(--radius); font-family:'Nunito',sans-serif; font-size:0.97rem; font-weight:800; cursor:pointer; border:none; transition:all 0.15s ease; background:var(--purple); color:#fff; box-shadow:0 4px 16px rgba(124,58,237,0.3); }
+    .btn-primary:hover  { background:var(--purple-dark); transform:translateY(-1px); }
+    .btn-secondary { width:100%; padding:16px 20px; border-radius:var(--radius); font-family:'Nunito',sans-serif; font-size:0.97rem; font-weight:800; cursor:pointer; border:3px solid var(--purple-faint); transition:all 0.15s ease; background:var(--white); color:var(--purple); box-shadow:var(--shadow-card); }
+    .btn-secondary:hover { background:var(--purple-faint); transform:translateY(-1px); }
+
+    #screen-cat-complete { background: var(--bg); display:none; flex-direction:column; justify-content:center; align-items:center; min-height:100vh; padding:36px 22px; text-align:center; }
+    #screen-cat-complete.active { display:flex; }
+    .interstitial-icon  { font-size: 4.5rem; margin-bottom: 12px; }
+    .interstitial-title { font-size: 1.8rem; font-weight: 900; color: var(--purple); margin-bottom: 5px; }
+    .interstitial-sub   { font-size: 0.95rem; font-weight: 700; color: var(--text-mid); margin-bottom: 20px; }
+    .interstitial-lives { font-size: 1.9rem; letter-spacing: 5px; }
+
+    @media (max-width: 360px) { .choices-grid { grid-template-columns: 1fr; } }
+    @media (min-width: 480px) { .category-grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 13px; } }
+
+    .difficulty-wrap { max-width: 480px; margin: 10px auto 4px; padding: 0 18px; position: relative; z-index: 1; }
+    .difficulty-toggle { display: flex; align-items: center; gap: 8px; background: var(--white); border-radius: var(--radius); padding: 8px 12px; box-shadow: var(--shadow-card); }
+    .diff-label { font-size: 0.82rem; font-weight: 900; color: var(--text-mid); white-space: nowrap; }
+    .diff-btn { flex: 1; padding: 7px 0; border: 2px solid transparent; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 800; cursor: pointer; transition: all 0.18s; background: transparent; color: var(--text-mid); }
+    .diff-btn.active { background: var(--purple); color: #fff; border-color: var(--purple); box-shadow: 0 2px 8px rgba(124,58,237,0.3); }
+    .diff-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .diff-info-box { border-radius: 14px; padding: 10px 12px; font-size: 0.75rem; border: 2px solid transparent; transition: border-color 0.2s, box-shadow 0.2s; }
+    .diff-info-box--easy { background: #EDE9FE; border-color: #C4B5FD; }
+    .diff-info-box--easy.selected { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(124,58,237,0.18); }
+    .diff-info-box--hard { background: #FFF7ED; border-color: #FED7AA; }
+    .diff-info-box--hard.selected { border-color: #EA580C; box-shadow: 0 0 0 3px rgba(234,88,12,0.18); }
+    .diff-info-title { font-weight: 900; font-size: 0.82rem; margin-bottom: 6px; }
+    .diff-info-box--easy .diff-info-title { color: var(--purple); }
+    .diff-info-box--hard .diff-info-title { color: #EA580C; }
+    .diff-info-item { display: flex; align-items: flex-start; gap: 5px; margin-bottom: 3px; color: var(--text-mid); font-weight: 600; line-height: 1.4; }
+    .diff-info-item::before { content: '•'; font-weight: 900; flex-shrink: 0; }
+    .diff-info-box--easy .diff-info-item::before { color: var(--purple); }
+    .diff-info-box--hard .diff-info-item::before { color: #EA580C; }
+
+    /* Level selector */
+    .level-wrap { max-width: 480px; margin: 0 auto 14px; padding: 0 18px; position: relative; z-index: 1; }
+    .level-wrap-inner { background: rgba(255,255,255,0.85); border-radius: 18px; padding: 12px 14px; box-shadow: 0 2px 10px rgba(124,58,237,0.08); }
+    .level-label { font-size: 0.75rem; font-weight: 900; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+    .level-toggle { display: flex; flex-direction: column; gap: 6px; }
+    .level-btn { width: 100%; padding: 10px 4px; border: 2px solid #E9D5FF; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 800; cursor: pointer; transition: all 0.18s; background: transparent; color: var(--text-mid); text-align: center; }
+    .level-btn.active { color: #fff; border-color: transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .level-btn.lv-beginner.active { background: linear-gradient(135deg,#059669,#34D399); }
+    .level-btn.lv-intermediate.active { background: linear-gradient(135deg,#2563EB,#60A5FA); }
+    .level-btn.lv-expert.active { background: linear-gradient(135deg,#DC2626,#F87171); }
+
+    .type-answer-wrap { display: flex; gap: 8px; align-items: stretch; width: 100%; }
+    .type-input { flex: 1; font-family: 'Nunito', sans-serif; font-size: 1.08rem; font-weight: 700; padding: 13px 16px; border: 3px solid var(--purple-light); border-radius: var(--radius); background: var(--white); color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .type-input:focus { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(124,58,237,0.12); }
+    .type-input:disabled { opacity: 0.6; }
+    .type-input::placeholder { color: var(--text-muted); font-weight: 600; }
+    .type-submit-btn { padding: 13px 18px; border-radius: var(--radius); border: none; background: var(--purple); color: #fff; font-size: 1.4rem; font-weight: 900; cursor: pointer; transition: background 0.18s, transform 0.1s; flex-shrink: 0; display: flex; align-items: center; }
+    .type-submit-btn:hover { background: var(--purple-dark); transform: translateY(-1px); }
+    .type-submit-btn:active { transform: scale(0.95); }
+    .type-submit-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+    #quiz-choices.type-mode { display: block; }
+
+    .hard-badge { display: inline-block; background: #EF4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.5px; text-transform: uppercase; vertical-align: middle; margin-left: 4px; }
+
+    #results-confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; overflow: hidden; }
+    .conf-rain { position: absolute; border-radius: 3px; animation: confRain linear forwards; }
+    @keyframes confRain { 0% { transform: translateY(-30px) rotate(0deg); opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(110vh) rotate(900deg); opacity: 0; } }
+    .score-big.counting { color: var(--yellow); }
+    .results-hero.celebrate { background: linear-gradient(135deg, #0F172A, #1D4ED8, #7C3AED); background-size: 200%; animation: heroPulse 2s ease infinite alternate; }
+    @keyframes heroPulse { from { background-position: 0%; } to { background-position: 100%; } }
+    .score-reveal { animation: scoreReveal 0.7s cubic-bezier(0.175,0.885,0.32,1.275) both; }
+    @keyframes scoreReveal { from { transform: scale(0.3) rotate(-10deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
+    .star-burst { position: absolute; font-size: 1.6rem; pointer-events: none; animation: starFly 1.4s ease forwards; }
+    @keyframes starFly { 0% { opacity: 1; transform: translate(0,0) scale(1); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.4); } }
+    .results-hero.game-over { background: linear-gradient(135deg, #1F1F1F, #4B0000, #7C0000); }
+  </style>
+</head>
+<body>
+
+<!-- ░░ HOME ░░ -->
+<div id="screen-home" class="screen active">
+  <div class="blob-bg"></div>
+  <nav class="nav">
+    <a href="index.html" class="lang-home-btn">← Languages</a>
+    <div class="nav-logo"><span class="logo-flag">🇫🇷</span><span class="logo-flash">Flash</span><span class="logo-lingo">lingo</span></div>
+    <div style="width:80px"></div>
+  </nav>
+  <div class="flag-stripe"></div>
+  <div class="home-hero">
+    <img src="Design/Flag_of_France.png" class="home-lang-flag" alt="France flag">
+    <div class="badge" id="level-badge">✨ Beginner · 500 Words · 24 Categories</div>
+    <h1>Welcome to<br><em>Flashlingo!</em></h1>
+    <p>Flash-card quizzes to build your French vocabulary — bonne chance!</p>
+  </div>
+
+  <div id="high-score-bar" class="high-score-bar" style="display:none;">
+    <div class="hs-title">🏆 Personal Best</div>
+    <div class="hs-scores">
+      <div class="hs-chip" id="hs-best">🌟 <span class="hs-pts"></span></div>
+    </div>
+  </div>
+
+  <div class="level-wrap">
+    <div class="level-wrap-inner">
+      <div class="level-label">Vocabulary Level:</div>
+      <div class="level-toggle">
+        <button class="level-btn lv-beginner active" id="btn-lv-beginner"    onclick="setLevel('beginner')">🌱 Beginner</button>
+        <button class="level-btn lv-intermediate"    id="btn-lv-intermediate" onclick="setLevel('intermediate')">📘 Intermediate</button>
+        <button class="level-btn lv-expert"          id="btn-lv-expert"       onclick="setLevel('expert')">🎓 Expert</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="difficulty-wrap">
+    <div class="difficulty-toggle">
+      <span class="diff-label">Difficulty:</span>
+      <button class="diff-btn active" id="btn-easy" onclick="setDifficulty('easy')">⭐ Easy</button>
+      <button class="diff-btn"        id="btn-hard" onclick="setDifficulty('hard')">🔥 Hard</button>
+    </div>
+    <div class="diff-info-grid">
+      <div class="diff-info-box diff-info-box--easy selected" id="diff-box-easy">
+        <div class="diff-info-title">⭐ Easy Mode</div>
+        <div class="diff-info-item">Multiple choice</div>
+      </div>
+      <div class="diff-info-box diff-info-box--hard" id="diff-box-hard">
+        <div class="diff-info-title">🔥 Hard Mode</div>
+        <div class="diff-info-item">Type the answer</div>
+        <div class="diff-info-item">Double points</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mode-grid">
+    <button class="mode-card mode-card--category" onclick="startMode('category')">
+      <div class="mode-card-bg"></div>
+      <span class="mode-icon">📚</span>
+      <div class="mode-name">By Category</div>
+      <div class="mode-tagline">Master one topic at a time</div>
+      <div class="mode-desc">Pick any of 20 topics and answer every word within it.</div>
+      <div class="mode-pill" id="pill-category">🎯 No lives limit · Up to 6 pts/word</div>
+    </button>
+    <button class="mode-card mode-card--endless" onclick="startMode('endless')">
+      <div class="mode-card-bg"></div>
+      <span class="mode-icon">🔥</span>
+      <div class="mode-name">Endless Mode</div>
+      <div class="mode-tagline">Category after category</div>
+      <div class="mode-desc">Complete random categories back-to-back. 3 mistakes and you're out!</div>
+      <div class="mode-pill" id="pill-endless">❤️ 3 lives · Up to 6 pts/word</div>
+    </button>
+    <button class="mode-card mode-card--god" onclick="startMode('god')">
+      <div class="mode-card-bg"></div>
+      <span class="mode-icon">⚡</span>
+      <div class="mode-name">God Mode</div>
+      <div class="mode-tagline">One strike. You're out.</div>
+      <div class="mode-desc">Random words from every category. All 500 words. One mistake ends it.</div>
+      <div class="mode-pill" id="pill-god">💀 1 life · Up to 10 pts/word</div>
+    </button>
+  </div>
+
+  <div class="home-stats">
+    <div class="home-stat"><span class="home-stat-num">500</span><span class="home-stat-label">Words</span></div>
+    <div class="home-stat"><span class="home-stat-num">24</span><span class="home-stat-label">Categories</span></div>
+    <div class="home-stat"><span class="home-stat-num">2×</span><span class="home-stat-label">Hard pts</span></div>
+  </div>
+</div>
+
+
+<!-- ░░ CATEGORIES ░░ -->
+<div id="screen-categories" class="screen">
+  <div class="screen-top">
+    <button class="back-btn" onclick="showScreen('screen-home')">← Back</button>
+    <div class="screen-title">Pick a Category</div>
+    <div class="screen-subtitle">Complete all words · Faster = more points</div>
+  </div>
+  <div id="category-grid" class="category-grid"></div>
+</div>
+
+
+<!-- ░░ QUIZ ░░ -->
+<div id="screen-quiz" class="screen" style="flex-direction:column;">
+  <div class="quiz-header" id="quiz-header">
+    <div class="quiz-top-row">
+      <div class="quiz-left">
+        <button class="stop-btn" onclick="confirmStop()">⏹ Stop</button>
+        <span id="quiz-category-tag" class="quiz-category-tag">Category</span>
+      </div>
+      <div class="quiz-right">
+        <span id="quiz-score-display" class="quiz-score-display">0 pts</span>
+        <span id="quiz-progress-text" class="quiz-progress-text">1/20</span>
+      </div>
+    </div>
+    <div id="quiz-lives" class="quiz-lives"></div>
+    <div class="progress-track">
+      <div id="progress-fill" class="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="quiz-body">
+    <div class="quiz-direction" id="quiz-direction">What is the French translation?</div>
+    <div class="quiz-word-card" id="quiz-word-card">
+      <span class="quiz-word-emoji" id="quiz-word-emoji">❓</span>
+      <div class="quiz-word" id="quiz-word">—</div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-track">
+        <div id="timer-bar" class="timer-bar"></div>
+      </div>
+      <div class="timer-time" id="timer-time">5.0s</div>
+    </div>
+    <div class="choices-grid" id="quiz-choices"></div>
+    <div class="quiz-feedback" id="quiz-feedback"></div>
+  </div>
+</div>
+
+
+<!-- ░░ INTERSTITIAL ░░ -->
+<div id="screen-cat-complete" class="screen">
+  <div class="interstitial-icon"  id="ci-icon">🎉</div>
+  <div class="interstitial-title" id="ci-title">Category Complete!</div>
+  <div class="interstitial-sub"   id="ci-sub">Next up…</div>
+  <div class="interstitial-lives" id="ci-lives"></div>
+</div>
+
+
+<!-- ░░ RESULTS ░░ -->
+<div id="results-confetti"></div>
+<div id="screen-results" class="screen">
+  <div class="results-hero" id="results-hero">
+    <div class="results-title"    id="results-title">Nice work!</div>
+    <div class="results-subtitle" id="results-subtitle"></div>
+  </div>
+  <div class="results-score-card">
+    <div class="score-label">Session Score</div>
+    <div class="score-big" id="results-score-big">0</div>
+    <div class="score-unit">points</div>
+    <div id="results-hs-area"></div>
+  </div>
+  <div class="results-stats"   id="results-stats"></div>
+  <div class="results-actions" id="results-actions"></div>
+</div>
+
+
+<!-- ░░ MILESTONE OVERLAY ░░ -->
+<div id="milestone-overlay" class="milestone-overlay" style="display:none;">
+  <div id="confetti-container"></div>
+  <div class="milestone-box">
+    <span class="milestone-emoji" id="ms-emoji">🎉</span>
+    <span class="milestone-count" id="ms-count">50</span>
+    <span class="milestone-label">words correct!</span>
+    <span class="milestone-sub"   id="ms-sub">Keep going!</span>
+  </div>
+</div>
+
+
+<!-- ░░ STOP CONFIRM ░░ -->
+<div id="stop-modal" class="stop-modal" style="display:none;">
+  <div class="stop-modal-box">
+    <div class="stop-modal-title">End Session?</div>
+    <div class="stop-modal-sub">Your progress will not be saved.</div>
+    <div class="stop-modal-btns">
+      <button class="stop-cancel" onclick="closeStopModal()">Keep Playing</button>
+      <button class="stop-exit"   onclick="exitToHome()">Exit</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ░░░░░░░░░░░░░ SCRIPT ░░░░░░░░░░░░░ -->
+<script>
+
+/* ═══════ WORD LIST ═══════════════════════════════════════════════ */
+const WORDS = [
+  // ── BEGINNER ──────────────────────────────────────────────────────────────
+  {french:"zéro",english:"zero",category:"numbers",level:"beginner"},{french:"un",english:"one",category:"numbers",level:"beginner"},
+  {french:"deux",english:"two",category:"numbers",level:"beginner"},{french:"trois",english:"three",category:"numbers",level:"beginner"},
+  {french:"quatre",english:"four",category:"numbers",level:"beginner"},{french:"cinq",english:"five",category:"numbers",level:"beginner"},
+  {french:"six",english:"six",category:"numbers",level:"beginner"},{french:"sept",english:"seven",category:"numbers",level:"beginner"},
+  {french:"huit",english:"eight",category:"numbers",level:"beginner"},{french:"neuf",english:"nine",category:"numbers",level:"beginner"},
+  {french:"dix",english:"ten",category:"numbers",level:"beginner"},{french:"onze",english:"eleven",category:"numbers",level:"beginner"},
+  {french:"douze",english:"twelve",category:"numbers",level:"beginner"},{french:"treize",english:"thirteen",category:"numbers",level:"beginner"},
+  {french:"quatorze",english:"fourteen",category:"numbers",level:"beginner"},{french:"quinze",english:"fifteen",category:"numbers",level:"beginner"},
+  {french:"seize",english:"sixteen",category:"numbers",level:"beginner"},{french:"dix-sept",english:"seventeen",category:"numbers",level:"beginner"},
+  {french:"dix-huit",english:"eighteen",category:"numbers",level:"beginner"},{french:"dix-neuf",english:"nineteen",category:"numbers",level:"beginner"},
+  {french:"vingt",english:"twenty",category:"numbers",level:"beginner"},{french:"trente",english:"thirty",category:"numbers",level:"beginner"},
+  {french:"quarante",english:"forty",category:"numbers",level:"beginner"},{french:"cinquante",english:"fifty",category:"numbers",level:"beginner"},
+  {french:"soixante",english:"sixty",category:"numbers",level:"beginner"},{french:"soixante-dix",english:"seventy",category:"numbers",level:"beginner"},
+  {french:"quatre-vingts",english:"eighty",category:"numbers",level:"beginner"},{french:"quatre-vingt-dix",english:"ninety",category:"numbers",level:"beginner"},
+  {french:"cent",english:"hundred",category:"numbers",level:"beginner"},{french:"mille",english:"thousand",category:"numbers",level:"beginner"},
+  {french:"rouge",english:"red",category:"colors",level:"beginner"},{french:"bleu",english:"blue",category:"colors",level:"beginner"},
+  {french:"vert",english:"green",category:"colors",level:"beginner"},{french:"jaune",english:"yellow",category:"colors",level:"beginner"},
+  {french:"orange",english:"orange",category:"colors",level:"beginner"},{french:"violet",english:"purple",category:"colors",level:"beginner"},
+  {french:"rose",english:"pink",category:"colors",level:"beginner"},{french:"noir",english:"black",category:"colors",level:"beginner"},
+  {french:"blanc",english:"white",category:"colors",level:"beginner"},{french:"gris",english:"grey",category:"colors",level:"beginner"},
+  {french:"brun",english:"brown",category:"colors",level:"beginner"},{french:"beige",english:"beige",category:"colors",level:"beginner"},
+  {french:"lundi",english:"Monday",category:"days",level:"beginner"},{french:"mardi",english:"Tuesday",category:"days",level:"beginner"},
+  {french:"mercredi",english:"Wednesday",category:"days",level:"beginner"},{french:"jeudi",english:"Thursday",category:"days",level:"beginner"},
+  {french:"vendredi",english:"Friday",category:"days",level:"beginner"},{french:"samedi",english:"Saturday",category:"days",level:"beginner"},
+  {french:"dimanche",english:"Sunday",category:"days",level:"beginner"},
+  {french:"janvier",english:"January",category:"months",level:"beginner"},{french:"février",english:"February",category:"months",level:"beginner"},
+  {french:"mars",english:"March",category:"months",level:"beginner"},{french:"avril",english:"April",category:"months",level:"beginner"},
+  {french:"mai",english:"May",category:"months",level:"beginner"},{french:"juin",english:"June",category:"months",level:"beginner"},
+  {french:"juillet",english:"July",category:"months",level:"beginner"},{french:"août",english:"August",category:"months",level:"beginner"},
+  {french:"septembre",english:"September",category:"months",level:"beginner"},{french:"octobre",english:"October",category:"months",level:"beginner"},
+  {french:"novembre",english:"November",category:"months",level:"beginner"},{french:"décembre",english:"December",category:"months",level:"beginner"},
+  {french:"le printemps",english:"spring",category:"seasons",level:"beginner"},{french:"l'été",english:"summer",category:"seasons",level:"beginner"},
+  {french:"l'automne",english:"autumn",category:"seasons",level:"beginner"},{french:"l'hiver",english:"winter",category:"seasons",level:"beginner"},
+  {french:"la famille",english:"family",category:"family",level:"beginner"},{french:"le père",english:"father",category:"family",level:"beginner"},
+  {french:"la mère",english:"mother",category:"family",level:"beginner"},{french:"le fils",english:"son",category:"family",level:"beginner"},
+  {french:"la fille",english:"daughter",category:"family",level:"beginner"},{french:"le frère",english:"brother",category:"family",level:"beginner"},
+  {french:"la sœur",english:"sister",category:"family",level:"beginner"},{french:"le grand-père",english:"grandfather",category:"family",level:"beginner"},
+  {french:"la grand-mère",english:"grandmother",category:"family",level:"beginner"},{french:"l'oncle",english:"uncle",category:"family",level:"beginner"},
+  {french:"la tante",english:"aunt",category:"family",level:"beginner"},{french:"le cousin",english:"cousin (male)",category:"family",level:"beginner"},
+  {french:"la cousine",english:"cousin (female)",category:"family",level:"beginner"},{french:"le mari",english:"husband",category:"family",level:"beginner"},
+  {french:"la femme",english:"wife",category:"family",level:"beginner"},{french:"l'enfant",english:"child",category:"family",level:"beginner"},
+  {french:"le bébé",english:"baby",category:"family",level:"beginner"},{french:"les parents",english:"parents",category:"family",level:"beginner"},
+  {french:"la tête",english:"head",category:"body",level:"beginner"},{french:"le visage",english:"face",category:"body",level:"beginner"},
+  {french:"les cheveux",english:"hair",category:"body",level:"beginner"},{french:"l'œil",english:"eye",category:"body",level:"beginner"},
+  {french:"les yeux",english:"eyes",category:"body",level:"beginner"},{french:"le nez",english:"nose",category:"body",level:"beginner"},
+  {french:"la bouche",english:"mouth",category:"body",level:"beginner"},{french:"l'oreille",english:"ear",category:"body",level:"beginner"},
+  {french:"le cou",english:"neck",category:"body",level:"beginner"},{french:"l'épaule",english:"shoulder",category:"body",level:"beginner"},
+  {french:"le bras",english:"arm",category:"body",level:"beginner"},{french:"la main",english:"hand",category:"body",level:"beginner"},
+  {french:"le doigt",english:"finger",category:"body",level:"beginner"},{french:"le ventre",english:"stomach",category:"body",level:"beginner"},
+  {french:"le dos",english:"back",category:"body",level:"beginner"},{french:"la jambe",english:"leg",category:"body",level:"beginner"},
+  {french:"le genou",english:"knee",category:"body",level:"beginner"},{french:"le pied",english:"foot",category:"body",level:"beginner"},
+  {french:"le cœur",english:"heart",category:"body",level:"beginner"},{french:"la dent",english:"tooth",category:"body",level:"beginner"},
+  {french:"la langue",english:"tongue",category:"body",level:"beginner"},
+  {french:"le chat",english:"cat",category:"animals",level:"beginner"},{french:"le chien",english:"dog",category:"animals",level:"beginner"},
+  {french:"le cheval",english:"horse",category:"animals",level:"beginner"},{french:"la vache",english:"cow",category:"animals",level:"beginner"},
+  {french:"le cochon",english:"pig",category:"animals",level:"beginner"},{french:"le mouton",english:"sheep",category:"animals",level:"beginner"},
+  {french:"la chèvre",english:"goat",category:"animals",level:"beginner"},{french:"le poulet",english:"chicken",category:"animals",level:"beginner"},
+  {french:"le lapin",english:"rabbit",category:"animals",level:"beginner"},{french:"la souris",english:"mouse",category:"animals",level:"beginner"},
+  {french:"l'oiseau",english:"bird",category:"animals",level:"beginner"},{french:"le poisson",english:"fish",category:"animals",level:"beginner"},
+  {french:"la grenouille",english:"frog",category:"animals",level:"beginner"},{french:"le serpent",english:"snake",category:"animals",level:"beginner"},
+  {french:"l'éléphant",english:"elephant",category:"animals",level:"beginner"},{french:"le lion",english:"lion",category:"animals",level:"beginner"},
+  {french:"le tigre",english:"tiger",category:"animals",level:"beginner"},{french:"l'ours",english:"bear",category:"animals",level:"beginner"},
+  {french:"le singe",english:"monkey",category:"animals",level:"beginner"},{french:"le canard",english:"duck",category:"animals",level:"beginner"},
+  {french:"la poule",english:"hen",category:"animals",level:"beginner"},
+  {french:"le pain",english:"bread",category:"food",level:"beginner"},{french:"le fromage",english:"cheese",category:"food",level:"beginner"},
+  {french:"le beurre",english:"butter",category:"food",level:"beginner"},{french:"le lait",english:"milk",category:"food",level:"beginner"},
+  {french:"l'œuf",english:"egg",category:"food",level:"beginner"},{french:"la viande",english:"meat",category:"food",level:"beginner"},
+  {french:"le porc",english:"pork",category:"food",level:"beginner"},{french:"le bœuf",english:"beef",category:"food",level:"beginner"},
+  {french:"la pomme",english:"apple",category:"food",level:"beginner"},{french:"la poire",english:"pear",category:"food",level:"beginner"},
+  {french:"la banane",english:"banana",category:"food",level:"beginner"},{french:"l'orange",english:"orange",category:"food",level:"beginner"},
+  {french:"la fraise",english:"strawberry",category:"food",level:"beginner"},{french:"le raisin",english:"grape",category:"food",level:"beginner"},
+  {french:"la tomate",english:"tomato",category:"food",level:"beginner"},{french:"la carotte",english:"carrot",category:"food",level:"beginner"},
+  {french:"la pomme de terre",english:"potato",category:"food",level:"beginner"},{french:"l'oignon",english:"onion",category:"food",level:"beginner"},
+  {french:"la salade",english:"salad",category:"food",level:"beginner"},{french:"le riz",english:"rice",category:"food",level:"beginner"},
+  {french:"les pâtes",english:"pasta",category:"food",level:"beginner"},{french:"la soupe",english:"soup",category:"food",level:"beginner"},
+  {french:"le gâteau",english:"cake",category:"food",level:"beginner"},{french:"le chocolat",english:"chocolate",category:"food",level:"beginner"},
+  {french:"le sucre",english:"sugar",category:"food",level:"beginner"},{french:"le sel",english:"salt",category:"food",level:"beginner"},
+  {french:"le poivre",english:"pepper",category:"food",level:"beginner"},{french:"l'huile",english:"oil",category:"food",level:"beginner"},
+  {french:"le repas",english:"meal",category:"food",level:"beginner"},{french:"le petit-déjeuner",english:"breakfast",category:"food",level:"beginner"},
+  {french:"le déjeuner",english:"lunch",category:"food",level:"beginner"},{french:"le dîner",english:"dinner",category:"food",level:"beginner"},
+  {french:"l'eau",english:"water",category:"drinks",level:"beginner"},{french:"le jus",english:"juice",category:"drinks",level:"beginner"},
+  {french:"le café",english:"coffee",category:"drinks",level:"beginner"},{french:"le thé",english:"tea",category:"drinks",level:"beginner"},
+  {french:"le vin",english:"wine",category:"drinks",level:"beginner"},{french:"la bière",english:"beer",category:"drinks",level:"beginner"},
+  {french:"le jus d'orange",english:"orange juice",category:"drinks",level:"beginner"},
+  {french:"les vêtements",english:"clothes",category:"clothing",level:"beginner"},{french:"la chemise",english:"shirt",category:"clothing",level:"beginner"},
+  {french:"le pantalon",english:"trousers",category:"clothing",level:"beginner"},{french:"la robe",english:"dress",category:"clothing",level:"beginner"},
+  {french:"la jupe",english:"skirt",category:"clothing",level:"beginner"},{french:"le manteau",english:"coat",category:"clothing",level:"beginner"},
+  {french:"la veste",english:"jacket",category:"clothing",level:"beginner"},{french:"le pull",english:"sweater",category:"clothing",level:"beginner"},
+  {french:"les chaussures",english:"shoes",category:"clothing",level:"beginner"},{french:"les chaussettes",english:"socks",category:"clothing",level:"beginner"},
+  {french:"le chapeau",english:"hat",category:"clothing",level:"beginner"},{french:"la cravate",english:"tie",category:"clothing",level:"beginner"},
+  {french:"le jean",english:"jeans",category:"clothing",level:"beginner"},{french:"le t-shirt",english:"t-shirt",category:"clothing",level:"beginner"},
+  {french:"le short",english:"shorts",category:"clothing",level:"beginner"},{french:"les gants",english:"gloves",category:"clothing",level:"beginner"},
+  {french:"l'écharpe",english:"scarf",category:"clothing",level:"beginner"},
+  {french:"la maison",english:"house",category:"home",level:"beginner"},{french:"l'appartement",english:"apartment",category:"home",level:"beginner"},
+  {french:"la pièce",english:"room",category:"home",level:"beginner"},{french:"la chambre",english:"bedroom",category:"home",level:"beginner"},
+  {french:"la cuisine",english:"kitchen",category:"home",level:"beginner"},{french:"la salle de bain",english:"bathroom",category:"home",level:"beginner"},
+  {french:"les toilettes",english:"toilet",category:"home",level:"beginner"},{french:"le salon",english:"living room",category:"home",level:"beginner"},
+  {french:"la salle à manger",english:"dining room",category:"home",level:"beginner"},{french:"le jardin",english:"garden",category:"home",level:"beginner"},
+  {french:"la porte",english:"door",category:"home",level:"beginner"},{french:"la fenêtre",english:"window",category:"home",level:"beginner"},
+  {french:"l'escalier",english:"stairs",category:"home",level:"beginner"},{french:"le lit",english:"bed",category:"home",level:"beginner"},
+  {french:"la chaise",english:"chair",category:"home",level:"beginner"},{french:"la table",english:"table",category:"home",level:"beginner"},
+  {french:"le canapé",english:"sofa",category:"home",level:"beginner"},{french:"l'armoire",english:"wardrobe",category:"home",level:"beginner"},
+  {french:"le bureau",english:"desk",category:"home",level:"beginner"},{french:"la lampe",english:"lamp",category:"home",level:"beginner"},
+  {french:"le miroir",english:"mirror",category:"home",level:"beginner"},{french:"le tapis",english:"rug",category:"home",level:"beginner"},
+  {french:"le frigo",english:"fridge",category:"home",level:"beginner"},{french:"le four",english:"oven",category:"home",level:"beginner"},
+  {french:"être",english:"to be",category:"verbs",level:"beginner"},{french:"avoir",english:"to have",category:"verbs",level:"beginner"},
+  {french:"aller",english:"to go",category:"verbs",level:"beginner"},{french:"faire",english:"to do / to make",category:"verbs",level:"beginner"},
+  {french:"dire",english:"to say",category:"verbs",level:"beginner"},{french:"voir",english:"to see",category:"verbs",level:"beginner"},
+  {french:"savoir",english:"to know (fact)",category:"verbs",level:"beginner"},{french:"pouvoir",english:"to be able to",category:"verbs",level:"beginner"},
+  {french:"vouloir",english:"to want",category:"verbs",level:"beginner"},{french:"venir",english:"to come",category:"verbs",level:"beginner"},
+  {french:"prendre",english:"to take",category:"verbs",level:"beginner"},{french:"donner",english:"to give",category:"verbs",level:"beginner"},
+  {french:"trouver",english:"to find",category:"verbs",level:"beginner"},{french:"parler",english:"to speak",category:"verbs",level:"beginner"},
+  {french:"manger",english:"to eat",category:"verbs",level:"beginner"},{french:"boire",english:"to drink",category:"verbs",level:"beginner"},
+  {french:"dormir",english:"to sleep",category:"verbs",level:"beginner"},{french:"travailler",english:"to work",category:"verbs",level:"beginner"},
+  {french:"habiter",english:"to live (reside)",category:"verbs",level:"beginner"},{french:"aimer",english:"to like / to love",category:"verbs",level:"beginner"},
+  {french:"lire",english:"to read",category:"verbs",level:"beginner"},{french:"écrire",english:"to write",category:"verbs",level:"beginner"},
+  {french:"écouter",english:"to listen",category:"verbs",level:"beginner"},{french:"regarder",english:"to watch",category:"verbs",level:"beginner"},
+  {french:"acheter",english:"to buy",category:"verbs",level:"beginner"},{french:"vendre",english:"to sell",category:"verbs",level:"beginner"},
+  {french:"ouvrir",english:"to open",category:"verbs",level:"beginner"},{french:"fermer",english:"to close",category:"verbs",level:"beginner"},
+  {french:"commencer",english:"to begin",category:"verbs",level:"beginner"},{french:"finir",english:"to finish",category:"verbs",level:"beginner"},
+  {french:"marcher",english:"to walk",category:"verbs",level:"beginner"},{french:"courir",english:"to run",category:"verbs",level:"beginner"},
+  {french:"jouer",english:"to play",category:"verbs",level:"beginner"},{french:"chanter",english:"to sing",category:"verbs",level:"beginner"},
+  {french:"danser",english:"to dance",category:"verbs",level:"beginner"},{french:"appeler",english:"to call",category:"verbs",level:"beginner"},
+  {french:"répondre",english:"to answer",category:"verbs",level:"beginner"},{french:"chercher",english:"to look for",category:"verbs",level:"beginner"},
+  {french:"aider",english:"to help",category:"verbs",level:"beginner"},{french:"penser",english:"to think",category:"verbs",level:"beginner"},
+  {french:"croire",english:"to believe",category:"verbs",level:"beginner"},{french:"connaître",english:"to know (person)",category:"verbs",level:"beginner"},
+  {french:"utiliser",english:"to use",category:"verbs",level:"beginner"},{french:"attendre",english:"to wait",category:"verbs",level:"beginner"},
+  {french:"partir",english:"to leave",category:"verbs",level:"beginner"},{french:"arriver",english:"to arrive",category:"verbs",level:"beginner"},
+  {french:"entrer",english:"to enter",category:"verbs",level:"beginner"},{french:"sortir",english:"to go out",category:"verbs",level:"beginner"},
+  {french:"mettre",english:"to put",category:"verbs",level:"beginner"},{french:"porter",english:"to carry / wear",category:"verbs",level:"beginner"},
+  {french:"vivre",english:"to live (be alive)",category:"verbs",level:"beginner"},{french:"nager",english:"to swim",category:"verbs",level:"beginner"},
+  {french:"cuisiner",english:"to cook",category:"verbs",level:"beginner"},{french:"conduire",english:"to drive",category:"verbs",level:"beginner"},
+  {french:"voyager",english:"to travel",category:"verbs",level:"beginner"},{french:"apprendre",english:"to learn",category:"verbs",level:"beginner"},
+  {french:"comprendre",english:"to understand",category:"verbs",level:"beginner"},{french:"demander",english:"to ask",category:"verbs",level:"beginner"},
+  {french:"montrer",english:"to show",category:"verbs",level:"beginner"},{french:"rire",english:"to laugh",category:"verbs",level:"beginner"},
+  {french:"pleurer",english:"to cry",category:"verbs",level:"beginner"},{french:"tomber",english:"to fall",category:"verbs",level:"beginner"},
+  {french:"rester",english:"to stay",category:"verbs",level:"beginner"},{french:"payer",english:"to pay",category:"verbs",level:"beginner"},
+  {french:"grand",english:"big / tall",category:"adjectives",level:"beginner"},{french:"petit",english:"small / little",category:"adjectives",level:"beginner"},
+  {french:"bon",english:"good",category:"adjectives",level:"beginner"},{french:"mauvais",english:"bad",category:"adjectives",level:"beginner"},
+  {french:"beau",english:"beautiful",category:"adjectives",level:"beginner"},{french:"joli",english:"pretty",category:"adjectives",level:"beginner"},
+  {french:"vieux",english:"old",category:"adjectives",level:"beginner"},{french:"jeune",english:"young",category:"adjectives",level:"beginner"},
+  {french:"nouveau",english:"new",category:"adjectives",level:"beginner"},{french:"long",english:"long",category:"adjectives",level:"beginner"},
+  {french:"court",english:"short",category:"adjectives",level:"beginner"},{french:"chaud",english:"hot / warm",category:"adjectives",level:"beginner"},
+  {french:"froid",english:"cold",category:"adjectives",level:"beginner"},{french:"facile",english:"easy",category:"adjectives",level:"beginner"},
+  {french:"difficile",english:"difficult",category:"adjectives",level:"beginner"},{french:"rapide",english:"fast",category:"adjectives",level:"beginner"},
+  {french:"lent",english:"slow",category:"adjectives",level:"beginner"},{french:"fort",english:"strong",category:"adjectives",level:"beginner"},
+  {french:"faible",english:"weak",category:"adjectives",level:"beginner"},{french:"riche",english:"rich",category:"adjectives",level:"beginner"},
+  {french:"pauvre",english:"poor",category:"adjectives",level:"beginner"},{french:"content",english:"happy / pleased",category:"adjectives",level:"beginner"},
+  {french:"triste",english:"sad",category:"adjectives",level:"beginner"},{french:"fatigué",english:"tired",category:"adjectives",level:"beginner"},
+  {french:"malade",english:"ill / sick",category:"adjectives",level:"beginner"},{french:"propre",english:"clean",category:"adjectives",level:"beginner"},
+  {french:"sale",english:"dirty",category:"adjectives",level:"beginner"},{french:"ouvert",english:"open",category:"adjectives",level:"beginner"},
+  {french:"fermé",english:"closed",category:"adjectives",level:"beginner"},{french:"plein",english:"full",category:"adjectives",level:"beginner"},
+  {french:"vide",english:"empty",category:"adjectives",level:"beginner"},{french:"seul",english:"alone",category:"adjectives",level:"beginner"},
+  {french:"libre",english:"free",category:"adjectives",level:"beginner"},{french:"occupé",english:"busy",category:"adjectives",level:"beginner"},
+  {french:"heureux",english:"happy",category:"adjectives",level:"beginner"},{french:"sympa",english:"nice / friendly",category:"adjectives",level:"beginner"},
+  {french:"intéressant",english:"interesting",category:"adjectives",level:"beginner"},
+  {french:"bonjour",english:"hello / good morning",category:"greetings",level:"beginner"},{french:"bonsoir",english:"good evening",category:"greetings",level:"beginner"},
+  {french:"bonne nuit",english:"good night",category:"greetings",level:"beginner"},{french:"au revoir",english:"goodbye",category:"greetings",level:"beginner"},
+  {french:"salut",english:"hi",category:"greetings",level:"beginner"},{french:"merci",english:"thank you",category:"greetings",level:"beginner"},
+  {french:"s'il vous plaît",english:"please (formal)",category:"greetings",level:"beginner"},{french:"s'il te plaît",english:"please (informal)",category:"greetings",level:"beginner"},
+  {french:"de rien",english:"you're welcome",category:"greetings",level:"beginner"},{french:"pardon",english:"excuse me / sorry",category:"greetings",level:"beginner"},
+  {french:"excusez-moi",english:"excuse me (formal)",category:"greetings",level:"beginner"},{french:"oui",english:"yes",category:"greetings",level:"beginner"},
+  {french:"non",english:"no",category:"greetings",level:"beginner"},
+  {french:"aujourd'hui",english:"today",category:"time",level:"beginner"},{french:"demain",english:"tomorrow",category:"time",level:"beginner"},
+  {french:"hier",english:"yesterday",category:"time",level:"beginner"},{french:"maintenant",english:"now",category:"time",level:"beginner"},
+  {french:"toujours",english:"always",category:"time",level:"beginner"},{french:"jamais",english:"never",category:"time",level:"beginner"},
+  {french:"souvent",english:"often",category:"time",level:"beginner"},{french:"parfois",english:"sometimes",category:"time",level:"beginner"},
+  {french:"tôt",english:"early",category:"time",level:"beginner"},{french:"tard",english:"late",category:"time",level:"beginner"},
+  {french:"l'heure",english:"hour / time",category:"time",level:"beginner"},{french:"la minute",english:"minute",category:"time",level:"beginner"},
+  {french:"le jour",english:"day",category:"time",level:"beginner"},{french:"la semaine",english:"week",category:"time",level:"beginner"},
+  {french:"le mois",english:"month",category:"time",level:"beginner"},{french:"l'année",english:"year",category:"time",level:"beginner"},
+  {french:"le matin",english:"morning",category:"time",level:"beginner"},{french:"le midi",english:"noon",category:"time",level:"beginner"},
+  {french:"l'après-midi",english:"afternoon",category:"time",level:"beginner"},{french:"le soir",english:"evening",category:"time",level:"beginner"},
+  {french:"la nuit",english:"night",category:"time",level:"beginner"},
+  {french:"le soleil",english:"sun",category:"weather",level:"beginner"},{french:"la pluie",english:"rain",category:"weather",level:"beginner"},
+  {french:"la neige",english:"snow",category:"weather",level:"beginner"},{french:"le vent",english:"wind",category:"weather",level:"beginner"},
+  {french:"le nuage",english:"cloud",category:"weather",level:"beginner"},{french:"l'orage",english:"storm",category:"weather",level:"beginner"},
+  {french:"le brouillard",english:"fog",category:"weather",level:"beginner"},{french:"la chaleur",english:"heat",category:"weather",level:"beginner"},
+  {french:"il fait beau",english:"the weather is nice",category:"weather",level:"beginner"},{french:"il pleut",english:"it is raining",category:"weather",level:"beginner"},
+  {french:"il neige",english:"it is snowing",category:"weather",level:"beginner"},
+  {french:"la voiture",english:"car",category:"transport",level:"beginner"},{french:"le train",english:"train",category:"transport",level:"beginner"},
+  {french:"le bus",english:"bus",category:"transport",level:"beginner"},{french:"le métro",english:"metro / subway",category:"transport",level:"beginner"},
+  {french:"l'avion",english:"plane",category:"transport",level:"beginner"},{french:"le bateau",english:"boat",category:"transport",level:"beginner"},
+  {french:"le taxi",english:"taxi",category:"transport",level:"beginner"},{french:"le vélo",english:"bicycle",category:"transport",level:"beginner"},
+  {french:"la moto",english:"motorcycle",category:"transport",level:"beginner"},{french:"la gare",english:"train station",category:"transport",level:"beginner"},
+  {french:"l'aéroport",english:"airport",category:"transport",level:"beginner"},{french:"l'arrêt de bus",english:"bus stop",category:"transport",level:"beginner"},
+  {french:"l'école",english:"school",category:"places",level:"beginner"},{french:"l'université",english:"university",category:"places",level:"beginner"},
+  {french:"le bureau",english:"office",category:"places",level:"beginner"},{french:"le magasin",english:"shop / store",category:"places",level:"beginner"},
+  {french:"le marché",english:"market",category:"places",level:"beginner"},{french:"le supermarché",english:"supermarket",category:"places",level:"beginner"},
+  {french:"le restaurant",english:"restaurant",category:"places",level:"beginner"},{french:"le café",english:"café",category:"places",level:"beginner"},
+  {french:"l'hôpital",english:"hospital",category:"places",level:"beginner"},{french:"la pharmacie",english:"pharmacy",category:"places",level:"beginner"},
+  {french:"la banque",english:"bank",category:"places",level:"beginner"},{french:"l'église",english:"church",category:"places",level:"beginner"},
+  {french:"la rue",english:"street",category:"places",level:"beginner"},{french:"la ville",english:"city",category:"places",level:"beginner"},
+  {french:"le village",english:"village",category:"places",level:"beginner"},{french:"le pays",english:"country",category:"places",level:"beginner"},
+  {french:"la France",english:"France",category:"places",level:"beginner"},{french:"le parc",english:"park",category:"places",level:"beginner"},
+  {french:"la plage",english:"beach",category:"places",level:"beginner"},{french:"la montagne",english:"mountain",category:"places",level:"beginner"},
+  {french:"la forêt",english:"forest",category:"places",level:"beginner"},{french:"la mer",english:"sea",category:"places",level:"beginner"},
+  {french:"la rivière",english:"river",category:"places",level:"beginner"},
+  {french:"le livre",english:"book",category:"objects",level:"beginner"},{french:"le stylo",english:"pen",category:"objects",level:"beginner"},
+  {french:"le crayon",english:"pencil",category:"objects",level:"beginner"},{french:"le cahier",english:"notebook",category:"objects",level:"beginner"},
+  {french:"le téléphone",english:"phone",category:"objects",level:"beginner"},{french:"l'ordinateur",english:"computer",category:"objects",level:"beginner"},
+  {french:"la clé",english:"key",category:"objects",level:"beginner"},{french:"le sac",english:"bag",category:"objects",level:"beginner"},
+  {french:"la montre",english:"watch",category:"objects",level:"beginner"},{french:"l'argent",english:"money",category:"objects",level:"beginner"},
+  {french:"la carte",english:"card / map",category:"objects",level:"beginner"},{french:"le journal",english:"newspaper",category:"objects",level:"beginner"},
+  {french:"la photo",english:"photo",category:"objects",level:"beginner"},{french:"la lettre",english:"letter",category:"objects",level:"beginner"},
+  {french:"le cadeau",english:"gift",category:"objects",level:"beginner"},{french:"le jouet",english:"toy",category:"objects",level:"beginner"},
+  // Professions (15)
+  {french:"le médecin",english:"doctor",category:"professions",level:"beginner"},{french:"l'infirmier",english:"nurse",category:"professions",level:"beginner"},
+  {french:"le professeur",english:"teacher",category:"professions",level:"beginner"},{french:"l'étudiant",english:"student",category:"professions",level:"beginner"},
+  {french:"le cuisinier",english:"cook",category:"professions",level:"beginner"},{french:"le policier",english:"police officer",category:"professions",level:"beginner"},
+  {french:"le pompier",english:"firefighter",category:"professions",level:"beginner"},{french:"l'avocat",english:"lawyer",category:"professions",level:"beginner"},
+  {french:"l'ingénieur",english:"engineer",category:"professions",level:"beginner"},{french:"le serveur",english:"waiter",category:"professions",level:"beginner"},
+  {french:"l'acteur",english:"actor",category:"professions",level:"beginner"},{french:"le dentiste",english:"dentist",category:"professions",level:"beginner"},
+  {french:"le directeur",english:"manager",category:"professions",level:"beginner"},{french:"le journaliste",english:"journalist",category:"professions",level:"beginner"},
+  {french:"le chauffeur",english:"driver",category:"professions",level:"beginner"},
+  // School (15)
+  {french:"la classe",english:"classroom",category:"school",level:"beginner"},{french:"le cours",english:"lesson",category:"school",level:"beginner"},
+  {french:"le devoir",english:"homework",category:"school",level:"beginner"},{french:"l'examen",english:"exam",category:"school",level:"beginner"},
+  {french:"la note",english:"grade",category:"school",level:"beginner"},{french:"le tableau",english:"blackboard",category:"school",level:"beginner"},
+  {french:"la bibliothèque",english:"library",category:"school",level:"beginner"},{french:"le dictionnaire",english:"dictionary",category:"school",level:"beginner"},
+  {french:"la calculatrice",english:"calculator",category:"school",level:"beginner"},{french:"la règle",english:"ruler",category:"school",level:"beginner"},
+  {french:"la question",english:"question",category:"school",level:"beginner"},{french:"la réponse",english:"answer",category:"school",level:"beginner"},
+  {french:"la matière",english:"subject",category:"school",level:"beginner"},{french:"l'erreur",english:"mistake",category:"school",level:"beginner"},
+  {french:"la récréation",english:"break / recess",category:"school",level:"beginner"},
+  // Question words (8)
+  {french:"qui",english:"who",category:"questions",level:"beginner"},{french:"quoi",english:"what",category:"questions",level:"beginner"},
+  {french:"où",english:"where",category:"questions",level:"beginner"},{french:"quand",english:"when",category:"questions",level:"beginner"},
+  {french:"comment",english:"how",category:"questions",level:"beginner"},{french:"pourquoi",english:"why",category:"questions",level:"beginner"},
+  {french:"combien",english:"how much / how many",category:"questions",level:"beginner"},{french:"quel",english:"which",category:"questions",level:"beginner"},
+  // Essential words (12)
+  {french:"et",english:"and",category:"essentials",level:"beginner"},{french:"ou",english:"or",category:"essentials",level:"beginner"},
+  {french:"mais",english:"but",category:"essentials",level:"beginner"},{french:"parce que",english:"because",category:"essentials",level:"beginner"},
+  {french:"donc",english:"so / therefore",category:"essentials",level:"beginner"},{french:"si",english:"if",category:"essentials",level:"beginner"},
+  {french:"aussi",english:"also / too",category:"essentials",level:"beginner"},{french:"très",english:"very",category:"essentials",level:"beginner"},
+  {french:"assez",english:"quite / enough",category:"essentials",level:"beginner"},{french:"peut-être",english:"maybe",category:"essentials",level:"beginner"},
+  {french:"bien sûr",english:"of course",category:"essentials",level:"beginner"},{french:"d'accord",english:"ok / agreed",category:"essentials",level:"beginner"},
+  // More verbs (25)
+  {french:"nettoyer",english:"to clean",category:"verbs",level:"beginner"},{french:"choisir",english:"to choose",category:"verbs",level:"beginner"},
+  {french:"gagner",english:"to win / to earn",category:"verbs",level:"beginner"},{french:"perdre",english:"to lose",category:"verbs",level:"beginner"},
+  {french:"oublier",english:"to forget",category:"verbs",level:"beginner"},{french:"se souvenir",english:"to remember",category:"verbs",level:"beginner"},
+  {french:"partager",english:"to share",category:"verbs",level:"beginner"},{french:"préparer",english:"to prepare",category:"verbs",level:"beginner"},
+  {french:"accepter",english:"to accept",category:"verbs",level:"beginner"},{french:"refuser",english:"to refuse",category:"verbs",level:"beginner"},
+  {french:"expliquer",english:"to explain",category:"verbs",level:"beginner"},{french:"continuer",english:"to continue",category:"verbs",level:"beginner"},
+  {french:"retourner",english:"to return",category:"verbs",level:"beginner"},{french:"visiter",english:"to visit",category:"verbs",level:"beginner"},
+  {french:"changer",english:"to change",category:"verbs",level:"beginner"},{french:"offrir",english:"to offer",category:"verbs",level:"beginner"},
+  {french:"permettre",english:"to allow",category:"verbs",level:"beginner"},{french:"réserver",english:"to book / to reserve",category:"verbs",level:"beginner"},
+  {french:"répéter",english:"to repeat",category:"verbs",level:"beginner"},{french:"inviter",english:"to invite",category:"verbs",level:"beginner"},
+  {french:"améliorer",english:"to improve",category:"verbs",level:"beginner"},{french:"rejoindre",english:"to join",category:"verbs",level:"beginner"},
+  {french:"décider",english:"to decide",category:"verbs",level:"beginner"},{french:"essayer",english:"to try",category:"verbs",level:"beginner"},
+  {french:"réussir",english:"to succeed",category:"verbs",level:"beginner"},
+  // More adjectives (15)
+  {french:"intelligent",english:"intelligent",category:"adjectives",level:"beginner"},{french:"moderne",english:"modern",category:"adjectives",level:"beginner"},
+  {french:"naturel",english:"natural",category:"adjectives",level:"beginner"},{french:"important",english:"important",category:"adjectives",level:"beginner"},
+  {french:"différent",english:"different",category:"adjectives",level:"beginner"},{french:"parfait",english:"perfect",category:"adjectives",level:"beginner"},
+  {french:"délicieux",english:"delicious",category:"adjectives",level:"beginner"},{french:"dangereux",english:"dangerous",category:"adjectives",level:"beginner"},
+  {french:"calme",english:"calm",category:"adjectives",level:"beginner"},{french:"bruyant",english:"noisy",category:"adjectives",level:"beginner"},
+  {french:"spécial",english:"special",category:"adjectives",level:"beginner"},{french:"dernier",english:"last",category:"adjectives",level:"beginner"},
+  {french:"premier",english:"first",category:"adjectives",level:"beginner"},{french:"prochain",english:"next",category:"adjectives",level:"beginner"},
+  {french:"même",english:"same",category:"adjectives",level:"beginner"},
+  // More places (8)
+  {french:"le château",english:"castle",category:"places",level:"beginner"},{french:"le musée",english:"museum",category:"places",level:"beginner"},
+  {french:"le théâtre",english:"theatre",category:"places",level:"beginner"},{french:"la piscine",english:"swimming pool",category:"places",level:"beginner"},
+  {french:"le stade",english:"stadium",category:"places",level:"beginner"},{french:"le centre commercial",english:"shopping centre",category:"places",level:"beginner"},
+  {french:"l'hôtel",english:"hotel",category:"places",level:"beginner"},{french:"la cathédrale",english:"cathedral",category:"places",level:"beginner"},
+  // ── INTERMEDIATE (B1/B2) ──────────────────────────────────────────────────
+  // Work
+  {french:"l'emploi",english:"employment",category:"work",level:"intermediate"},
+  {french:"le chômage",english:"unemployment",category:"work",level:"intermediate"},
+  {french:"l'entreprise",english:"company",category:"work",level:"intermediate"},
+  {french:"le salaire",english:"salary",category:"work",level:"intermediate"},
+  {french:"le contrat",english:"contract",category:"work",level:"intermediate"},
+  {french:"la carrière",english:"career",category:"work",level:"intermediate"},
+  {french:"la formation",english:"training",category:"work",level:"intermediate"},
+  {french:"le recrutement",english:"recruitment",category:"work",level:"intermediate"},
+  {french:"le poste",english:"position",category:"work",level:"intermediate"},
+  {french:"le budget",english:"budget",category:"work",level:"intermediate"},
+  {french:"le rapport",english:"report",category:"work",level:"intermediate"},
+  {french:"le délai",english:"deadline",category:"work",level:"intermediate"},
+  {french:"l'objectif",english:"objective",category:"work",level:"intermediate"},
+  {french:"la productivité",english:"productivity",category:"work",level:"intermediate"},
+  {french:"le prestataire",english:"contractor",category:"work",level:"intermediate"},
+  {french:"le télétravail",english:"remote work",category:"work",level:"intermediate"},
+  {french:"le stagiaire",english:"intern",category:"work",level:"intermediate"},
+  {french:"la prime",english:"bonus",category:"work",level:"intermediate"},
+  {french:"le syndicat",english:"union",category:"work",level:"intermediate"},
+  {french:"la grève",english:"strike",category:"work",level:"intermediate"},
+  {french:"le patron",english:"employer",category:"work",level:"intermediate"},
+  {french:"licencier",english:"to fire",category:"work",level:"intermediate"},
+  {french:"démissionner",english:"to resign",category:"work",level:"intermediate"},
+  {french:"le CV",english:"résumé",category:"work",level:"intermediate"},
+  {french:"l'entretien d'embauche",english:"job interview",category:"work",level:"intermediate"},
+  {french:"postuler",english:"to apply",category:"work",level:"intermediate"},
+  {french:"la réunion",english:"meeting",category:"work",level:"intermediate"},
+  {french:"l'équipe",english:"team",category:"work",level:"intermediate"},
+  {french:"le projet",english:"project",category:"work",level:"intermediate"},
+  // Politics
+  {french:"le président",english:"president",category:"politics",level:"intermediate"},
+  {french:"le parlement",english:"parliament",category:"politics",level:"intermediate"},
+  {french:"l'élection",english:"election",category:"politics",level:"intermediate"},
+  {french:"la loi",english:"law",category:"politics",level:"intermediate"},
+  {french:"le vote",english:"vote",category:"politics",level:"intermediate"},
+  {french:"le parti",english:"party",category:"politics",level:"intermediate"},
+  {french:"la démocratie",english:"democracy",category:"politics",level:"intermediate"},
+  {french:"le citoyen",english:"citizen",category:"politics",level:"intermediate"},
+  {french:"la constitution",english:"constitution",category:"politics",level:"intermediate"},
+  {french:"le ministre",english:"minister",category:"politics",level:"intermediate"},
+  {french:"le sénat",english:"senate",category:"politics",level:"intermediate"},
+  {french:"l'ambassadeur",english:"ambassador",category:"politics",level:"intermediate"},
+  {french:"l'accord",english:"agreement",category:"politics",level:"intermediate"},
+  {french:"le traité",english:"treaty",category:"politics",level:"intermediate"},
+  {french:"la réforme",english:"reform",category:"politics",level:"intermediate"},
+  {french:"le débat",english:"debate",category:"politics",level:"intermediate"},
+  {french:"le discours",english:"speech",category:"politics",level:"intermediate"},
+  {french:"la campagne",english:"campaign",category:"politics",level:"intermediate"},
+  {french:"le candidat",english:"candidate",category:"politics",level:"intermediate"},
+  {french:"l'opposition",english:"opposition",category:"politics",level:"intermediate"},
+  {french:"la coalition",english:"coalition",category:"politics",level:"intermediate"},
+  {french:"la liberté",english:"freedom",category:"politics",level:"intermediate"},
+  {french:"le droit",english:"right",category:"politics",level:"intermediate"},
+  {french:"la frontière",english:"border",category:"politics",level:"intermediate"},
+  {french:"le gouvernement",english:"government",category:"politics",level:"intermediate"},
+  // Health
+  {french:"le médicament",english:"medication",category:"health",level:"intermediate"},
+  {french:"l'opération",english:"operation",category:"health",level:"intermediate"},
+  {french:"la maladie",english:"illness",category:"health",level:"intermediate"},
+  {french:"le symptôme",english:"symptom",category:"health",level:"intermediate"},
+  {french:"le diagnostic",english:"diagnosis",category:"health",level:"intermediate"},
+  {french:"le traitement",english:"treatment",category:"health",level:"intermediate"},
+  {french:"la guérison",english:"recovery",category:"health",level:"intermediate"},
+  {french:"la chirurgie",english:"surgery",category:"health",level:"intermediate"},
+  {french:"les urgences",english:"emergency room",category:"health",level:"intermediate"},
+  {french:"l'ordonnance",english:"prescription",category:"health",level:"intermediate"},
+  {french:"le vaccin",english:"vaccine",category:"health",level:"intermediate"},
+  {french:"l'allergie",english:"allergy",category:"health",level:"intermediate"},
+  {french:"la douleur",english:"pain",category:"health",level:"intermediate"},
+  {french:"la fièvre",english:"fever",category:"health",level:"intermediate"},
+  {french:"la tension",english:"blood pressure",category:"health",level:"intermediate"},
+  {french:"le diabète",english:"diabetes",category:"health",level:"intermediate"},
+  {french:"le cancer",english:"cancer",category:"health",level:"intermediate"},
+  {french:"la thérapie",english:"therapy",category:"health",level:"intermediate"},
+  {french:"la blessure",english:"injury",category:"health",level:"intermediate"},
+  {french:"la fracture",english:"fracture",category:"health",level:"intermediate"},
+  {french:"le cabinet",english:"doctor's office",category:"health",level:"intermediate"},
+  {french:"la consultation",english:"consultation",category:"health",level:"intermediate"},
+  {french:"la mutuelle",english:"health insurance",category:"health",level:"intermediate"},
+  {french:"le pharmacien",english:"pharmacist",category:"health",level:"intermediate"},
+  {french:"le remède",english:"remedy",category:"health",level:"intermediate"},
+  {french:"la clinique",english:"clinic",category:"health",level:"intermediate"},
+  {french:"le chirurgien",english:"surgeon",category:"health",level:"intermediate"},
+  {french:"l'infirmier",english:"nurse",category:"health",level:"intermediate"},
+  {french:"le spécialiste",english:"specialist",category:"health",level:"intermediate"},
+  {french:"la radiographie",english:"X-ray",category:"health",level:"intermediate"},
+  // Environment
+  {french:"l'environnement",english:"environment",category:"environment",level:"intermediate"},
+  {french:"la pollution",english:"pollution",category:"environment",level:"intermediate"},
+  {french:"le réchauffement",english:"warming",category:"environment",level:"intermediate"},
+  {french:"l'écologie",english:"ecology",category:"environment",level:"intermediate"},
+  {french:"le recyclage",english:"recycling",category:"environment",level:"intermediate"},
+  {french:"les déchets",english:"waste",category:"environment",level:"intermediate"},
+  {french:"la biodiversité",english:"biodiversity",category:"environment",level:"intermediate"},
+  {french:"le développement durable",english:"sustainable development",category:"environment",level:"intermediate"},
+  {french:"l'empreinte carbone",english:"carbon footprint",category:"environment",level:"intermediate"},
+  {french:"l'éolienne",english:"wind turbine",category:"environment",level:"intermediate"},
+  {french:"l'énergie solaire",english:"solar energy",category:"environment",level:"intermediate"},
+  {french:"les émissions",english:"emissions",category:"environment",level:"intermediate"},
+  {french:"la sécheresse",english:"drought",category:"environment",level:"intermediate"},
+  {french:"l'inondation",english:"flood",category:"environment",level:"intermediate"},
+  {french:"le séisme",english:"earthquake",category:"environment",level:"intermediate"},
+  {french:"l'atmosphère",english:"atmosphere",category:"environment",level:"intermediate"},
+  {french:"la couche d'ozone",english:"ozone layer",category:"environment",level:"intermediate"},
+  {french:"la déforestation",english:"deforestation",category:"environment",level:"intermediate"},
+  {french:"la faune",english:"wildlife",category:"environment",level:"intermediate"},
+  {french:"la flore",english:"flora",category:"environment",level:"intermediate"},
+  {french:"le compost",english:"compost",category:"environment",level:"intermediate"},
+  {french:"l'effet de serre",english:"greenhouse effect",category:"environment",level:"intermediate"},
+  {french:"les énergies renouvelables",english:"renewable energy",category:"environment",level:"intermediate"},
+  {french:"la marée noire",english:"oil spill",category:"environment",level:"intermediate"},
+  {french:"le réchauffement climatique",english:"climate change",category:"environment",level:"intermediate"},
+  // Technology
+  {french:"le réseau",english:"network",category:"technology",level:"intermediate"},
+  {french:"le logiciel",english:"software",category:"technology",level:"intermediate"},
+  {french:"l'application",english:"app",category:"technology",level:"intermediate"},
+  {french:"les données",english:"data",category:"technology",level:"intermediate"},
+  {french:"le numérique",english:"digital",category:"technology",level:"intermediate"},
+  {french:"l'intelligence artificielle",english:"artificial intelligence",category:"technology",level:"intermediate"},
+  {french:"le robot",english:"robot",category:"technology",level:"intermediate"},
+  {french:"télécharger",english:"to download",category:"technology",level:"intermediate"},
+  {french:"la cybersécurité",english:"cybersecurity",category:"technology",level:"intermediate"},
+  {french:"l'innovation",english:"innovation",category:"technology",level:"intermediate"},
+  {french:"l'écran",english:"screen",category:"technology",level:"intermediate"},
+  {french:"la tablette",english:"tablet",category:"technology",level:"intermediate"},
+  {french:"la sauvegarde",english:"backup",category:"technology",level:"intermediate"},
+  {french:"le cloud",english:"cloud",category:"technology",level:"intermediate"},
+  {french:"l'algorithme",english:"algorithm",category:"technology",level:"intermediate"},
+  {french:"la programmation",english:"programming",category:"technology",level:"intermediate"},
+  {french:"le code",english:"code",category:"technology",level:"intermediate"},
+  {french:"l'interface",english:"interface",category:"technology",level:"intermediate"},
+  {french:"la mise à jour",english:"update",category:"technology",level:"intermediate"},
+  {french:"le piratage",english:"hacking",category:"technology",level:"intermediate"},
+  {french:"le mot de passe",english:"password",category:"technology",level:"intermediate"},
+  {french:"le serveur",english:"server",category:"technology",level:"intermediate"},
+  {french:"la connexion",english:"connection",category:"technology",level:"intermediate"},
+  {french:"le réseau social",english:"social network",category:"technology",level:"intermediate"},
+  {french:"le streaming",english:"streaming",category:"technology",level:"intermediate"},
+  // Culture
+  {french:"la peinture",english:"painting",category:"culture",level:"intermediate"},
+  {french:"la sculpture",english:"sculpture",category:"culture",level:"intermediate"},
+  {french:"la littérature",english:"literature",category:"culture",level:"intermediate"},
+  {french:"le roman",english:"novel",category:"culture",level:"intermediate"},
+  {french:"la poésie",english:"poetry",category:"culture",level:"intermediate"},
+  {french:"l'exposition",english:"exhibition",category:"culture",level:"intermediate"},
+  {french:"la galerie",english:"gallery",category:"culture",level:"intermediate"},
+  {french:"le concert",english:"concert",category:"culture",level:"intermediate"},
+  {french:"le festival",english:"festival",category:"culture",level:"intermediate"},
+  {french:"le patrimoine",english:"heritage",category:"culture",level:"intermediate"},
+  {french:"la tradition",english:"tradition",category:"culture",level:"intermediate"},
+  {french:"la coutume",english:"custom",category:"culture",level:"intermediate"},
+  {french:"l'artiste",english:"artist",category:"culture",level:"intermediate"},
+  {french:"le compositeur",english:"composer",category:"culture",level:"intermediate"},
+  {french:"le réalisateur",english:"director",category:"culture",level:"intermediate"},
+  {french:"le personnage",english:"character",category:"culture",level:"intermediate"},
+  {french:"le chef-d'œuvre",english:"masterpiece",category:"culture",level:"intermediate"},
+  {french:"la critique",english:"review",category:"culture",level:"intermediate"},
+  {french:"le spectacle",english:"show",category:"culture",level:"intermediate"},
+  {french:"la scène",english:"stage",category:"culture",level:"intermediate"},
+  {french:"le musée",english:"museum",category:"culture",level:"intermediate"},
+  {french:"l'œuvre",english:"work of art",category:"culture",level:"intermediate"},
+  {french:"le tableau",english:"painting",category:"culture",level:"intermediate"},
+  {french:"la danse",english:"dance",category:"culture",level:"intermediate"},
+  {french:"l'opéra",english:"opera",category:"culture",level:"intermediate"},
+  // Travel
+  {french:"la réservation",english:"reservation",category:"travel",level:"intermediate"},
+  {french:"le billet",english:"ticket",category:"travel",level:"intermediate"},
+  {french:"le passeport",english:"passport",category:"travel",level:"intermediate"},
+  {french:"le visa",english:"visa",category:"travel",level:"intermediate"},
+  {french:"la douane",english:"customs",category:"travel",level:"intermediate"},
+  {french:"la valise",english:"suitcase",category:"travel",level:"intermediate"},
+  {french:"l'itinéraire",english:"itinerary",category:"travel",level:"intermediate"},
+  {french:"l'excursion",english:"excursion",category:"travel",level:"intermediate"},
+  {french:"le guide",english:"guide",category:"travel",level:"intermediate"},
+  {french:"la destination",english:"destination",category:"travel",level:"intermediate"},
+  {french:"l'hébergement",english:"accommodation",category:"travel",level:"intermediate"},
+  {french:"la pension",english:"guesthouse",category:"travel",level:"intermediate"},
+  {french:"l'auberge",english:"inn",category:"travel",level:"intermediate"},
+  {french:"la location",english:"rental",category:"travel",level:"intermediate"},
+  {french:"la croisière",english:"cruise",category:"travel",level:"intermediate"},
+  {french:"l'escale",english:"stopover",category:"travel",level:"intermediate"},
+  {french:"la correspondance",english:"connection",category:"travel",level:"intermediate"},
+  {french:"le séjour",english:"stay",category:"travel",level:"intermediate"},
+  {french:"l'étranger",english:"abroad",category:"travel",level:"intermediate"},
+  {french:"le touriste",english:"tourist",category:"travel",level:"intermediate"},
+  {french:"le vol",english:"flight",category:"travel",level:"intermediate"},
+  {french:"l'embarquement",english:"boarding",category:"travel",level:"intermediate"},
+  {french:"les bagages",english:"luggage",category:"travel",level:"intermediate"},
+  {french:"la carte d'embarquement",english:"boarding pass",category:"travel",level:"intermediate"},
+  {french:"le retard",english:"delay",category:"travel",level:"intermediate"},
+  // Economy
+  {french:"le marché",english:"market",category:"economy",level:"intermediate"},
+  {french:"le commerce",english:"trade",category:"economy",level:"intermediate"},
+  {french:"la croissance",english:"growth",category:"economy",level:"intermediate"},
+  {french:"l'inflation",english:"inflation",category:"economy",level:"intermediate"},
+  {french:"la récession",english:"recession",category:"economy",level:"intermediate"},
+  {french:"l'impôt",english:"tax",category:"economy",level:"intermediate"},
+  {french:"la taxe",english:"tax",category:"economy",level:"intermediate"},
+  {french:"la dette",english:"debt",category:"economy",level:"intermediate"},
+  {french:"l'investissement",english:"investment",category:"economy",level:"intermediate"},
+  {french:"la bourse",english:"stock exchange",category:"economy",level:"intermediate"},
+  {french:"l'action",english:"share",category:"economy",level:"intermediate"},
+  {french:"le dividende",english:"dividend",category:"economy",level:"intermediate"},
+  {french:"la monnaie",english:"currency",category:"economy",level:"intermediate"},
+  {french:"l'exportation",english:"export",category:"economy",level:"intermediate"},
+  {french:"l'importation",english:"import",category:"economy",level:"intermediate"},
+  {french:"le consommateur",english:"consumer",category:"economy",level:"intermediate"},
+  {french:"la production",english:"production",category:"economy",level:"intermediate"},
+  {french:"l'industrie",english:"industry",category:"economy",level:"intermediate"},
+  {french:"le libre-échange",english:"free trade",category:"economy",level:"intermediate"},
+  {french:"la concurrence",english:"competition",category:"economy",level:"intermediate"},
+  {french:"le bénéfice",english:"profit",category:"economy",level:"intermediate"},
+  {french:"la perte",english:"loss",category:"economy",level:"intermediate"},
+  {french:"le revenu",english:"income",category:"economy",level:"intermediate"},
+  {french:"la richesse",english:"wealth",category:"economy",level:"intermediate"},
+  {french:"le capital",english:"capital",category:"economy",level:"intermediate"},
+  // Emotions
+  {french:"le bonheur",english:"happiness",category:"emotions",level:"intermediate"},
+  {french:"l'anxiété",english:"anxiety",category:"emotions",level:"intermediate"},
+  {french:"le stress",english:"stress",category:"emotions",level:"intermediate"},
+  {french:"la confiance",english:"confidence",category:"emotions",level:"intermediate"},
+  {french:"la honte",english:"shame",category:"emotions",level:"intermediate"},
+  {french:"la jalousie",english:"jealousy",category:"emotions",level:"intermediate"},
+  {french:"la fierté",english:"pride",category:"emotions",level:"intermediate"},
+  {french:"la nostalgie",english:"nostalgia",category:"emotions",level:"intermediate"},
+  {french:"l'espoir",english:"hope",category:"emotions",level:"intermediate"},
+  {french:"le désespoir",english:"despair",category:"emotions",level:"intermediate"},
+  {french:"l'enthousiasme",english:"enthusiasm",category:"emotions",level:"intermediate"},
+  {french:"la déception",english:"disappointment",category:"emotions",level:"intermediate"},
+  {french:"la peur",english:"fear",category:"emotions",level:"intermediate"},
+  {french:"la haine",english:"hatred",category:"emotions",level:"intermediate"},
+  {french:"la pitié",english:"pity",category:"emotions",level:"intermediate"},
+  {french:"le regret",english:"regret",category:"emotions",level:"intermediate"},
+  {french:"la joie",english:"joy",category:"emotions",level:"intermediate"},
+  {french:"la frustration",english:"frustration",category:"emotions",level:"intermediate"},
+  {french:"le soulagement",english:"relief",category:"emotions",level:"intermediate"},
+  {french:"l'impatience",english:"impatience",category:"emotions",level:"intermediate"},
+  {french:"la timidité",english:"shyness",category:"emotions",level:"intermediate"},
+  {french:"la solitude",english:"loneliness",category:"emotions",level:"intermediate"},
+  {french:"la culpabilité",english:"guilt",category:"emotions",level:"intermediate"},
+  {french:"le courage",english:"courage",category:"emotions",level:"intermediate"},
+  {french:"la générosité",english:"generosity",category:"emotions",level:"intermediate"},
+  // Relationships
+  {french:"l'amitié",english:"friendship",category:"relationships",level:"intermediate"},
+  {french:"le couple",english:"couple",category:"relationships",level:"intermediate"},
+  {french:"le mariage",english:"marriage",category:"relationships",level:"intermediate"},
+  {french:"le divorce",english:"divorce",category:"relationships",level:"intermediate"},
+  {french:"la séparation",english:"separation",category:"relationships",level:"intermediate"},
+  {french:"les fiançailles",english:"engagement",category:"relationships",level:"intermediate"},
+  {french:"la rupture",english:"breakup",category:"relationships",level:"intermediate"},
+  {french:"la réconciliation",english:"reconciliation",category:"relationships",level:"intermediate"},
+  {french:"le conflit",english:"conflict",category:"relationships",level:"intermediate"},
+  {french:"le respect",english:"respect",category:"relationships",level:"intermediate"},
+  {french:"la solidarité",english:"solidarity",category:"relationships",level:"intermediate"},
+  {french:"l'entraide",english:"mutual help",category:"relationships",level:"intermediate"},
+  {french:"le soutien",english:"support",category:"relationships",level:"intermediate"},
+  {french:"la trahison",english:"betrayal",category:"relationships",level:"intermediate"},
+  {french:"la loyauté",english:"loyalty",category:"relationships",level:"intermediate"},
+  {french:"la complicité",english:"complicity",category:"relationships",level:"intermediate"},
+  {french:"l'affection",english:"affection",category:"relationships",level:"intermediate"},
+  {french:"la tendresse",english:"tenderness",category:"relationships",level:"intermediate"},
+  {french:"le partenaire",english:"partner",category:"relationships",level:"intermediate"},
+  // Sports
+  {french:"le championnat",english:"championship",category:"sports",level:"intermediate"},
+  {french:"la compétition",english:"competition",category:"sports",level:"intermediate"},
+  {french:"l'entraînement",english:"training",category:"sports",level:"intermediate"},
+  {french:"l'arbitre",english:"referee",category:"sports",level:"intermediate"},
+  {french:"la victoire",english:"victory",category:"sports",level:"intermediate"},
+  {french:"la défaite",english:"defeat",category:"sports",level:"intermediate"},
+  {french:"le tournoi",english:"tournament",category:"sports",level:"intermediate"},
+  {french:"la médaille",english:"medal",category:"sports",level:"intermediate"},
+  {french:"l'athlète",english:"athlete",category:"sports",level:"intermediate"},
+  {french:"le record",english:"record",category:"sports",level:"intermediate"},
+  {french:"le penalty",english:"penalty",category:"sports",level:"intermediate"},
+  {french:"le but",english:"goal",category:"sports",level:"intermediate"},
+  {french:"le terrain",english:"field",category:"sports",level:"intermediate"},
+  {french:"la natation",english:"swimming",category:"sports",level:"intermediate"},
+  {french:"le cyclisme",english:"cycling",category:"sports",level:"intermediate"},
+  {french:"le tennis",english:"tennis",category:"sports",level:"intermediate"},
+  {french:"le football",english:"football",category:"sports",level:"intermediate"},
+  {french:"le rugby",english:"rugby",category:"sports",level:"intermediate"},
+  {french:"la boxe",english:"boxing",category:"sports",level:"intermediate"},
+  {french:"l'escalade",english:"climbing",category:"sports",level:"intermediate"},
+  {french:"la course",english:"race",category:"sports",level:"intermediate"},
+  {french:"le saut",english:"jump",category:"sports",level:"intermediate"},
+  {french:"le lancer",english:"throw",category:"sports",level:"intermediate"},
+  {french:"la nage",english:"swimming",category:"sports",level:"intermediate"},
+  {french:"le sprint",english:"sprint",category:"sports",level:"intermediate"},
+  // Science
+  {french:"l'expérience",english:"experiment",category:"science",level:"intermediate"},
+  {french:"la recherche",english:"research",category:"science",level:"intermediate"},
+  {french:"le laboratoire",english:"laboratory",category:"science",level:"intermediate"},
+  {french:"la théorie",english:"theory",category:"science",level:"intermediate"},
+  {french:"l'hypothèse",english:"hypothesis",category:"science",level:"intermediate"},
+  {french:"la découverte",english:"discovery",category:"science",level:"intermediate"},
+  {french:"la biologie",english:"biology",category:"science",level:"intermediate"},
+  {french:"la chimie",english:"chemistry",category:"science",level:"intermediate"},
+  {french:"la physique",english:"physics",category:"science",level:"intermediate"},
+  {french:"l'astronomie",english:"astronomy",category:"science",level:"intermediate"},
+  {french:"la géologie",english:"geology",category:"science",level:"intermediate"},
+  {french:"l'évolution",english:"evolution",category:"science",level:"intermediate"},
+  {french:"la génétique",english:"genetics",category:"science",level:"intermediate"},
+  {french:"la cellule",english:"cell",category:"science",level:"intermediate"},
+  {french:"l'atome",english:"atom",category:"science",level:"intermediate"},
+  {french:"la molécule",english:"molecule",category:"science",level:"intermediate"},
+  {french:"la gravité",english:"gravity",category:"science",level:"intermediate"},
+  {french:"l'électricité",english:"electricity",category:"science",level:"intermediate"},
+  {french:"le microscope",english:"microscope",category:"science",level:"intermediate"},
+  {french:"l'ADN",english:"DNA",category:"science",level:"intermediate"},
+  // Education (advanced)
+  {french:"le lycée",english:"high school",category:"education_adv",level:"intermediate"},
+  {french:"le diplôme",english:"diploma",category:"education_adv",level:"intermediate"},
+  {french:"le baccalauréat",english:"baccalaureate",category:"education_adv",level:"intermediate"},
+  {french:"les études",english:"studies",category:"education_adv",level:"intermediate"},
+  {french:"le concours",english:"competitive exam",category:"education_adv",level:"intermediate"},
+  {french:"le programme",english:"curriculum",category:"education_adv",level:"intermediate"},
+  {french:"la connaissance",english:"knowledge",category:"education_adv",level:"intermediate"},
+  {french:"la compétence",english:"skill",category:"education_adv",level:"intermediate"},
+  {french:"l'apprentissage",english:"learning",category:"education_adv",level:"intermediate"},
+  {french:"la bourse d'études",english:"scholarship",category:"education_adv",level:"intermediate"},
+  {french:"la thèse",english:"thesis",category:"education_adv",level:"intermediate"},
+  {french:"la faculté",english:"faculty",category:"education_adv",level:"intermediate"},
+  {french:"le mémoire",english:"dissertation",category:"education_adv",level:"intermediate"},
+  {french:"l'amphithéâtre",english:"lecture hall",category:"education_adv",level:"intermediate"},
+  {french:"le cours magistral",english:"lecture",category:"education_adv",level:"intermediate"},
+  {french:"le master",english:"master's degree",category:"education_adv",level:"intermediate"},
+  {french:"la licence",english:"bachelor's degree",category:"education_adv",level:"intermediate"},
+  {french:"le doctorat",english:"doctorate",category:"education_adv",level:"intermediate"},
+  // Food (advanced)
+  {french:"la recette",english:"recipe",category:"food_adv",level:"intermediate"},
+  {french:"l'ingrédient",english:"ingredient",category:"food_adv",level:"intermediate"},
+  {french:"l'épice",english:"spice",category:"food_adv",level:"intermediate"},
+  {french:"la sauce",english:"sauce",category:"food_adv",level:"intermediate"},
+  {french:"l'entrée",english:"starter",category:"food_adv",level:"intermediate"},
+  {french:"la gastronomie",english:"gastronomy",category:"food_adv",level:"intermediate"},
+  {french:"le régime",english:"diet",category:"food_adv",level:"intermediate"},
+  {french:"le végétarien",english:"vegetarian",category:"food_adv",level:"intermediate"},
+  {french:"le végétalien",english:"vegan",category:"food_adv",level:"intermediate"},
+  {french:"le biologique",english:"organic",category:"food_adv",level:"intermediate"},
+  {french:"le nutriment",english:"nutrient",category:"food_adv",level:"intermediate"},
+  {french:"la calorie",english:"calorie",category:"food_adv",level:"intermediate"},
+  {french:"la saveur",english:"flavour",category:"food_adv",level:"intermediate"},
+  {french:"la texture",english:"texture",category:"food_adv",level:"intermediate"},
+  {french:"l'arôme",english:"aroma",category:"food_adv",level:"intermediate"},
+  {french:"le plat principal",english:"main course",category:"food_adv",level:"intermediate"},
+  {french:"le buffet",english:"buffet",category:"food_adv",level:"intermediate"},
+  {french:"la marinade",english:"marinade",category:"food_adv",level:"intermediate"},
+  {french:"le condiment",english:"condiment",category:"food_adv",level:"intermediate"},
+  {french:"la levure",english:"yeast",category:"food_adv",level:"intermediate"},
+  // Housing
+  {french:"le logement",english:"housing",category:"housing",level:"intermediate"},
+  {french:"le loyer",english:"rent",category:"housing",level:"intermediate"},
+  {french:"le propriétaire",english:"landlord",category:"housing",level:"intermediate"},
+  {french:"le locataire",english:"tenant",category:"housing",level:"intermediate"},
+  {french:"le bail",english:"lease",category:"housing",level:"intermediate"},
+  {french:"l'immeuble",english:"apartment building",category:"housing",level:"intermediate"},
+  {french:"la résidence",english:"residence",category:"housing",level:"intermediate"},
+  {french:"le quartier",english:"neighbourhood",category:"housing",level:"intermediate"},
+  {french:"la rénovation",english:"renovation",category:"housing",level:"intermediate"},
+  {french:"l'architecte",english:"architect",category:"housing",level:"intermediate"},
+  {french:"la construction",english:"construction",category:"housing",level:"intermediate"},
+  {french:"l'ascenseur",english:"lift",category:"housing",level:"intermediate"},
+  {french:"la copropriété",english:"co-ownership",category:"housing",level:"intermediate"},
+  {french:"les charges",english:"service charges",category:"housing",level:"intermediate"},
+  {french:"le déménagement",english:"moving",category:"housing",level:"intermediate"},
+  {french:"le meublé",english:"furnished",category:"housing",level:"intermediate"},
+  {french:"le sous-sol",english:"basement",category:"housing",level:"intermediate"},
+  {french:"le grenier",english:"attic",category:"housing",level:"intermediate"},
+  {french:"la terrasse",english:"terrace",category:"housing",level:"intermediate"},
+  {french:"le voisinage",english:"neighbourhood",category:"housing",level:"intermediate"},
+  // Law
+  {french:"le tribunal",english:"court",category:"law",level:"intermediate"},
+  {french:"le juge",english:"judge",category:"law",level:"intermediate"},
+  {french:"l'avocat",english:"lawyer",category:"law",level:"intermediate"},
+  {french:"le procès",english:"trial",category:"law",level:"intermediate"},
+  {french:"l'accusé",english:"accused",category:"law",level:"intermediate"},
+  {french:"le témoin",english:"witness",category:"law",level:"intermediate"},
+  {french:"la sentence",english:"sentence",category:"law",level:"intermediate"},
+  {french:"la peine",english:"punishment",category:"law",level:"intermediate"},
+  {french:"l'amende",english:"fine",category:"law",level:"intermediate"},
+  {french:"la prison",english:"prison",category:"law",level:"intermediate"},
+  {french:"le crime",english:"crime",category:"law",level:"intermediate"},
+  {french:"la victime",english:"victim",category:"law",level:"intermediate"},
+  {french:"l'enquête",english:"investigation",category:"law",level:"intermediate"},
+  {french:"la preuve",english:"evidence",category:"law",level:"intermediate"},
+  {french:"le règlement",english:"regulation",category:"law",level:"intermediate"},
+  {french:"la contravention",english:"traffic fine",category:"law",level:"intermediate"},
+  {french:"la plainte",english:"complaint",category:"law",level:"intermediate"},
+  {french:"l'arrestation",english:"arrest",category:"law",level:"intermediate"},
+  {french:"la peine de mort",english:"death penalty",category:"law",level:"intermediate"},
+  {french:"l'innocence",english:"innocence",category:"law",level:"intermediate"},
+  // Media
+  {french:"le reportage",english:"report",category:"media",level:"intermediate"},
+  {french:"le journaliste",english:"journalist",category:"media",level:"intermediate"},
+  {french:"l'émission",english:"programme",category:"media",level:"intermediate"},
+  {french:"la chaîne",english:"channel",category:"media",level:"intermediate"},
+  {french:"l'article",english:"article",category:"media",level:"intermediate"},
+  {french:"l'interview",english:"interview",category:"media",level:"intermediate"},
+  {french:"le titre",english:"headline",category:"media",level:"intermediate"},
+  {french:"la publicité",english:"advertising",category:"media",level:"intermediate"},
+  {french:"l'abonné",english:"subscriber",category:"media",level:"intermediate"},
+  {french:"le commentaire",english:"comment",category:"media",level:"intermediate"},
+  {french:"le blog",english:"blog",category:"media",level:"intermediate"},
+  {french:"le podcast",english:"podcast",category:"media",level:"intermediate"},
+  {french:"la diffusion",english:"broadcast",category:"media",level:"intermediate"},
+  {french:"le direct",english:"live broadcast",category:"media",level:"intermediate"},
+  {french:"la censure",english:"censorship",category:"media",level:"intermediate"},
+  {french:"la liberté de presse",english:"press freedom",category:"media",level:"intermediate"},
+  {french:"l'éditeur",english:"editor",category:"media",level:"intermediate"},
+  {french:"la rédaction",english:"newsroom",category:"media",level:"intermediate"},
+  {french:"le correspondant",english:"correspondent",category:"media",level:"intermediate"},
+  {french:"le journal",english:"newspaper",category:"media",level:"intermediate"},
+  // Advanced verbs
+  {french:"obtenir",english:"to obtain",category:"advanced_verbs",level:"intermediate"},
+  {french:"résoudre",english:"to resolve",category:"advanced_verbs",level:"intermediate"},
+  {french:"atteindre",english:"to reach",category:"advanced_verbs",level:"intermediate"},
+  {french:"négliger",english:"to neglect",category:"advanced_verbs",level:"intermediate"},
+  {french:"accomplir",english:"to accomplish",category:"advanced_verbs",level:"intermediate"},
+  {french:"réaliser",english:"to achieve",category:"advanced_verbs",level:"intermediate"},
+  {french:"maintenir",english:"to maintain",category:"advanced_verbs",level:"intermediate"},
+  {french:"développer",english:"to develop",category:"advanced_verbs",level:"intermediate"},
+  {french:"proposer",english:"to propose",category:"advanced_verbs",level:"intermediate"},
+  {french:"établir",english:"to establish",category:"advanced_verbs",level:"intermediate"},
+  {french:"soutenir",english:"to support",category:"advanced_verbs",level:"intermediate"},
+  {french:"promouvoir",english:"to promote",category:"advanced_verbs",level:"intermediate"},
+  {french:"reconnaître",english:"to recognise",category:"advanced_verbs",level:"intermediate"},
+  {french:"analyser",english:"to analyse",category:"advanced_verbs",level:"intermediate"},
+  {french:"évaluer",english:"to evaluate",category:"advanced_verbs",level:"intermediate"},
+  {french:"améliorer",english:"to improve",category:"advanced_verbs",level:"intermediate"},
+  {french:"planifier",english:"to plan",category:"advanced_verbs",level:"intermediate"},
+  {french:"gérer",english:"to manage",category:"advanced_verbs",level:"intermediate"},
+  {french:"s'adapter",english:"to adapt",category:"advanced_verbs",level:"intermediate"},
+  {french:"prévenir",english:"to prevent",category:"advanced_verbs",level:"intermediate"},
+  {french:"surveiller",english:"to monitor",category:"advanced_verbs",level:"intermediate"},
+  {french:"participer",english:"to participate",category:"advanced_verbs",level:"intermediate"},
+  {french:"contribuer",english:"to contribute",category:"advanced_verbs",level:"intermediate"},
+  {french:"approuver",english:"to approve",category:"advanced_verbs",level:"intermediate"},
+  {french:"exiger",english:"to demand",category:"advanced_verbs",level:"intermediate"},
+  {french:"conseiller",english:"to advise",category:"advanced_verbs",level:"intermediate"},
+  {french:"protéger",english:"to protect",category:"advanced_verbs",level:"intermediate"},
+  {french:"réduire",english:"to reduce",category:"advanced_verbs",level:"intermediate"},
+  {french:"augmenter",english:"to increase",category:"advanced_verbs",level:"intermediate"},
+  {french:"investir",english:"to invest",category:"advanced_verbs",level:"intermediate"},
+  // Advanced adjectives
+  {french:"complexe",english:"complex",category:"advanced_adj",level:"intermediate"},
+  {french:"précis",english:"precise",category:"advanced_adj",level:"intermediate"},
+  {french:"efficace",english:"effective",category:"advanced_adj",level:"intermediate"},
+  {french:"considérable",english:"considerable",category:"advanced_adj",level:"intermediate"},
+  {french:"fondamental",english:"fundamental",category:"advanced_adj",level:"intermediate"},
+  {french:"essentiel",english:"essential",category:"advanced_adj",level:"intermediate"},
+  {french:"remarquable",english:"remarkable",category:"advanced_adj",level:"intermediate"},
+  {french:"exceptionnel",english:"exceptional",category:"advanced_adj",level:"intermediate"},
+  {french:"profond",english:"deep",category:"advanced_adj",level:"intermediate"},
+  {french:"superficiel",english:"superficial",category:"advanced_adj",level:"intermediate"},
+  {french:"sincère",english:"sincere",category:"advanced_adj",level:"intermediate"},
+  {french:"ambitieux",english:"ambitious",category:"advanced_adj",level:"intermediate"},
+  {french:"responsable",english:"responsible",category:"advanced_adj",level:"intermediate"},
+  {french:"créatif",english:"creative",category:"advanced_adj",level:"intermediate"},
+  {french:"logique",english:"logical",category:"advanced_adj",level:"intermediate"},
+  {french:"rigoureux",english:"rigorous",category:"advanced_adj",level:"intermediate"},
+  {french:"équitable",english:"fair",category:"advanced_adj",level:"intermediate"},
+  {french:"durable",english:"sustainable",category:"advanced_adj",level:"intermediate"},
+  {french:"progressif",english:"progressive",category:"advanced_adj",level:"intermediate"},
+  {french:"contemporain",english:"contemporary",category:"advanced_adj",level:"intermediate"},
+  {french:"innovant",english:"innovative",category:"advanced_adj",level:"intermediate"},
+  {french:"pertinent",english:"relevant",category:"advanced_adj",level:"intermediate"},
+  {french:"légitime",english:"legitimate",category:"advanced_adj",level:"intermediate"},
+  {french:"global",english:"global",category:"advanced_adj",level:"intermediate"},
+  {french:"spécifique",english:"specific",category:"advanced_adj",level:"intermediate"},
+  // ── CHALLENGING (C1/C2) ──────────────────────────────────────────────────
+  // Abstract concepts
+  {french:"la nuance",english:"nuance",category:"abstract",level:"expert"},
+  {french:"la subtilité",english:"subtlety",category:"abstract",level:"expert"},
+  {french:"le paradoxe",english:"paradox",category:"abstract",level:"expert"},
+  {french:"le dilemme",english:"dilemma",category:"abstract",level:"expert"},
+  {french:"l'équivoque",english:"ambiguity",category:"abstract",level:"expert"},
+  {french:"l'ambiguïté",english:"ambiguity",category:"abstract",level:"expert"},
+  {french:"la contrainte",english:"constraint",category:"abstract",level:"expert"},
+  {french:"le décalage",english:"gap",category:"abstract",level:"expert"},
+  {french:"le préjugé",english:"prejudice",category:"abstract",level:"expert"},
+  {french:"le stéréotype",english:"stereotype",category:"abstract",level:"expert"},
+  {french:"le cliché",english:"cliché",category:"abstract",level:"expert"},
+  {french:"l'euphémisme",english:"euphemism",category:"abstract",level:"expert"},
+  {french:"l'allégorie",english:"allegory",category:"abstract",level:"expert"},
+  {french:"la métaphore",english:"metaphor",category:"abstract",level:"expert"},
+  {french:"l'ironie",english:"irony",category:"abstract",level:"expert"},
+  {french:"le sarcasme",english:"sarcasm",category:"abstract",level:"expert"},
+  {french:"le cynisme",english:"cynicism",category:"abstract",level:"expert"},
+  {french:"l'empirisme",english:"empiricism",category:"abstract",level:"expert"},
+  {french:"le rationalisme",english:"rationalism",category:"abstract",level:"expert"},
+  {french:"le dogmatisme",english:"dogmatism",category:"abstract",level:"expert"},
+  {french:"le pragmatisme",english:"pragmatism",category:"abstract",level:"expert"},
+  {french:"le relativisme",english:"relativism",category:"abstract",level:"expert"},
+  {french:"le nihilisme",english:"nihilism",category:"abstract",level:"expert"},
+  {french:"le scepticisme",english:"scepticism",category:"abstract",level:"expert"},
+  {french:"la dialectique",english:"dialectics",category:"abstract",level:"expert"},
+  {french:"le sophisme",english:"sophism",category:"abstract",level:"expert"},
+  {french:"l'antithèse",english:"antithesis",category:"abstract",level:"expert"},
+  {french:"l'axiome",english:"axiom",category:"abstract",level:"expert"},
+  {french:"le postulat",english:"postulate",category:"abstract",level:"expert"},
+  {french:"le paradigme",english:"paradigm",category:"abstract",level:"expert"},
+  // Politics (advanced)
+  {french:"le plébiscite",english:"plebiscite",category:"politics_adv",level:"expert"},
+  {french:"le suffrage universel",english:"universal suffrage",category:"politics_adv",level:"expert"},
+  {french:"l'état de droit",english:"rule of law",category:"politics_adv",level:"expert"},
+  {french:"la séparation des pouvoirs",english:"separation of powers",category:"politics_adv",level:"expert"},
+  {french:"la laïcité",english:"secularism",category:"politics_adv",level:"expert"},
+  {french:"le fédéralisme",english:"federalism",category:"politics_adv",level:"expert"},
+  {french:"la décentralisation",english:"decentralisation",category:"politics_adv",level:"expert"},
+  {french:"la souveraineté",english:"sovereignty",category:"politics_adv",level:"expert"},
+  {french:"l'autonomie",english:"autonomy",category:"politics_adv",level:"expert"},
+  {french:"la géopolitique",english:"geopolitics",category:"politics_adv",level:"expert"},
+  {french:"la mondialisation",english:"globalisation",category:"politics_adv",level:"expert"},
+  {french:"le multilatéralisme",english:"multilateralism",category:"politics_adv",level:"expert"},
+  {french:"la non-ingérence",english:"non-interference",category:"politics_adv",level:"expert"},
+  {french:"l'embargo",english:"embargo",category:"politics_adv",level:"expert"},
+  {french:"la ratification",english:"ratification",category:"politics_adv",level:"expert"},
+  {french:"l'abstention",english:"abstention",category:"politics_adv",level:"expert"},
+  {french:"la dissolution",english:"dissolution",category:"politics_adv",level:"expert"},
+  {french:"la cohabitation",english:"cohabitation",category:"politics_adv",level:"expert"},
+  {french:"le mandat",english:"mandate",category:"politics_adv",level:"expert"},
+  {french:"l'impunité",english:"impunity",category:"politics_adv",level:"expert"},
+  {french:"la dissidence",english:"dissidence",category:"politics_adv",level:"expert"},
+  {french:"le totalitarisme",english:"totalitarianism",category:"politics_adv",level:"expert"},
+  {french:"la démocratie participative",english:"participatory democracy",category:"politics_adv",level:"expert"},
+  {french:"l'oligarchie",english:"oligarchy",category:"politics_adv",level:"expert"},
+  {french:"la technocratie",english:"technocracy",category:"politics_adv",level:"expert"},
+  {french:"le référendum",english:"referendum",category:"politics_adv",level:"expert"},
+  {french:"le bicaméralisme",english:"bicameralism",category:"politics_adv",level:"expert"},
+  {french:"la défiance",english:"mistrust",category:"politics_adv",level:"expert"},
+  {french:"la proportionnelle",english:"proportional representation",category:"politics_adv",level:"expert"},
+  {french:"la représentativité",english:"representativeness",category:"politics_adv",level:"expert"},
+  // Law (advanced)
+  {french:"la jurisprudence",english:"case law",category:"law_adv",level:"expert"},
+  {french:"la constitutionnalité",english:"constitutionality",category:"law_adv",level:"expert"},
+  {french:"la prérogative",english:"prerogative",category:"law_adv",level:"expert"},
+  {french:"la juridiction",english:"jurisdiction",category:"law_adv",level:"expert"},
+  {french:"le litige",english:"dispute",category:"law_adv",level:"expert"},
+  {french:"le contentieux",english:"litigation",category:"law_adv",level:"expert"},
+  {french:"le recours",english:"legal appeal",category:"law_adv",level:"expert"},
+  {french:"la cassation",english:"annulment",category:"law_adv",level:"expert"},
+  {french:"la mise en examen",english:"formal investigation",category:"law_adv",level:"expert"},
+  {french:"l'acquittement",english:"acquittal",category:"law_adv",level:"expert"},
+  {french:"les circonstances atténuantes",english:"mitigating circumstances",category:"law_adv",level:"expert"},
+  {french:"les circonstances aggravantes",english:"aggravating circumstances",category:"law_adv",level:"expert"},
+  {french:"la récidive",english:"reoffending",category:"law_adv",level:"expert"},
+  {french:"la présomption d'innocence",english:"presumption of innocence",category:"law_adv",level:"expert"},
+  {french:"l'immunité",english:"immunity",category:"law_adv",level:"expert"},
+  {french:"l'extradition",english:"extradition",category:"law_adv",level:"expert"},
+  {french:"la prescription",english:"statute of limitations",category:"law_adv",level:"expert"},
+  {french:"l'amnistie",english:"amnesty",category:"law_adv",level:"expert"},
+  {french:"la grâce",english:"pardon",category:"law_adv",level:"expert"},
+  {french:"le procureur",english:"prosecutor",category:"law_adv",level:"expert"},
+  {french:"l'inculpé",english:"defendant",category:"law_adv",level:"expert"},
+  {french:"le plaidoyer",english:"plea",category:"law_adv",level:"expert"},
+  {french:"le réquisitoire",english:"indictment speech",category:"law_adv",level:"expert"},
+  {french:"le verdict",english:"verdict",category:"law_adv",level:"expert"},
+  {french:"l'appel",english:"appeal",category:"law_adv",level:"expert"},
+  {french:"la cour d'assises",english:"crown court",category:"law_adv",level:"expert"},
+  {french:"le juge d'instruction",english:"investigating judge",category:"law_adv",level:"expert"},
+  {french:"la liberté provisoire",english:"bail",category:"law_adv",level:"expert"},
+  {french:"les dommages et intérêts",english:"damages",category:"law_adv",level:"expert"},
+  {french:"le délit",english:"offence",category:"law_adv",level:"expert"},
+  // Science (advanced)
+  {french:"le génome",english:"genome",category:"science_adv",level:"expert"},
+  {french:"le séquençage",english:"sequencing",category:"science_adv",level:"expert"},
+  {french:"la nanotechnologie",english:"nanotechnology",category:"science_adv",level:"expert"},
+  {french:"la biotechnologie",english:"biotechnology",category:"science_adv",level:"expert"},
+  {french:"la robotique",english:"robotics",category:"science_adv",level:"expert"},
+  {french:"la cybernétique",english:"cybernetics",category:"science_adv",level:"expert"},
+  {french:"le quantique",english:"quantum",category:"science_adv",level:"expert"},
+  {french:"le semiconducteur",english:"semiconductor",category:"science_adv",level:"expert"},
+  {french:"le supraconducteur",english:"superconductor",category:"science_adv",level:"expert"},
+  {french:"la neuroscience",english:"neuroscience",category:"science_adv",level:"expert"},
+  {french:"l'épigénétique",english:"epigenetics",category:"science_adv",level:"expert"},
+  {french:"le microbiome",english:"microbiome",category:"science_adv",level:"expert"},
+  {french:"l'entropie",english:"entropy",category:"science_adv",level:"expert"},
+  {french:"la thermodynamique",english:"thermodynamics",category:"science_adv",level:"expert"},
+  {french:"la relativité",english:"relativity",category:"science_adv",level:"expert"},
+  {french:"la fusion nucléaire",english:"nuclear fusion",category:"science_adv",level:"expert"},
+  {french:"la fission",english:"fission",category:"science_adv",level:"expert"},
+  {french:"l'antimatière",english:"antimatter",category:"science_adv",level:"expert"},
+  {french:"la photosynthèse",english:"photosynthesis",category:"science_adv",level:"expert"},
+  {french:"la catalyse",english:"catalysis",category:"science_adv",level:"expert"},
+  {french:"l'osmose",english:"osmosis",category:"science_adv",level:"expert"},
+  {french:"la diffraction",english:"diffraction",category:"science_adv",level:"expert"},
+  {french:"la spectrométrie",english:"spectrometry",category:"science_adv",level:"expert"},
+  {french:"la chromatographie",english:"chromatography",category:"science_adv",level:"expert"},
+  {french:"le quark",english:"quark",category:"science_adv",level:"expert"},
+  {french:"le trou noir",english:"black hole",category:"science_adv",level:"expert"},
+  {french:"la singularité",english:"singularity",category:"science_adv",level:"expert"},
+  {french:"la biopharmacie",english:"biopharmaceutics",category:"science_adv",level:"expert"},
+  {french:"le transhumanisme",english:"transhumanism",category:"science_adv",level:"expert"},
+  {french:"le réseau de neurones",english:"neural network",category:"science_adv",level:"expert"},
+  // Philosophy
+  {french:"l'épistémologie",english:"epistemology",category:"philosophy",level:"expert"},
+  {french:"l'ontologie",english:"ontology",category:"philosophy",level:"expert"},
+  {french:"la phénoménologie",english:"phenomenology",category:"philosophy",level:"expert"},
+  {french:"l'herméneutique",english:"hermeneutics",category:"philosophy",level:"expert"},
+  {french:"la déontologie",english:"deontology",category:"philosophy",level:"expert"},
+  {french:"l'utilitarisme",english:"utilitarianism",category:"philosophy",level:"expert"},
+  {french:"le conséquentialisme",english:"consequentialism",category:"philosophy",level:"expert"},
+  {french:"la transcendance",english:"transcendence",category:"philosophy",level:"expert"},
+  {french:"l'immanence",english:"immanence",category:"philosophy",level:"expert"},
+  {french:"l'aliénation",english:"alienation",category:"philosophy",level:"expert"},
+  {french:"la réification",english:"reification",category:"philosophy",level:"expert"},
+  {french:"l'intersubjectivité",english:"intersubjectivity",category:"philosophy",level:"expert"},
+  {french:"l'altérité",english:"alterity",category:"philosophy",level:"expert"},
+  {french:"l'existentialisme",english:"existentialism",category:"philosophy",level:"expert"},
+  {french:"le structuralisme",english:"structuralism",category:"philosophy",level:"expert"},
+  {french:"le post-modernisme",english:"postmodernism",category:"philosophy",level:"expert"},
+  {french:"la déconstruction",english:"deconstruction",category:"philosophy",level:"expert"},
+  {french:"la téléologie",english:"teleology",category:"philosophy",level:"expert"},
+  {french:"le fatalisme",english:"fatalism",category:"philosophy",level:"expert"},
+  {french:"le libre arbitre",english:"free will",category:"philosophy",level:"expert"},
+  {french:"le déterminisme",english:"determinism",category:"philosophy",level:"expert"},
+  {french:"l'intentionnalité",english:"intentionality",category:"philosophy",level:"expert"},
+  {french:"la conscience",english:"consciousness",category:"philosophy",level:"expert"},
+  {french:"l'éthique normative",english:"normative ethics",category:"philosophy",level:"expert"},
+  {french:"la métaphysique",english:"metaphysics",category:"philosophy",level:"expert"},
+  {french:"le nominalisme",english:"nominalism",category:"philosophy",level:"expert"},
+  {french:"le dualisme",english:"dualism",category:"philosophy",level:"expert"},
+  {french:"le matérialisme",english:"materialism",category:"philosophy",level:"expert"},
+  {french:"le réductionnisme",english:"reductionism",category:"philosophy",level:"expert"},
+  {french:"la vertu",english:"virtue",category:"philosophy",level:"expert"},
+  // Economy (advanced)
+  {french:"la liquidité",english:"liquidity",category:"economy_adv",level:"expert"},
+  {french:"la solvabilité",english:"solvency",category:"economy_adv",level:"expert"},
+  {french:"la capitalisation boursière",english:"market capitalisation",category:"economy_adv",level:"expert"},
+  {french:"la fusion-acquisition",english:"merger and acquisition",category:"economy_adv",level:"expert"},
+  {french:"l'offre publique d'achat",english:"takeover bid",category:"economy_adv",level:"expert"},
+  {french:"le délit d'initié",english:"insider trading",category:"economy_adv",level:"expert"},
+  {french:"le fonds spéculatif",english:"hedge fund",category:"economy_adv",level:"expert"},
+  {french:"la diversification",english:"diversification",category:"economy_adv",level:"expert"},
+  {french:"l'arbitrage",english:"arbitrage",category:"economy_adv",level:"expert"},
+  {french:"le levier financier",english:"financial leverage",category:"economy_adv",level:"expert"},
+  {french:"l'amortissement",english:"amortisation",category:"economy_adv",level:"expert"},
+  {french:"la dépréciation",english:"depreciation",category:"economy_adv",level:"expert"},
+  {french:"la trésorerie",english:"treasury",category:"economy_adv",level:"expert"},
+  {french:"le flux de trésorerie",english:"cash flow",category:"economy_adv",level:"expert"},
+  {french:"le bilan",english:"balance sheet",category:"economy_adv",level:"expert"},
+  {french:"le compte de résultat",english:"income statement",category:"economy_adv",level:"expert"},
+  {french:"la marge bénéficiaire",english:"profit margin",category:"economy_adv",level:"expert"},
+  {french:"la valeur ajoutée",english:"added value",category:"economy_adv",level:"expert"},
+  {french:"l'indice boursier",english:"stock index",category:"economy_adv",level:"expert"},
+  {french:"la stagflation",english:"stagflation",category:"economy_adv",level:"expert"},
+  {french:"la déflation",english:"deflation",category:"economy_adv",level:"expert"},
+  {french:"l'hyperinflation",english:"hyperinflation",category:"economy_adv",level:"expert"},
+  {french:"l'aléa moral",english:"moral hazard",category:"economy_adv",level:"expert"},
+  {french:"l'externalité",english:"externality",category:"economy_adv",level:"expert"},
+  {french:"le rendement",english:"yield",category:"economy_adv",level:"expert"},
+  {french:"l'actif",english:"asset",category:"economy_adv",level:"expert"},
+  {french:"le passif",english:"liability",category:"economy_adv",level:"expert"},
+  {french:"l'obligation",english:"bond",category:"economy_adv",level:"expert"},
+  {french:"le capitalisme financier",english:"financial capitalism",category:"economy_adv",level:"expert"},
+  {french:"la spéculation",english:"speculation",category:"economy_adv",level:"expert"},
+  // Rhetoric
+  {french:"le prologue",english:"prologue",category:"rhetoric",level:"expert"},
+  {french:"l'épilogue",english:"epilogue",category:"rhetoric",level:"expert"},
+  {french:"le dénouement",english:"denouement",category:"rhetoric",level:"expert"},
+  {french:"la péripétie",english:"plot twist",category:"rhetoric",level:"expert"},
+  {french:"le protagoniste",english:"protagonist",category:"rhetoric",level:"expert"},
+  {french:"l'antagoniste",english:"antagonist",category:"rhetoric",level:"expert"},
+  {french:"le narrateur",english:"narrator",category:"rhetoric",level:"expert"},
+  {french:"la focalisation",english:"focalisation",category:"rhetoric",level:"expert"},
+  {french:"l'ellipse",english:"ellipsis",category:"rhetoric",level:"expert"},
+  {french:"l'anachronisme",english:"anachronism",category:"rhetoric",level:"expert"},
+  {french:"l'oxymore",english:"oxymoron",category:"rhetoric",level:"expert"},
+  {french:"le pléonasme",english:"pleonasm",category:"rhetoric",level:"expert"},
+  {french:"la litote",english:"litotes",category:"rhetoric",level:"expert"},
+  {french:"l'hyperbole",english:"hyperbole",category:"rhetoric",level:"expert"},
+  {french:"la périphrase",english:"periphrasis",category:"rhetoric",level:"expert"},
+  {french:"le chiasme",english:"chiasmus",category:"rhetoric",level:"expert"},
+  {french:"l'anaphore",english:"anaphora",category:"rhetoric",level:"expert"},
+  {french:"l'épiphore",english:"epiphora",category:"rhetoric",level:"expert"},
+  {french:"l'allitération",english:"alliteration",category:"rhetoric",level:"expert"},
+  {french:"l'assonance",english:"assonance",category:"rhetoric",level:"expert"},
+  {french:"l'onomatopée",english:"onomatopoeia",category:"rhetoric",level:"expert"},
+  {french:"l'épopée",english:"epic poem",category:"rhetoric",level:"expert"},
+  {french:"la tragédie",english:"tragedy",category:"rhetoric",level:"expert"},
+  {french:"la comédie",english:"comedy",category:"rhetoric",level:"expert"},
+  {french:"la satire",english:"satire",category:"rhetoric",level:"expert"},
+  // Arts (advanced)
+  {french:"l'impressionnisme",english:"impressionism",category:"arts_adv",level:"expert"},
+  {french:"le cubisme",english:"cubism",category:"arts_adv",level:"expert"},
+  {french:"le surréalisme",english:"surrealism",category:"arts_adv",level:"expert"},
+  {french:"le dadaïsme",english:"dadaism",category:"arts_adv",level:"expert"},
+  {french:"l'expressionnisme",english:"expressionism",category:"arts_adv",level:"expert"},
+  {french:"l'avant-garde",english:"avant-garde",category:"arts_adv",level:"expert"},
+  {french:"l'iconoclaste",english:"iconoclast",category:"arts_adv",level:"expert"},
+  {french:"le baroque",english:"baroque",category:"arts_adv",level:"expert"},
+  {french:"le classicisme",english:"classicism",category:"arts_adv",level:"expert"},
+  {french:"le romantisme",english:"romanticism",category:"arts_adv",level:"expert"},
+  {french:"le naturalisme",english:"naturalism",category:"arts_adv",level:"expert"},
+  {french:"le réalisme",english:"realism",category:"arts_adv",level:"expert"},
+  {french:"le symbolisme",english:"symbolism",category:"arts_adv",level:"expert"},
+  {french:"le néoclassicisme",english:"neoclassicism",category:"arts_adv",level:"expert"},
+  {french:"le fauvisme",english:"fauvism",category:"arts_adv",level:"expert"},
+  {french:"l'abstraction",english:"abstraction",category:"arts_adv",level:"expert"},
+  {french:"le minimalisme",english:"minimalism",category:"arts_adv",level:"expert"},
+  {french:"le conceptualisme",english:"conceptualism",category:"arts_adv",level:"expert"},
+  {french:"l'installation artistique",english:"art installation",category:"arts_adv",level:"expert"},
+  {french:"la performance",english:"performance art",category:"arts_adv",level:"expert"},
+  {french:"la biennale",english:"biennale",category:"arts_adv",level:"expert"},
+  {french:"le mécène",english:"patron",category:"arts_adv",level:"expert"},
+  {french:"la rétrospective",english:"retrospective",category:"arts_adv",level:"expert"},
+  {french:"l'iconographie",english:"iconography",category:"arts_adv",level:"expert"},
+  {french:"le maniérisme",english:"mannerism",category:"arts_adv",level:"expert"},
+  // Environment (advanced)
+  {french:"le géosystème",english:"geosystem",category:"environment_adv",level:"expert"},
+  {french:"la biosphère",english:"biosphere",category:"environment_adv",level:"expert"},
+  {french:"la lithosphère",english:"lithosphere",category:"environment_adv",level:"expert"},
+  {french:"l'hydrosphère",english:"hydrosphere",category:"environment_adv",level:"expert"},
+  {french:"la cryosphère",english:"cryosphere",category:"environment_adv",level:"expert"},
+  {french:"la chaîne alimentaire",english:"food chain",category:"environment_adv",level:"expert"},
+  {french:"la niche écologique",english:"ecological niche",category:"environment_adv",level:"expert"},
+  {french:"la biomasse",english:"biomass",category:"environment_adv",level:"expert"},
+  {french:"le phytoplancton",english:"phytoplankton",category:"environment_adv",level:"expert"},
+  {french:"le zooplancton",english:"zooplankton",category:"environment_adv",level:"expert"},
+  {french:"l'acidification",english:"acidification",category:"environment_adv",level:"expert"},
+  {french:"l'eutrophisation",english:"eutrophication",category:"environment_adv",level:"expert"},
+  {french:"la désertification",english:"desertification",category:"environment_adv",level:"expert"},
+  {french:"le lessivage",english:"leaching",category:"environment_adv",level:"expert"},
+  {french:"l'aquifère",english:"aquifer",category:"environment_adv",level:"expert"},
+  {french:"la nappe phréatique",english:"water table",category:"environment_adv",level:"expert"},
+  {french:"le pergélisol",english:"permafrost",category:"environment_adv",level:"expert"},
+  {french:"le méthane",english:"methane",category:"environment_adv",level:"expert"},
+  {french:"le dioxyde de carbone",english:"carbon dioxide",category:"environment_adv",level:"expert"},
+  {french:"le monoxyde d'azote",english:"nitrous oxide",category:"environment_adv",level:"expert"},
+  {french:"l'albédo",english:"albedo",category:"environment_adv",level:"expert"},
+  {french:"la bioluminescence",english:"bioluminescence",category:"environment_adv",level:"expert"},
+  {french:"la résilience écologique",english:"ecological resilience",category:"environment_adv",level:"expert"},
+  {french:"l'espèce invasive",english:"invasive species",category:"environment_adv",level:"expert"},
+  {french:"l'extinction de masse",english:"mass extinction",category:"environment_adv",level:"expert"},
+  // Psychology (advanced)
+  {french:"la schizophrénie",english:"schizophrenia",category:"psychology_adv",level:"expert"},
+  {french:"le trouble bipolaire",english:"bipolar disorder",category:"psychology_adv",level:"expert"},
+  {french:"l'anxiété généralisée",english:"generalised anxiety",category:"psychology_adv",level:"expert"},
+  {french:"le trouble obsessionnel compulsif",english:"OCD",category:"psychology_adv",level:"expert"},
+  {french:"le trouble de la personnalité",english:"personality disorder",category:"psychology_adv",level:"expert"},
+  {french:"le narcissisme",english:"narcissism",category:"psychology_adv",level:"expert"},
+  {french:"la psychose",english:"psychosis",category:"psychology_adv",level:"expert"},
+  {french:"la névrose",english:"neurosis",category:"psychology_adv",level:"expert"},
+  {french:"la thérapie cognitive comportementale",english:"cognitive behavioural therapy",category:"psychology_adv",level:"expert"},
+  {french:"la psychanalyse",english:"psychoanalysis",category:"psychology_adv",level:"expert"},
+  {french:"l'inconscient collectif",english:"collective unconscious",category:"psychology_adv",level:"expert"},
+  {french:"l'archétype",english:"archetype",category:"psychology_adv",level:"expert"},
+  {french:"le refoulement",english:"repression",category:"psychology_adv",level:"expert"},
+  {french:"la projection",english:"projection",category:"psychology_adv",level:"expert"},
+  {french:"la sublimation",english:"sublimation",category:"psychology_adv",level:"expert"},
+  {french:"le transfert",english:"transference",category:"psychology_adv",level:"expert"},
+  {french:"le contre-transfert",english:"countertransference",category:"psychology_adv",level:"expert"},
+  {french:"la dissociation",english:"dissociation",category:"psychology_adv",level:"expert"},
+  {french:"l'alexithymie",english:"alexithymia",category:"psychology_adv",level:"expert"},
+  {french:"la résilience",english:"resilience",category:"psychology_adv",level:"expert"},
+  {french:"le traumatisme",english:"trauma",category:"psychology_adv",level:"expert"},
+  {french:"l'anamnèse",english:"anamnesis",category:"psychology_adv",level:"expert"},
+  {french:"l'étiologie",english:"aetiology",category:"psychology_adv",level:"expert"},
+  {french:"la comorbidité",english:"comorbidity",category:"psychology_adv",level:"expert"},
+  {french:"l'hypervigilance",english:"hypervigilance",category:"psychology_adv",level:"expert"},
+  // Formal language
+  {french:"nonobstant",english:"notwithstanding",category:"formal_lang",level:"expert"},
+  {french:"de surcroît",english:"furthermore",category:"formal_lang",level:"expert"},
+  {french:"certes",english:"admittedly",category:"formal_lang",level:"expert"},
+  {french:"a priori",english:"a priori",category:"formal_lang",level:"expert"},
+  {french:"a posteriori",english:"a posteriori",category:"formal_lang",level:"expert"},
+  {french:"ipso facto",english:"ipso facto",category:"formal_lang",level:"expert"},
+  {french:"de facto",english:"de facto",category:"formal_lang",level:"expert"},
+  {french:"de jure",english:"de jure",category:"formal_lang",level:"expert"},
+  {french:"sine qua non",english:"sine qua non",category:"formal_lang",level:"expert"},
+  {french:"in fine",english:"ultimately",category:"formal_lang",level:"expert"},
+  {french:"en amont",english:"upstream",category:"formal_lang",level:"expert"},
+  {french:"en aval",english:"downstream",category:"formal_lang",level:"expert"},
+  {french:"au demeurant",english:"moreover",category:"formal_lang",level:"expert"},
+  {french:"en l'occurrence",english:"as it happens",category:"formal_lang",level:"expert"},
+  {french:"dans la mesure où",english:"insofar as",category:"formal_lang",level:"expert"},
+  {french:"eu égard à",english:"with regard to",category:"formal_lang",level:"expert"},
+  {french:"à cet égard",english:"in this regard",category:"formal_lang",level:"expert"},
+  {french:"à titre exceptionnel",english:"as an exception",category:"formal_lang",level:"expert"},
+  {french:"en vertu de",english:"by virtue of",category:"formal_lang",level:"expert"},
+  {french:"à défaut de",english:"in the absence of",category:"formal_lang",level:"expert"},
+  {french:"sous peine de",english:"under penalty of",category:"formal_lang",level:"expert"},
+  {french:"en dépit de",english:"despite",category:"formal_lang",level:"expert"},
+  {french:"à plus forte raison",english:"all the more so",category:"formal_lang",level:"expert"},
+  {french:"au regard de",english:"in view of",category:"formal_lang",level:"expert"},
+  {french:"en l'état actuel",english:"as things currently stand",category:"formal_lang",level:"expert"},
+  // Social issues (advanced)
+  {french:"l'inégalité",english:"inequality",category:"social_adv",level:"expert"},
+  {french:"la discrimination",english:"discrimination",category:"social_adv",level:"expert"},
+  {french:"le racisme systémique",english:"systemic racism",category:"social_adv",level:"expert"},
+  {french:"l'antisémitisme",english:"antisemitism",category:"social_adv",level:"expert"},
+  {french:"l'islamophobie",english:"islamophobia",category:"social_adv",level:"expert"},
+  {french:"la xénophobie",english:"xenophobia",category:"social_adv",level:"expert"},
+  {french:"l'homophobie",english:"homophobia",category:"social_adv",level:"expert"},
+  {french:"la transphobie",english:"transphobia",category:"social_adv",level:"expert"},
+  {french:"le sexisme",english:"sexism",category:"social_adv",level:"expert"},
+  {french:"la misogynie",english:"misogyny",category:"social_adv",level:"expert"},
+  {french:"le patriarcat",english:"patriarchy",category:"social_adv",level:"expert"},
+  {french:"le féminisme",english:"feminism",category:"social_adv",level:"expert"},
+  {french:"l'intersectionnalité",english:"intersectionality",category:"social_adv",level:"expert"},
+  {french:"l'exclusion sociale",english:"social exclusion",category:"social_adv",level:"expert"},
+  {french:"la précarité",english:"precariousness",category:"social_adv",level:"expert"},
+  {french:"la marginalisation",english:"marginalisation",category:"social_adv",level:"expert"},
+  {french:"la stigmatisation",english:"stigmatisation",category:"social_adv",level:"expert"},
+  {french:"le déclassement",english:"downward mobility",category:"social_adv",level:"expert"},
+  {french:"la mobilité sociale",english:"social mobility",category:"social_adv",level:"expert"},
+  {french:"le prolétariat",english:"proletariat",category:"social_adv",level:"expert"},
+  {french:"la bourgeoisie",english:"bourgeoisie",category:"social_adv",level:"expert"},
+  {french:"le néolibéralisme",english:"neoliberalism",category:"social_adv",level:"expert"},
+  {french:"la gentrification",english:"gentrification",category:"social_adv",level:"expert"},
+  {french:"le communautarisme",english:"communitarianism",category:"social_adv",level:"expert"},
+  {french:"le multiculturalisme",english:"multiculturalism",category:"social_adv",level:"expert"},
+  {french:"l'assimilation",english:"assimilation",category:"social_adv",level:"expert"},
+  {french:"l'intégration",english:"integration",category:"social_adv",level:"expert"},
+  {french:"la déségrégation",english:"desegregation",category:"social_adv",level:"expert"},
+  {french:"l'émancipation",english:"emancipation",category:"social_adv",level:"expert"},
+  {french:"l'affirmation identitaire",english:"identity affirmation",category:"social_adv",level:"expert"},
+  // Challenging verbs
+  {french:"accentuer",english:"to accentuate",category:"expert_verbs",level:"expert"},
+  {french:"amplifier",english:"to amplify",category:"expert_verbs",level:"expert"},
+  {french:"atténuer",english:"to attenuate",category:"expert_verbs",level:"expert"},
+  {french:"s'épanouir",english:"to flourish",category:"expert_verbs",level:"expert"},
+  {french:"déceler",english:"to detect",category:"expert_verbs",level:"expert"},
+  {french:"dénoter",english:"to denote",category:"expert_verbs",level:"expert"},
+  {french:"contrecarrer",english:"to thwart",category:"expert_verbs",level:"expert"},
+  {french:"déroger",english:"to derogate",category:"expert_verbs",level:"expert"},
+  {french:"s'affranchir",english:"to free oneself",category:"expert_verbs",level:"expert"},
+  {french:"approfondir",english:"to deepen",category:"expert_verbs",level:"expert"},
+  {french:"synthétiser",english:"to synthesise",category:"expert_verbs",level:"expert"},
+  {french:"étayer",english:"to substantiate",category:"expert_verbs",level:"expert"},
+  {french:"infirmer",english:"to refute",category:"expert_verbs",level:"expert"},
+  {french:"corroborer",english:"to corroborate",category:"expert_verbs",level:"expert"},
+  {french:"réfuter",english:"to rebut",category:"expert_verbs",level:"expert"},
+  {french:"nuancer",english:"to nuance",category:"expert_verbs",level:"expert"},
+  {french:"relativiser",english:"to put in perspective",category:"expert_verbs",level:"expert"},
+  {french:"pondérer",english:"to weigh up",category:"expert_verbs",level:"expert"},
+  {french:"arbitrer",english:"to arbitrate",category:"expert_verbs",level:"expert"},
+  {french:"contraindre",english:"to compel",category:"expert_verbs",level:"expert"},
+  {french:"enfreindre",english:"to infringe",category:"expert_verbs",level:"expert"},
+  {french:"transgresser",english:"to transgress",category:"expert_verbs",level:"expert"},
+  {french:"outrepasser",english:"to overstep",category:"expert_verbs",level:"expert"},
+  {french:"s'ingérer",english:"to interfere",category:"expert_verbs",level:"expert"},
+  {french:"s'immiscer",english:"to meddle",category:"expert_verbs",level:"expert"},
+  {french:"revendiquer",english:"to claim",category:"expert_verbs",level:"expert"},
+  {french:"succéder",english:"to succeed",category:"expert_verbs",level:"expert"},
+  {french:"prévaloir",english:"to prevail",category:"expert_verbs",level:"expert"},
+  {french:"entériner",english:"to ratify",category:"expert_verbs",level:"expert"},
+  {french:"cautionner",english:"to endorse",category:"expert_verbs",level:"expert"},
+  // Challenging adjectives
+  {french:"inaliénable",english:"inalienable",category:"expert_adj",level:"expert"},
+  {french:"immuable",english:"immutable",category:"expert_adj",level:"expert"},
+  {french:"irréfutable",english:"irrefutable",category:"expert_adj",level:"expert"},
+  {french:"irrévocable",english:"irrevocable",category:"expert_adj",level:"expert"},
+  {french:"prépondérant",english:"preponderant",category:"expert_adj",level:"expert"},
+  {french:"concomitant",english:"concomitant",category:"expert_adj",level:"expert"},
+  {french:"inhérent",english:"inherent",category:"expert_adj",level:"expert"},
+  {french:"intrinsèque",english:"intrinsic",category:"expert_adj",level:"expert"},
+  {french:"extrinsèque",english:"extrinsic",category:"expert_adj",level:"expert"},
+  {french:"inéluctable",english:"inescapable",category:"expert_adj",level:"expert"},
+  {french:"incontournable",english:"unavoidable",category:"expert_adj",level:"expert"},
+  {french:"insaisissable",english:"elusive",category:"expert_adj",level:"expert"},
+  {french:"indéfectible",english:"unfailing",category:"expert_adj",level:"expert"},
+  {french:"récurrent",english:"recurring",category:"expert_adj",level:"expert"},
+  {french:"intangible",english:"intangible",category:"expert_adj",level:"expert"},
+  {french:"ambivalent",english:"ambivalent",category:"expert_adj",level:"expert"},
+  {french:"judicieux",english:"judicious",category:"expert_adj",level:"expert"},
+  {french:"péremptoire",english:"peremptory",category:"expert_adj",level:"expert"},
+  {french:"véhément",english:"vehement",category:"expert_adj",level:"expert"},
+  {french:"acerbe",english:"acerbic",category:"expert_adj",level:"expert"},
+  {french:"elliptique",english:"elliptical",category:"expert_adj",level:"expert"},
+  {french:"chimérique",english:"chimerical",category:"expert_adj",level:"expert"},
+  {french:"fallacieux",english:"fallacious",category:"expert_adj",level:"expert"},
+  {french:"irrécusable",english:"indisputable",category:"expert_adj",level:"expert"},
+  {french:"coercitif",english:"coercive",category:"expert_adj",level:"expert"},
+  // Challenging nouns
+  {french:"la conjoncture",english:"conjuncture",category:"expert_nouns",level:"expert"},
+  {french:"la circonscription",english:"constituency",category:"expert_nouns",level:"expert"},
+  {french:"le décret",english:"decree",category:"expert_nouns",level:"expert"},
+  {french:"l'arrêté",english:"order",category:"expert_nouns",level:"expert"},
+  {french:"l'équité",english:"equity",category:"expert_nouns",level:"expert"},
+  {french:"le précédent",english:"precedent",category:"expert_nouns",level:"expert"},
+  {french:"la dérogation",english:"derogation",category:"expert_nouns",level:"expert"},
+  {french:"la concession",english:"concession",category:"expert_nouns",level:"expert"},
+  {french:"la clause",english:"clause",category:"expert_nouns",level:"expert"},
+  {french:"la stipulation",english:"stipulation",category:"expert_nouns",level:"expert"},
+  {french:"la modalité",english:"modality",category:"expert_nouns",level:"expert"},
+  {french:"l'exigence",english:"requirement",category:"expert_nouns",level:"expert"},
+  {french:"le prérequis",english:"prerequisite",category:"expert_nouns",level:"expert"},
+  {french:"l'enjeu",english:"issue at stake",category:"expert_nouns",level:"expert"},
+  {french:"le dénominateur commun",english:"common denominator",category:"expert_nouns",level:"expert"},
+  {french:"le vecteur",english:"vector",category:"expert_nouns",level:"expert"},
+  {french:"le catalyseur",english:"catalyst",category:"expert_nouns",level:"expert"},
+  {french:"la pierre angulaire",english:"cornerstone",category:"expert_nouns",level:"expert"},
+  {french:"l'indicateur",english:"indicator",category:"expert_nouns",level:"expert"},
+  {french:"la méthodologie",english:"methodology",category:"expert_nouns",level:"expert"},
+  {french:"la nomenclature",english:"nomenclature",category:"expert_nouns",level:"expert"},
+  {french:"le seuil",english:"threshold",category:"expert_nouns",level:"expert"},
+  {french:"la corrélation",english:"correlation",category:"expert_nouns",level:"expert"},
+  {french:"le benchmark",english:"benchmark",category:"expert_nouns",level:"expert"},
+  {french:"le paradigme analytique",english:"analytical framework",category:"expert_nouns",level:"expert"},
+  // Formal expressions
+  {french:"faire fi de",english:"to disregard",category:"formal_expressions",level:"expert"},
+  {french:"mettre en cause",english:"to implicate",category:"formal_expressions",level:"expert"},
+  {french:"en toute connaissance de cause",english:"with full knowledge",category:"formal_expressions",level:"expert"},
+  {french:"tirer profit de",english:"to benefit from",category:"formal_expressions",level:"expert"},
+  {french:"faire preuve de",english:"to demonstrate",category:"formal_expressions",level:"expert"},
+  {french:"être à même de",english:"to be able to",category:"formal_expressions",level:"expert"},
+  {french:"dans la mesure du possible",english:"as far as possible",category:"formal_expressions",level:"expert"},
+  {french:"à ce titre",english:"in this capacity",category:"formal_expressions",level:"expert"},
+  {french:"à la lumière de",english:"in light of",category:"formal_expressions",level:"expert"},
+  {french:"sous réserve de",english:"subject to",category:"formal_expressions",level:"expert"},
+  {french:"en l'absence de",english:"in the absence of",category:"formal_expressions",level:"expert"},
+  {french:"quoi qu'il en soit",english:"whatever the case",category:"formal_expressions",level:"expert"},
+  {french:"pour autant que",english:"as far as",category:"formal_expressions",level:"expert"},
+  {french:"d'autant plus que",english:"all the more so because",category:"formal_expressions",level:"expert"},
+  {french:"compte tenu de",english:"taking into account",category:"formal_expressions",level:"expert"},
+  {french:"en ce qui concerne",english:"regarding",category:"formal_expressions",level:"expert"},
+  {french:"sachant que",english:"given that",category:"formal_expressions",level:"expert"},
+  {french:"il convient de",english:"it is appropriate to",category:"formal_expressions",level:"expert"},
+  {french:"de telle sorte que",english:"in such a way that",category:"formal_expressions",level:"expert"},
+  {french:"à cet effet",english:"to this end",category:"formal_expressions",level:"expert"},
+  {french:"nonobstant ce qui précède",english:"notwithstanding the foregoing",category:"formal_expressions",level:"expert"},
+  {french:"à titre indicatif",english:"for information purposes",category:"formal_expressions",level:"expert"},
+  {french:"à titre préliminaire",english:"as a preliminary matter",category:"formal_expressions",level:"expert"},
+  {french:"il est à noter que",english:"it should be noted that",category:"formal_expressions",level:"expert"},
+  {french:"en conséquence",english:"consequently",category:"formal_expressions",level:"expert"},
+  // Medicine (advanced)
+  {french:"la muqueuse",english:"mucous membrane",category:"medicine_adv",level:"expert"},
+  {french:"la thyroïde",english:"thyroid",category:"medicine_adv",level:"expert"},
+  {french:"l'adrénaline",english:"adrenaline",category:"medicine_adv",level:"expert"},
+  {french:"le cortisol",english:"cortisol",category:"medicine_adv",level:"expert"},
+  {french:"la sérotonine",english:"serotonin",category:"medicine_adv",level:"expert"},
+  {french:"la dopamine",english:"dopamine",category:"medicine_adv",level:"expert"},
+  {french:"l'insuline",english:"insulin",category:"medicine_adv",level:"expert"},
+  {french:"le glucagon",english:"glucagon",category:"medicine_adv",level:"expert"},
+  {french:"l'hémoglobine",english:"haemoglobin",category:"medicine_adv",level:"expert"},
+  {french:"la plaquette",english:"platelet",category:"medicine_adv",level:"expert"},
+  {french:"le lymphocyte",english:"lymphocyte",category:"medicine_adv",level:"expert"},
+  {french:"le leucocyte",english:"leukocyte",category:"medicine_adv",level:"expert"},
+  {french:"l'érythrocyte",english:"red blood cell",category:"medicine_adv",level:"expert"},
+  {french:"la mitose",english:"mitosis",category:"medicine_adv",level:"expert"},
+  {french:"la méiose",english:"meiosis",category:"medicine_adv",level:"expert"},
+  {french:"la pathologie",english:"pathology",category:"medicine_adv",level:"expert"},
+  {french:"l'immunosuppresseur",english:"immunosuppressant",category:"medicine_adv",level:"expert"},
+  {french:"la chimiothérapie",english:"chemotherapy",category:"medicine_adv",level:"expert"},
+  {french:"la radiothérapie",english:"radiotherapy",category:"medicine_adv",level:"expert"},
+  {french:"la biopsie",english:"biopsy",category:"medicine_adv",level:"expert"},
+  // Geography (advanced)
+  {french:"le méandre",english:"meander",category:"geography_adv",level:"expert"},
+  {french:"l'estuaire",english:"estuary",category:"geography_adv",level:"expert"},
+  {french:"le promontoire",english:"promontory",category:"geography_adv",level:"expert"},
+  {french:"la lagune",english:"lagoon",category:"geography_adv",level:"expert"},
+  {french:"l'archipel",english:"archipelago",category:"geography_adv",level:"expert"},
+  {french:"la péninsule",english:"peninsula",category:"geography_adv",level:"expert"},
+  {french:"l'isthme",english:"isthmus",category:"geography_adv",level:"expert"},
+  {french:"le détroit",english:"strait",category:"geography_adv",level:"expert"},
+  {french:"le récif corallien",english:"coral reef",category:"geography_adv",level:"expert"},
+  {french:"la mangrove",english:"mangrove",category:"geography_adv",level:"expert"},
+  {french:"la tourbière",english:"peat bog",category:"geography_adv",level:"expert"},
+  {french:"la toundra",english:"tundra",category:"geography_adv",level:"expert"},
+  {french:"la savane",english:"savanna",category:"geography_adv",level:"expert"},
+  {french:"le bassin versant",english:"watershed",category:"geography_adv",level:"expert"},
+  {french:"le plateau continental",english:"continental shelf",category:"geography_adv",level:"expert"},
+  // Human sciences
+  {french:"l'anthropologie",english:"anthropology",category:"sciences_humaines",level:"expert"},
+  {french:"la sociologie",english:"sociology",category:"sciences_humaines",level:"expert"},
+  {french:"la démographie",english:"demography",category:"sciences_humaines",level:"expert"},
+  {french:"l'épidémiologie",english:"epidemiology",category:"sciences_humaines",level:"expert"},
+  {french:"la toxicologie",english:"toxicology",category:"sciences_humaines",level:"expert"},
+  {french:"l'immunologie",english:"immunology",category:"sciences_humaines",level:"expert"},
+  {french:"la pharmacologie",english:"pharmacology",category:"sciences_humaines",level:"expert"},
+  {french:"la virologie",english:"virology",category:"sciences_humaines",level:"expert"},
+  {french:"la bactériologie",english:"bacteriology",category:"sciences_humaines",level:"expert"},
+  {french:"la parasitologie",english:"parasitology",category:"sciences_humaines",level:"expert"},
+  {french:"l'endocrinologie",english:"endocrinology",category:"sciences_humaines",level:"expert"},
+  {french:"l'archéologie",english:"archaeology",category:"sciences_humaines",level:"expert"},
+  {french:"l'épigraphie",english:"epigraphy",category:"sciences_humaines",level:"expert"},
+  {french:"la paléontologie",english:"palaeontology",category:"sciences_humaines",level:"expert"},
+  {french:"l'ethnologie",english:"ethnology",category:"sciences_humaines",level:"expert"},
+  {french:"la linguistique",english:"linguistics",category:"sciences_humaines",level:"expert"},
+  {french:"la sémiologie",english:"semiology",category:"sciences_humaines",level:"expert"},
+  {french:"la psycholinguistique",english:"psycholinguistics",category:"sciences_humaines",level:"expert"},
+  {french:"la sociolinguistique",english:"sociolinguistics",category:"sciences_humaines",level:"expert"},
+  {french:"la dialectologie",english:"dialectology",category:"sciences_humaines",level:"expert"},
+];
+
+/* ═══════ WORD EMOJI MAP ══════════════════════════════════════════ */
+const WORD_EMOJI = {
+  "zero":"0️⃣","one":"1️⃣","two":"2️⃣","three":"3️⃣","four":"4️⃣","five":"5️⃣",
+  "six":"6️⃣","seven":"7️⃣","eight":"8️⃣","nine":"9️⃣","ten":"🔟",
+  "eleven":"1️⃣1️⃣","twelve":"1️⃣2️⃣","thirteen":"1️⃣3️⃣","fourteen":"1️⃣4️⃣","fifteen":"1️⃣5️⃣",
+  "sixteen":"1️⃣6️⃣","seventeen":"1️⃣7️⃣","eighteen":"1️⃣8️⃣","nineteen":"1️⃣9️⃣",
+  "twenty":"2️⃣0️⃣","thirty":"3️⃣0️⃣","forty":"4️⃣0️⃣","fifty":"5️⃣0️⃣","sixty":"6️⃣0️⃣",
+  "seventy":"7️⃣0️⃣","eighty":"8️⃣0️⃣","ninety":"9️⃣0️⃣","hundred":"💯","thousand":"🔢",
+  "red":"🔴","blue":"🔵","green":"🟢","yellow":"🟡","orange":"🟠","purple":"🟣",
+  "pink":"🩷","black":"⚫","white":"⚪","grey":"🩶","brown":"🟤","beige":"🏜️",
+  "Monday":"📅","Tuesday":"📅","Wednesday":"📅","Thursday":"📅",
+  "Friday":"🎉","Saturday":"🎊","Sunday":"⛪",
+  "January":"❄️","February":"💕","March":"🌱","April":"🌸","May":"🌷",
+  "June":"☀️","July":"🏖️","August":"🌊","September":"🍂","October":"🎃",
+  "November":"🍁","December":"🎄",
+  "spring":"🌸","summer":"☀️","autumn":"🍂","winter":"❄️",
+  "family":"👨‍👩‍👧‍👦","father":"👨","mother":"👩","son":"👦","daughter":"👧",
+  "brother":"🧑","sister":"👧","grandfather":"👴","grandmother":"👵",
+  "uncle":"🧔","aunt":"👩‍🦱","cousin (male)":"🧑","cousin (female)":"👩",
+  "husband":"💍","wife":"💍","child":"🧒","baby":"👶","parents":"👨‍👩‍👧",
+  "head":"🧠","face":"😊","hair":"💇","eye":"👁️","eyes":"👀","nose":"👃",
+  "mouth":"👄","ear":"👂","neck":"🦒","shoulder":"🦾","arm":"💪",
+  "hand":"🖐️","finger":"☝️","stomach":"🫃","back":"🔙","leg":"🦵",
+  "knee":"🦵","foot":"🦶","heart":"❤️","tooth":"🦷","tongue":"👅",
+  "cat":"🐱","dog":"🐶","horse":"🐴","cow":"🐄","pig":"🐷","sheep":"🐑",
+  "goat":"🐐","chicken":"🐔","rabbit":"🐰","mouse":"🐭","bird":"🐦","fish":"🐟",
+  "frog":"🐸","snake":"🐍","elephant":"🐘","lion":"🦁","tiger":"🐯","bear":"🐻",
+  "monkey":"🐒","duck":"🦆","hen":"🐓",
+  "bread":"🍞","cheese":"🧀","butter":"🧈","milk":"🥛","egg":"🥚","meat":"🥩",
+  "pork":"🥓","beef":"🥩","apple":"🍎","pear":"🍐","banana":"🍌",
+  "orange":"🍊","strawberry":"🍓","grape":"🍇","tomato":"🍅","carrot":"🥕",
+  "potato":"🥔","onion":"🧅","salad":"🥗","rice":"🍚","pasta":"🍝","soup":"🍜",
+  "cake":"🎂","chocolate":"🍫","sugar":"🍬","salt":"🧂","pepper":"🌶️","oil":"🫒",
+  "meal":"🍽️","breakfast":"🌅","lunch":"🥪","dinner":"🍽️",
+  "water":"💧","juice":"🧃","coffee":"☕","tea":"🍵","wine":"🍷",
+  "beer":"🍺","orange juice":"🍊",
+  "clothes":"👗","shirt":"👔","trousers":"👖","dress":"👗","skirt":"🩱",
+  "coat":"🧥","jacket":"🧥","sweater":"🧶","shoes":"👟","socks":"🧦",
+  "hat":"🎩","tie":"👔","jeans":"👖","t-shirt":"👕","shorts":"🩳",
+  "gloves":"🧤","scarf":"🧣",
+  "house":"🏠","apartment":"🏢","room":"🚪","bedroom":"🛏️","kitchen":"🍳",
+  "bathroom":"🛁","toilet":"🚽","living room":"🛋️","dining room":"🍽️",
+  "garden":"🌿","door":"🚪","window":"🪟","stairs":"🪜","bed":"🛏️",
+  "chair":"🪑","table":"🪑","sofa":"🛋️","wardrobe":"👚","desk":"🖥️",
+  "lamp":"💡","mirror":"🪞","rug":"🏠","fridge":"🧊","oven":"🍳",
+  "to be":"💫","to have":"🤲","to go":"🚶","to do / to make":"🔨","to say":"💬",
+  "to see":"👀","to know (fact)":"🧠","to be able to":"💪","to want":"💝",
+  "to come":"🤝","to take":"✊","to give":"🎁","to find":"🔍","to speak":"🗣️",
+  "to eat":"🍽️","to drink":"🥤","to sleep":"😴","to work":"💼",
+  "to live (reside)":"🏡","to like / to love":"❤️","to read":"📖",
+  "to write":"✍️","to listen":"👂","to watch":"👁️","to buy":"🛒","to sell":"💰",
+  "to open":"🔓","to close":"🔒","to begin":"🚀","to finish":"🏁",
+  "to walk":"🚶","to run":"🏃","to play":"🎮","to sing":"🎤","to dance":"💃",
+  "to call":"📞","to answer":"💬","to look for":"🔍","to help":"🤝",
+  "to think":"🤔","to believe":"🙏","to know (person)":"🧑","to use":"🔧",
+  "to wait":"⏳","to leave":"🚪","to arrive":"🛬","to enter":"🚪",
+  "to go out":"🚪","to put":"📦","to carry / wear":"👜","to live (be alive)":"🏡",
+  "to swim":"🏊","to cook":"👨‍🍳","to drive":"🚗","to travel":"✈️",
+  "to learn":"📚","to understand":"💡","to ask":"❓","to show":"👇",
+  "to laugh":"😂","to cry":"😢","to fall":"⬇️","to stay":"🪑","to pay":"💳",
+  "big / tall":"🏔️","small / little":"🐜","good":"👍","bad":"👎","beautiful":"✨",
+  "pretty":"🌸","old":"👴","young":"👶","new":"🆕","long":"📏","short":"📏",
+  "hot / warm":"🔥","cold":"🧊","easy":"✅","difficult":"😤","fast":"⚡",
+  "slow":"🐢","strong":"💪","weak":"🍃","rich":"💰","poor":"🏚️",
+  "happy / pleased":"😊","sad":"😢","tired":"😴","ill / sick":"🤒",
+  "clean":"🧹","dirty":"🪣","open":"🔓","closed":"🔒","full":"🫙",
+  "empty":"📭","alone":"🧍","free":"🕊️","busy":"😰","happy":"😄",
+  "nice / friendly":"🤗","interesting":"💭",
+  "hello / good morning":"👋","good evening":"🌆","good night":"🌙",
+  "goodbye":"👋","hi":"🙋","thank you":"🙏","please (formal)":"🤲",
+  "please (informal)":"🤲","you're welcome":"😊","excuse me / sorry":"🙏",
+  "excuse me (formal)":"🙏","yes":"✅","no":"❌",
+  "today":"📅","tomorrow":"⏭️","yesterday":"⏮️","now":"⚡","always":"♾️",
+  "never":"🚫","often":"🔄","sometimes":"⏳","early":"🌅","late":"🌙",
+  "hour / time":"⏰","minute":"⏱️","day":"☀️","week":"📅","month":"🗓️",
+  "year":"🗓️","morning":"🌄","noon":"☀️","afternoon":"🌤️","evening":"🌆","night":"🌙",
+  "sun":"☀️","rain":"🌧️","snow":"❄️","wind":"💨","cloud":"☁️","storm":"⛈️",
+  "fog":"🌫️","heat":"🔥","the weather is nice":"🌤️","it is raining":"🌧️","it is snowing":"❄️",
+  "car":"🚗","train":"🚂","bus":"🚌","metro / subway":"🚇","plane":"✈️",
+  "boat":"⛵","taxi":"🚕","bicycle":"🚲","motorcycle":"🏍️",
+  "train station":"🚉","airport":"✈️","bus stop":"🚏",
+  "school":"🏫","university":"🎓","office":"🏢","shop / store":"🏪",
+  "market":"🏬","supermarket":"🛒","restaurant":"🍽️","café":"☕",
+  "hospital":"🏥","pharmacy":"💊","bank":"🏦","church":"⛪",
+  "street":"🛣️","city":"🏙️","village":"🏘️","country":"🌍","France":"🇫🇷",
+  "park":"🌳","beach":"🏖️","mountain":"⛰️","forest":"🌲","sea":"🌊","river":"🏞️",
+  "book":"📚","pen":"🖊️","pencil":"✏️","notebook":"📔","phone":"📱",
+  "computer":"💻","key":"🔑","bag":"👜","watch":"⌚","money":"💰",
+  "card / map":"🗺️","newspaper":"📰","photo":"📷","letter":"✉️",
+  "gift":"🎁","toy":"🪀",
+  // Professions
+  "doctor":"👨‍⚕️","nurse":"👩‍⚕️","teacher":"👨‍🏫","student":"👨‍🎓",
+  "cook":"👨‍🍳","police officer":"👮","firefighter":"🚒","lawyer":"⚖️",
+  "engineer":"👷","waiter":"🤵","actor":"🎭","dentist":"🦷",
+  "manager":"💼","journalist":"📰","driver":"🚗",
+  // School
+  "classroom":"🏫","lesson":"📖","homework":"📝","exam":"🧪",
+  "grade":"🏅","blackboard":"📋","library":"📚","dictionary":"📓",
+  "calculator":"🔢","ruler":"📏","question":"❓","answer":"💡",
+  "subject":"📚","mistake":"⚠️","break / recess":"☕",
+  // Question words
+  "who":"🙋","what":"🤷","where":"📍","when":"⏰","how":"🤔",
+  "why":"💭","how much / how many":"🔢","which":"👉",
+  // Essentials
+  "and":"➕","or":"🔀","but":"↩️","because":"🔍",
+  "so / therefore":"➡️","if":"🎲","also / too":"✅","very":"💯",
+  "quite / enough":"👌","maybe":"🤔","of course":"💫","ok / agreed":"🤝",
+  // New verbs
+  "to clean":"🧹","to choose":"🎯","to win / to earn":"🏆","to lose":"📉",
+  "to forget":"🌫️","to remember":"🧠","to share":"📤","to prepare":"🍳",
+  "to accept":"✅","to refuse":"🙅","to explain":"📢","to continue":"▶️",
+  "to return":"↩️","to visit":"🗺️","to change":"🔄","to offer":"🎀",
+  "to allow":"✔️","to book / to reserve":"📅","to repeat":"🔁",
+  "to invite":"💌","to improve":"📈","to join":"🔗","to decide":"💡",
+  "to try":"🤞","to succeed":"🏅",
+  // New adjectives
+  "intelligent":"🧠","modern":"🏙️","natural":"🌿","important":"❗",
+  "different":"🌈","perfect":"⭐","delicious":"😋","dangerous":"⚠️",
+  "calm":"😌","noisy":"📢","special":"🌟","last":"🔚","first":"🥇",
+  "next":"👉","same":"↔️",
+  // New places
+  "castle":"🏰","museum":"🏛️","theatre":"🎪","swimming pool":"🏊",
+  "stadium":"🏟️","shopping centre":"🛍️","hotel":"🏨","cathedral":"⛪"
+};
+
+/* ═══════ CATEGORY META ═══════════════════════════════════════════ */
+const CAT_DISPLAY = {
+  numbers:"Numbers", colors:"Colours", days:"Days of the Week",
+  months:"Months", seasons:"Seasons", family:"Family", body:"Body Parts",
+  animals:"Animals", food:"Food", drinks:"Drinks", clothing:"Clothing",
+  home:"Home & Furniture", verbs:"Verbs", adjectives:"Adjectives",
+  greetings:"Greetings", time:"Time & When", weather:"Weather",
+  transport:"Transport", places:"Places", objects:"Objects",
+  professions:"Professions", school:"School & Study",
+  questions:"Question Words", essentials:"Essential Words",
+  // Intermediate
+  work:"Work & Career", politics:"Politics", health:"Health & Medicine",
+  environment:"Environment", technology:"Technology", culture:"Culture & Arts",
+  travel:"Travel", economy:"Economy & Finance", emotions:"Emotions",
+  relationships:"Relationships", sports:"Sports", science:"Science",
+  education_adv:"Education (Advanced)", food_adv:"Food & Cuisine (Advanced)",
+  housing:"Housing & Urban Life", law:"Law & Justice", media:"Media & Communication",
+  advanced_verbs:"Verbs (Advanced)", advanced_adj:"Adjectives (Advanced)",
+  // Expert
+  abstract:"Abstract Concepts", politics_adv:"Politics (Expert)", law_adv:"Law (Expert)",
+  science_adv:"Science (Expert)", philosophy:"Philosophy", economy_adv:"Economy (Expert)",
+  rhetoric:"Rhetoric & Language", arts_adv:"Arts & Literature (Expert)",
+  environment_adv:"Environment (Expert)", psychology_adv:"Psychology (Expert)",
+  formal_lang:"Formal Language", social_adv:"Social Sciences (Expert)",
+  expert_verbs:"Verbs (Expert)", expert_adj:"Adjectives (Expert)",
+  expert_nouns:"Nouns (Expert)", formal_expressions:"Formal Expressions",
+  medicine_adv:"Medicine (Expert)", geography_adv:"Geography (Expert)",
+  sciences_humaines:"Human Sciences"
+};
+const CAT_ICONS = {
+  numbers:"🔢", colors:"🎨", days:"📅", months:"🗓️", seasons:"🌸",
+  family:"👨‍👩‍👧", body:"💪", animals:"🐾", food:"🍎", drinks:"🥤",
+  clothing:"👕", home:"🏠", verbs:"⚡", adjectives:"✨", greetings:"👋",
+  time:"⏰", weather:"☀️", transport:"🚗", places:"📍", objects:"📦",
+  professions:"👔", school:"🏫", questions:"❓", essentials:"💬",
+  // Intermediate
+  work:"💼", politics:"🏛️", health:"🏥", environment:"🌿", technology:"💻",
+  culture:"🎭", travel:"✈️", economy:"📈", emotions:"❤️", relationships:"🤝",
+  sports:"⚽", science:"🔬", education_adv:"🎓", food_adv:"👨‍🍳",
+  housing:"🏘️", law:"⚖️", media:"📺", advanced_verbs:"🔤", advanced_adj:"💫",
+  // Expert
+  abstract:"🧠", politics_adv:"🗳️", law_adv:"📜", science_adv:"⚛️",
+  philosophy:"🦉", economy_adv:"💹", rhetoric:"📖", arts_adv:"🎨",
+  environment_adv:"🌍", psychology_adv:"🧬", formal_lang:"🎩",
+  social_adv:"👥", expert_verbs:"⚡", expert_adj:"💎", expert_nouns:"📚",
+  formal_expressions:"🖊️", medicine_adv:"🩺", geography_adv:"🗺️",
+  sciences_humaines:"🔭"
+};
+const CAT_BG = {
+  numbers:"linear-gradient(135deg,#1D4ED8,#60A5FA)",
+  colors:"linear-gradient(135deg,#7C3AED,#C084FC)",
+  days:"linear-gradient(135deg,#9D174D,#F472B6)",
+  months:"linear-gradient(135deg,#0E7490,#22D3EE)",
+  seasons:"linear-gradient(135deg,#15803D,#86EFAC)",
+  family:"linear-gradient(135deg,#B91C1C,#F87171)",
+  body:"linear-gradient(135deg,#C2410C,#FB923C)",
+  animals:"linear-gradient(135deg,#166534,#4ADE80)",
+  food:"linear-gradient(135deg,#B45309,#FCD34D)",
+  drinks:"linear-gradient(135deg,#0369A1,#38BDF8)",
+  clothing:"linear-gradient(135deg,#6B21A8,#C084FC)",
+  home:"linear-gradient(135deg,#92400E,#FBBF24)",
+  verbs:"linear-gradient(135deg,#4C1D95,#8B5CF6)",
+  adjectives:"linear-gradient(135deg,#9D174D,#F472B6)",
+  greetings:"linear-gradient(135deg,#064E3B,#34D399)",
+  time:"linear-gradient(135deg,#312E81,#818CF8)",
+  weather:"linear-gradient(135deg,#0C4A6E,#38BDF8)",
+  transport:"linear-gradient(135deg,#991B1B,#F87171)",
+  places:"linear-gradient(135deg,#1E3A8A,#93C5FD)",
+  objects:"linear-gradient(135deg,#4C1D95,#A78BFA)",
+  professions:"linear-gradient(135deg,#0C4A6E,#0EA5E9)",
+  school:"linear-gradient(135deg,#1E1B4B,#6366F1)",
+  questions:"linear-gradient(135deg,#7C2D12,#F97316)",
+  essentials:"linear-gradient(135deg,#1F2937,#6B7280)",
+  // Intermediate
+  work:"linear-gradient(135deg,#1E40AF,#3B82F6)",
+  politics:"linear-gradient(135deg,#312E81,#6366F1)",
+  health:"linear-gradient(135deg,#065F46,#34D399)",
+  environment:"linear-gradient(135deg,#14532D,#86EFAC)",
+  technology:"linear-gradient(135deg,#1E3A5F,#38BDF8)",
+  culture:"linear-gradient(135deg,#701A75,#E879F9)",
+  travel:"linear-gradient(135deg,#0C4A6E,#7DD3FC)",
+  economy:"linear-gradient(135deg,#14532D,#4ADE80)",
+  emotions:"linear-gradient(135deg,#9F1239,#FB7185)",
+  relationships:"linear-gradient(135deg,#7C2D12,#FDBA74)",
+  sports:"linear-gradient(135deg,#1D4ED8,#93C5FD)",
+  science:"linear-gradient(135deg,#0E7490,#67E8F9)",
+  education_adv:"linear-gradient(135deg,#1E1B4B,#818CF8)",
+  food_adv:"linear-gradient(135deg,#92400E,#FDE68A)",
+  housing:"linear-gradient(135deg,#78350F,#FCD34D)",
+  law:"linear-gradient(135deg,#1F2937,#9CA3AF)",
+  media:"linear-gradient(135deg,#4C1D95,#C4B5FD)",
+  advanced_verbs:"linear-gradient(135deg,#3B0764,#A855F7)",
+  advanced_adj:"linear-gradient(135deg,#831843,#F9A8D4)",
+  // Expert
+  abstract:"linear-gradient(135deg,#0F172A,#475569)",
+  politics_adv:"linear-gradient(135deg,#1E1B4B,#4338CA)",
+  law_adv:"linear-gradient(135deg,#111827,#6B7280)",
+  science_adv:"linear-gradient(135deg,#0C4A6E,#0284C7)",
+  philosophy:"linear-gradient(135deg,#3B0764,#6D28D9)",
+  economy_adv:"linear-gradient(135deg,#064E3B,#059669)",
+  rhetoric:"linear-gradient(135deg,#451A03,#B45309)",
+  arts_adv:"linear-gradient(135deg,#6B21A8,#D946EF)",
+  environment_adv:"linear-gradient(135deg,#14532D,#16A34A)",
+  psychology_adv:"linear-gradient(135deg,#4C1D95,#7C3AED)",
+  formal_lang:"linear-gradient(135deg,#1F2937,#374151)",
+  social_adv:"linear-gradient(135deg,#0C4A6E,#1D4ED8)",
+  expert_verbs:"linear-gradient(135deg,#2E1065,#7E22CE)",
+  expert_adj:"linear-gradient(135deg,#701A75,#A21CAF)",
+  expert_nouns:"linear-gradient(135deg,#1E3A8A,#2563EB)",
+  formal_expressions:"linear-gradient(135deg,#0F172A,#1E293B)",
+  medicine_adv:"linear-gradient(135deg,#065F46,#0D9488)",
+  geography_adv:"linear-gradient(135deg,#1C3D5A,#0EA5E9)",
+  sciences_humaines:"linear-gradient(135deg,#312E81,#4F46E5)"
+};
+const CAT_BG_DEFAULT = "linear-gradient(135deg,#3B0764,#7C3AED)";
+
+/* ═══════ AUDIO ENGINE ════════════════════════════════════════════ */
+let _audioCtx = null;
+function getCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+function tone(freq, type, vol, dur, t0=0) {
+  try {
+    const ctx = getCtx();
+    const osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.connect(g); g.connect(ctx.destination);
+    osc.type = type; osc.frequency.value = freq;
+    const t = ctx.currentTime + t0;
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.start(t); osc.stop(t + dur + 0.01);
+  } catch(e){}
+}
+function sfxCorrect() {
+  tone(659.25, 'sine', 0.55, 0.18, 0.00);
+  tone(987.77, 'sine', 0.55, 0.18, 0.11);
+  tone(1318.5, 'sine', 0.55, 0.28, 0.22);
+  tone(1318.5*1.5,'sine', 0.28, 0.22, 0.22);
+}
+function sfxWrong() {
+  [0, 0.26].forEach(delay => {
+    try {
+      const ctx = getCtx();
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination);
+      osc.type = 'square';
+      const t = ctx.currentTime + delay;
+      osc.frequency.setValueAtTime(185, t);
+      osc.frequency.linearRampToValueAtTime(130, t + 0.22);
+      g.gain.setValueAtTime(0.6, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+      osc.start(t); osc.stop(t + 0.24);
+    } catch(e){}
+  });
+}
+function sfxTick(timeRemaining) {
+  const urgency = 1 - (timeRemaining / getTimerDur());
+  const vol  = 0.25 + urgency * 0.45;
+  const freq = 700 + urgency * 600;
+  tone(freq, 'square', vol, 0.055);
+}
+function sfxMilestone() {
+  [0,0.12,0.24,0.36,0.48].forEach((d,i) => {
+    const freqs = [523.25, 659.25, 783.99, 1046.5, 1318.5];
+    tone(freqs[i], 'sine', 0.5, 0.3, d);
+  });
+}
+
+/* ═══════ TIMER ═══════════════════════════════════════════════════ */
+function getTimerDur() { return difficulty === 'hard' ? 10.0 : 5.0; }
+let timerInterval = null, timeLeft = 5.0, lastTickSec = -1;
+
+function startTimer() {
+  const dur = getTimerDur();
+  timeLeft = dur; lastTickSec = Math.ceil(dur);
+  updateTimerUI();
+  sfxTick(dur);
+  timerInterval = setInterval(() => {
+    timeLeft = Math.max(0, parseFloat((timeLeft - 0.05).toFixed(2)));
+    updateTimerUI();
+    const w = Math.ceil(timeLeft);
+    if (w < lastTickSec && w >= 1) { lastTickSec = w; sfxTick(timeLeft); }
+    if (timeLeft <= 0) { stopTimer(); handleTimeout(); }
+  }, 50);
+}
+function stopTimer() { clearInterval(timerInterval); timerInterval = null; }
+function updateTimerUI() {
+  const dur = getTimerDur();
+  const pct = (timeLeft / dur) * 100;
+  const bar = document.getElementById('timer-bar');
+  const lbl = document.getElementById('timer-time');
+  if (!bar) return;
+  bar.style.width = pct + '%';
+  const urgentThresh = dur * 0.3;
+  const yellowThresh = dur * 0.6;
+  bar.classList.toggle('urgent', timeLeft <= urgentThresh);
+  bar.style.background = timeLeft > yellowThresh ? '#10B981' : timeLeft > urgentThresh ? '#F59E0B' : '#EF4444';
+  if (lbl) lbl.textContent = timeLeft.toFixed(1) + 's';
+}
+
+/* ═══════ SCORING ═════════════════════════════════════════════════ */
+function calcPoints(tLeft, isNearMiss = false) {
+  const baseMax = gameMode === 'god' ? 10 : 6;
+  const dur = getTimerDur();
+  const ratio = tLeft / dur;
+  let pts;
+  if (ratio >= 0.70) pts = baseMax;
+  else if (ratio >= 0.50) pts = Math.max(baseMax - 2, 2);
+  else if (ratio >= 0.30) pts = Math.max(baseMax - 4, 2);
+  else if (ratio >= 0.10) pts = Math.max(baseMax - 6, 2);
+  else pts = 2;
+  if (difficulty === 'hard') pts *= 2;
+  if (isNearMiss) pts = Math.max(Math.round(pts * 0.6 / 2) * 2, 2);
+  return pts;
+}
+
+let sessionScore = 0, highScores = {};
+let wordLevel = 'beginner';
+
+function getLevelWords() { return WORDS.filter(w => w.level === wordLevel); }
+
+const LEVEL_META = {
+  beginner:     { label:'✨ Beginner',     cats:24, words:500 },
+  intermediate: { label:'📘 Intermediate', cats:19, words:500 },
+  expert:  { label:'🎓 Expert',  cats:19, words:500 }
+};
+
+function setLevel(lv) {
+  wordLevel = lv;
+  ['beginner','intermediate','expert'].forEach(l => {
+    document.getElementById('btn-lv-'+l).classList.toggle('active', l === lv);
+  });
+  const m = LEVEL_META[lv];
+  const lw = getLevelWords();
+  const cats = [...new Set(lw.map(w=>w.category))].length;
+  document.getElementById('level-badge').textContent = m.label + ' · ' + lw.length + ' Words · ' + cats + ' Categories';
+  loadHS();
+  updateHomeHS();
+}
+
+function hsKey() { return 'frenchQuizHS_' + wordLevel; }
+function loadHS()  { try { highScores = JSON.parse(localStorage.getItem(hsKey())||'{}'); } catch(e){highScores={};} }
+function saveHS()  { try { localStorage.setItem(hsKey(), JSON.stringify(highScores)); } catch(e){} }
+function globalBest() {
+  const vals = Object.values(highScores).filter(v => typeof v === 'number' && v > 0);
+  return vals.length ? Math.max(...vals) : 0;
+}
+function updateHomeHS() {
+  const best = globalBest();
+  const bar  = document.getElementById('high-score-bar');
+  if (best > 0) {
+    bar.style.display = 'flex';
+    document.getElementById('hs-best').querySelector('.hs-pts').textContent = best.toLocaleString() + ' pts';
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+/* ═══════ MILESTONES ══════════════════════════════════════════════ */
+const MILESTONES     = [20,50,100,150,200,250,300,350,400];
+const MS_EMOJI       = {20:'🎉',50:'⭐',100:'🌟',150:'💫',200:'🏆',250:'👑',300:'🔥',350:'⚡',400:'🎯'};
+const MS_SUB         = {20:'You\'re on a roll!',50:'Halfway to 100!',100:'Century!',150:'Incredible!',200:'Unstoppable!',250:'Legendary!',300:'Beyond awesome!',350:'Almost at 400!',400:'Perfect mastery!'};
+let shownMilestones  = new Set();
+
+function checkMilestone(callback) {
+  const hit = MILESTONES.find(m => m === correctCount && !shownMilestones.has(m));
+  if (!hit) return false;
+  shownMilestones.add(hit);
+  showMilestone(hit, callback);
+  return true;
+}
+function spawnConfetti() {
+  const c = document.getElementById('confetti-container');
+  c.innerHTML = '';
+  const colors = ['#7C3AED','#F59E0B','#10B981','#EF4444','#3B82F6','#EC4899','#fff','#FDE68A'];
+  for (let i = 0; i < 40; i++) {
+    const d = document.createElement('div');
+    const size = 8 + Math.random()*10;
+    d.className = 'conf-dot';
+    d.style.cssText = `left:${Math.random()*400}px;top:0;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'3px'};animation-duration:${1.2+Math.random()*1.2}s;animation-delay:${Math.random()*0.6}s;`;
+    c.appendChild(d);
+  }
+}
+function showMilestone(count, callback) {
+  sfxMilestone(); spawnConfetti();
+  document.getElementById('ms-emoji').textContent = MS_EMOJI[count]||'🎉';
+  document.getElementById('ms-count').textContent = count;
+  document.getElementById('ms-sub').textContent   = MS_SUB[count]||'Amazing!';
+  const overlay = document.getElementById('milestone-overlay');
+  overlay.style.display = 'flex'; overlay.classList.remove('fade-out');
+  setTimeout(() => {
+    overlay.classList.add('fade-out');
+    setTimeout(() => { overlay.style.display='none'; overlay.classList.remove('fade-out'); if(callback)callback(); }, 500);
+  }, 2600);
+}
+
+/* ═══════ STOP MODAL ══════════════════════════════════════════════ */
+function confirmStop() { stopTimer(); document.getElementById('stop-modal').style.display='flex'; }
+function closeStopModal() { document.getElementById('stop-modal').style.display='none'; if(!answerLocked)startTimer(); }
+function exitToHome() { document.getElementById('stop-modal').style.display='none'; showScreen('screen-home'); }
+
+/* ═══════ GAME STATE ══════════════════════════════════════════════ */
+let gameMode='',difficulty='easy',lives=0,questions=[],currentQIdx=0,correctCount=0,
+    totalAnswered=0,completedCats=[],currentCat=null,godStreak=0,answerLocked=false;
+
+function setDifficulty(d) {
+  difficulty = d;
+  document.getElementById('btn-easy').classList.toggle('active', d === 'easy');
+  document.getElementById('btn-hard').classList.toggle('active', d === 'hard');
+  document.getElementById('diff-box-easy').classList.toggle('selected', d === 'easy');
+  document.getElementById('diff-box-hard').classList.toggle('selected', d === 'hard');
+  const catMax = d === 'hard' ? 12 : 6;
+  const godMax = d === 'hard' ? 20 : 10;
+  document.getElementById('pill-category').textContent = `🎯 No lives limit · Up to ${catMax} pts/word`;
+  document.getElementById('pill-endless').textContent  = `❤️ 3 lives · Up to ${catMax} pts/word`;
+  document.getElementById('pill-god').textContent      = `💀 1 life · Up to ${godMax} pts/word`;
+}
+
+const _DIACRITICS = new RegExp('[\\u0300-\\u036f]', 'g');
+function stripAccents(s) {
+  return s.normalize('NFD').replace(_DIACRITICS, '').toLowerCase().replace(/\s+/g,' ').trim();
+}
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function getCategories(){return[...new Set(getLevelWords().map(w=>w.category))];}
+function getWordsByCat(cat){return getLevelWords().filter(w=>w.category===cat);}
+function randomCat(exc=[]){const a=getCategories().filter(c=>!exc.includes(c));return a.length?a[Math.floor(Math.random()*a.length)]:null;}
+function buildQuestions(words){return shuffle(words).map(word=>{const d=shuffle(getLevelWords().filter(w=>w.french!==word.french)).slice(0,3);const c=shuffle([word,...d]);return{word,choices:c,correctIdx:c.indexOf(word)};});}
+function getWordEmoji(word){return WORD_EMOJI[word.english]||CAT_ICONS[word.category]||'❓';}
+
+function showScreen(id) {
+  stopTimer();
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
+  const el=document.getElementById(id);
+  el.style.display=(id==='screen-quiz'||id==='screen-cat-complete')?'flex':'block';
+  el.classList.add('active');
+  if(id==='screen-home')updateHomeHS();
+}
+
+function startMode(mode) {
+  gameMode=mode; correctCount=0; totalAnswered=0; completedCats=[];
+  godStreak=0; sessionScore=0; shownMilestones=new Set();
+  if(mode==='category'){lives=Infinity;buildCategoryGrid();showScreen('screen-categories');}
+  else if(mode==='endless'){lives=3;launchEndlessRound();}
+  else{lives=1;launchGodMode();}
+}
+
+function buildCategoryGrid(){
+  const grid=document.getElementById('category-grid');grid.innerHTML='';
+  getCategories().forEach(cat=>{
+    const count=getWordsByCat(cat).length;
+    const card=document.createElement('div');card.className='cat-card';
+    card.innerHTML=`<span class="cat-icon">${CAT_ICONS[cat]||'📖'}</span><span class="cat-name">${CAT_DISPLAY[cat]||cat}</span><span class="cat-count">${count} words</span>`;
+    card.onclick=()=>startCategory(cat);grid.appendChild(card);
+  });
+}
+function startCategory(cat){currentCat=cat;questions=buildQuestions(getWordsByCat(cat));currentQIdx=0;showScreen('screen-quiz');renderQuestion();}
+
+function launchEndlessRound(forcedCat){
+  const cat=forcedCat||randomCat(completedCats);if(!cat){showResults('all-complete');return;}
+  currentCat=cat;questions=buildQuestions(getWordsByCat(cat));currentQIdx=0;showScreen('screen-quiz');renderQuestion();
+}
+function launchGodMode(){currentCat=null;questions=buildQuestions(getLevelWords());currentQIdx=0;showScreen('screen-quiz');renderQuestion();}
+
+function renderQuestion() {
+  answerLocked=false;
+  if(document.activeElement) document.activeElement.blur();
+  const q=questions[currentQIdx];
+  document.getElementById('quiz-header').style.background = currentCat?(CAT_BG[currentCat]||CAT_BG_DEFAULT):CAT_BG_DEFAULT;
+  const catLabel=currentCat?(CAT_DISPLAY[currentCat]||currentCat):'All Categories';
+  document.getElementById('quiz-category-tag').textContent=catLabel;
+  document.getElementById('quiz-progress-text').textContent=`${currentQIdx+1}/${questions.length}`;
+  document.getElementById('progress-fill').style.width=((currentQIdx/questions.length)*100)+'%';
+  document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+  renderLives();
+  document.getElementById('quiz-word-emoji').textContent=getWordEmoji(q.word);
+  document.getElementById('quiz-word').textContent=q.word.english;
+  const card=document.getElementById('quiz-word-card');
+  card.classList.remove('flash-correct','flash-wrong');card.style.borderColor='transparent';
+  const dirEl=document.getElementById('quiz-direction');
+  dirEl.innerHTML=difficulty==='hard'?'Type the French translation: <span class="hard-badge">Hard</span>':'What is the French translation?';
+  const choicesEl=document.getElementById('quiz-choices');choicesEl.innerHTML='';
+  if(difficulty==='hard'){
+    choicesEl.className='type-mode';
+    const wrap=document.createElement('div');wrap.className='type-answer-wrap';
+    const inp=document.createElement('input');inp.type='text';inp.id='type-input';inp.className='type-input';
+    inp.placeholder='Type French translation…';inp.autocomplete='off';inp.spellcheck=false;
+    inp.setAttribute('autocorrect','off');inp.setAttribute('autocapitalize','none');
+    inp.onkeydown=e=>{if(e.key==='Enter')submitTypedAnswer();};
+    const sub=document.createElement('button');sub.className='type-submit-btn';sub.textContent='→';sub.onclick=submitTypedAnswer;
+    wrap.appendChild(inp);wrap.appendChild(sub);choicesEl.appendChild(wrap);
+    setTimeout(()=>inp.focus(),120);
+  } else {
+    choicesEl.className='choices-grid';
+    q.choices.forEach((choice,i)=>{
+      const btn=document.createElement('button');btn.className='choice-btn';
+      btn.textContent=choice.french;btn.onclick=()=>handleAnswer(i);choicesEl.appendChild(btn);
+    });
+  }
+  const fb=document.getElementById('quiz-feedback');fb.textContent='';fb.className='quiz-feedback';
+  startTimer();
+}
+
+function renderLives(){
+  const el=document.getElementById('quiz-lives');
+  if(!el||gameMode==='category'){if(el)el.innerHTML='';return;}
+  const max=gameMode==='god'?1:3;let h='';
+  for(let i=0;i<max;i++)h+=i<lives?'❤️':'🖤';
+  el.innerHTML=h;
+}
+
+function handleTimeout(){
+  if(answerLocked)return;answerLocked=true;sfxWrong();
+  const q=questions[currentQIdx];
+  if(difficulty==='easy'){document.querySelectorAll('.choice-btn').forEach((btn,i)=>{btn.disabled=true;if(i===q.correctIdx)btn.classList.add('correct');});}
+  else{const inp=document.getElementById('type-input');const sub=document.querySelector('.type-submit-btn');if(inp)inp.disabled=true;if(sub)sub.disabled=true;}
+  if(lives!==Infinity)lives--;totalAnswered++;
+  document.getElementById('quiz-word-card').classList.add('flash-wrong');
+  const fb=document.getElementById('quiz-feedback');
+  fb.innerHTML=`⏱️ Too slow! Answer: <strong>${q.word.french}</strong>`;fb.className='quiz-feedback feedback-wrong';
+  renderLives();advanceAfterDelay();
+}
+
+function handleAnswer(choiceIdx){
+  if(answerLocked)return;answerLocked=true;stopTimer();
+  const q=questions[currentQIdx];const correct=choiceIdx===q.correctIdx;
+  const fb=document.getElementById('quiz-feedback');
+  document.querySelectorAll('.choice-btn').forEach((btn,i)=>{
+    btn.disabled=true;if(i===q.correctIdx)btn.classList.add('correct');else if(i===choiceIdx&&!correct)btn.classList.add('wrong');
+  });
+  if(correct){
+    const pts=calcPoints(timeLeft);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
+    fb.textContent=`✅ +${pts} pts`;fb.className='quiz-feedback feedback-correct';
+    document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+    const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
+    popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
+  } else {
+    if(lives!==Infinity)lives--;sfxWrong();
+    document.getElementById('quiz-word-card').classList.add('flash-wrong');
+    fb.innerHTML=`❌ Answer: <strong>${q.word.french}</strong>`;fb.className='quiz-feedback feedback-wrong';
+  }
+  totalAnswered++;renderLives();advanceAfterDelay();
+}
+
+function submitTypedAnswer(){
+  if(answerLocked)return;
+  const inp=document.getElementById('type-input');if(!inp)return;
+  const typed=inp.value.trim();if(!typed)return;
+  answerLocked=true;stopTimer();
+  const q=questions[currentQIdx];const correct=q.word.french;
+  const typedClean=typed.toLowerCase();const correctClean=correct.toLowerCase();
+  const exactMatch=typedClean===correctClean;
+  const nearMiss=!exactMatch&&stripAccents(typedClean)===stripAccents(correctClean);
+  inp.disabled=true;const sub=document.querySelector('.type-submit-btn');if(sub)sub.disabled=true;
+  const fb=document.getElementById('quiz-feedback');
+  if(exactMatch){
+    const pts=calcPoints(timeLeft,false);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
+    fb.textContent=`✅ +${pts} pts`;fb.className='quiz-feedback feedback-correct';
+    document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+    const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
+    popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
+  } else if(nearMiss){
+    const pts=calcPoints(timeLeft,true);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
+    fb.innerHTML=`✅ +${pts} pts &nbsp;·&nbsp; Exact spelling: <strong>${correct}</strong>`;fb.className='quiz-feedback feedback-correct';
+    document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+    const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
+    popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
+  } else {
+    if(lives!==Infinity)lives--;sfxWrong();
+    document.getElementById('quiz-word-card').classList.add('flash-wrong');
+    fb.innerHTML=`❌ Answer: <strong>${correct}</strong>`;fb.className='quiz-feedback feedback-wrong';
+  }
+  totalAnswered++;renderLives();advanceAfterDelay();
+}
+
+function advanceAfterDelay(){
+  setTimeout(()=>{
+    if(lives===0){showResults('game-over');return;}
+    currentQIdx++;
+    const doNext=()=>{
+      if(currentQIdx>=questions.length){
+        if(gameMode==='category')showResults('category-complete');
+        else if(gameMode==='endless'){completedCats.push(currentCat);showCatInterstitial();}
+        else showResults('all-complete');
+      } else renderQuestion();
+    };
+    if(!checkMilestone(doNext))doNext();
+  },1500);
+}
+
+function showCatInterstitial(){
+  showScreen('screen-cat-complete');
+  document.getElementById('ci-icon').textContent='🎉';
+  document.getElementById('ci-title').textContent=`${CAT_DISPLAY[currentCat]||currentCat} done!`;
+  const nextCat=randomCat(completedCats);
+  if(!nextCat){document.getElementById('ci-sub').textContent='All categories done!';document.getElementById('ci-lives').innerHTML='';setTimeout(()=>showResults('all-complete'),1800);return;}
+  let lh='';for(let i=0;i<3;i++)lh+=i<lives?'❤️':'🖤';
+  document.getElementById('ci-lives').innerHTML=lh;
+  document.getElementById('ci-sub').textContent=`Next: ${CAT_DISPLAY[nextCat]||nextCat}`;
+  setTimeout(()=>launchEndlessRound(nextCat),2000);
+}
+
+function showResults(type){
+  showScreen('screen-results');
+  const prevBest=globalBest();
+  const prevModeBest=highScores[gameMode]||0;
+  if(sessionScore>prevModeBest&&sessionScore>0){highScores[gameMode]=sessionScore;saveHS();}
+  const isNew=sessionScore>0&&sessionScore>prevBest;
+  const pct=totalAnswered>0?Math.round((correctCount/totalAnswered)*100):0;
+  const isGameOver=type==='game-over';
+  const titles={'game-over':gameMode==='god'?'💀 Game Over!':'💔 Out of Lives!','category-complete':'🎉 Category Complete!','all-complete':'🏆 Outstanding!'};
+  document.getElementById('results-title').textContent=titles[type]||'✅ Done!';
+  document.getElementById('results-subtitle').textContent={'game-over':gameMode==='god'?`Streak: ${godStreak} words`:`${completedCats.length} categor${completedCats.length===1?'y':'ies'} done`,'category-complete':CAT_DISPLAY[currentCat]||currentCat,'all-complete':'You conquered every category!'}[type]||'';
+  const hero=document.getElementById('results-hero');
+  hero.classList.remove('celebrate','game-over');
+  if(isGameOver){hero.classList.add('game-over');}else{hero.classList.add('celebrate');launchResultsConfetti();}
+  const scoreBig=document.getElementById('results-score-big');
+  scoreBig.classList.add('score-reveal');setTimeout(()=>scoreBig.classList.remove('score-reveal'),800);
+  animateScore(sessionScore);sfxCelebration(isGameOver);
+  const hsArea=document.getElementById('results-hs-area');
+  const curBest=globalBest();
+  hsArea.innerHTML=isNew?'<div class="new-hs-badge">🏆 New Personal Best!</div>':(curBest>0?`<div class="prev-hs-note">Best: ${curBest.toLocaleString()} pts</div>`:'');
+  let stats=`<div class="stat-chip"><span class="stat-num">${pct}%</span><span class="stat-label">Accuracy</span></div><div class="stat-chip"><span class="stat-num">${correctCount}</span><span class="stat-label">Correct</span></div><div class="stat-chip"><span class="stat-num">${totalAnswered-correctCount}</span><span class="stat-label">Wrong</span></div>`;
+  if(gameMode==='endless')stats+=`<div class="stat-chip"><span class="stat-num">${completedCats.length}</span><span class="stat-label">Categories</span></div>`;
+  if(gameMode==='god')stats+=`<div class="stat-chip"><span class="stat-num">${godStreak}</span><span class="stat-label">Streak</span></div>`;
+  document.getElementById('results-stats').innerHTML=stats;
+  const actEl=document.getElementById('results-actions');actEl.innerHTML='';
+  const btn=(label,cls,fn)=>{const b=document.createElement('button');b.className=cls;b.textContent=label;b.onclick=fn;actEl.appendChild(b);};
+  if(type==='category-complete'){btn('🔄 Try Again','btn-secondary',()=>startCategory(currentCat));btn('📚 Pick Category','btn-secondary',()=>showScreen('screen-categories'));}
+  if(type==='game-over'&&gameMode==='endless')btn('🔥 Play Again','btn-secondary',()=>startMode('endless'));
+  if(type==='game-over'&&gameMode==='god')btn('⚡ God Mode Again','btn-secondary',()=>startMode('god'));
+  btn('🏠 Back to Home','btn-primary',()=>showScreen('screen-home'));
+}
+
+function sfxCelebration(isGameOver){
+  if(isGameOver){tone(392.00,'sine',0.38,0.32,0.00);tone(349.23,'sine',0.38,0.32,0.36);tone(329.63,'sine',0.38,0.55,0.72);}
+  else{[523.25,659.25,783.99,1046.50,1318.50].forEach((f,i)=>tone(f,'sine',0.48,0.22,i*0.10));[523.25,659.25,783.99,1046.50].forEach(f=>tone(f,'sine',0.42,0.75,0.65));tone(1567.98,'sine',0.28,0.55,0.80);}
+}
+
+function animateScore(target){
+  const el=document.getElementById('results-score-big');el.classList.add('counting');el.textContent='0';
+  const dur=Math.min(1800,400+target*6);const start=Date.now();
+  const tick=()=>{const p=Math.min((Date.now()-start)/dur,1);const eased=1-Math.pow(1-p,3);el.textContent=Math.round(eased*target).toLocaleString();if(p<1)requestAnimationFrame(tick);else{el.textContent=target.toLocaleString();el.classList.remove('counting');}};
+  requestAnimationFrame(tick);
+}
+
+function launchResultsConfetti(count=70){
+  const c=document.getElementById('results-confetti');c.innerHTML='';
+  const colors=['#7C3AED','#F59E0B','#10B981','#EF4444','#3B82F6','#EC4899','#ffffff','#FDE68A','#A78BFA'];
+  for(let i=0;i<count;i++){const d=document.createElement('div');const size=7+Math.random()*13;const isCircle=Math.random()>0.45;d.className='conf-rain';d.style.cssText=`left:${Math.random()*100}%;top:-25px;width:${size}px;height:${isCircle?size:size*0.45}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${isCircle?'50%':'2px'};animation-duration:${1.6+Math.random()*1.8}s;animation-delay:${Math.random()*1.0}s;`;c.appendChild(d);}
+  setTimeout(()=>{c.innerHTML='';},4500);
+}
+
+loadHS();
+showScreen('screen-home');
+</script>
+</body>
+</html>
