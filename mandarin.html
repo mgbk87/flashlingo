@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2536172736464305"
+     crossorigin="anonymous"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flashlingo 🇨🇳</title>
@@ -151,6 +153,7 @@
     @keyframes ptsFly { 0% { opacity:1; transform: translateY(0) scale(1); } 100% { opacity:0; transform: translateY(-60px) scale(1.4); } }
 
     .quiz-feedback { margin-top: 14px; font-size: 0.97rem; font-weight: 800; min-height: 24px; text-align: center; }
+    .quiz-feedback strong { font-size: 1.97rem; }
     .feedback-correct { color: var(--green); }
     .feedback-wrong   { color: var(--red); }
 
@@ -1377,7 +1380,7 @@ const CAT_DISPLAY = {
   expert_verbs:"Verbs (Expert)", expert_adj:"Adjectives (Expert)",
   expert_nouns:"Nouns (Expert)", formal_expressions:"Formal Expressions",
   medicine_adv:"Medicine (Expert)", geography_adv:"Geography (Expert)",
-  sciences_humaines:"Human Sciences"
+  sciences_humaines:"Human Sciences", sciences_humanas:"Human Sciences"
 };
 const CAT_ICONS = {
   numbers:"🔢", colors:"🎨", days:"📅", months:"🗓️", seasons:"🌸",
@@ -1917,6 +1920,7 @@ function submitTypedAnswer(){
 }
 
 function advanceAfterDelay(){
+  const isWrong = document.getElementById('quiz-feedback').classList.contains('feedback-wrong');
   setTimeout(()=>{
     if(lives===0){showResults('game-over');return;}
     currentQIdx++;
@@ -1928,7 +1932,7 @@ function advanceAfterDelay(){
       } else renderQuestion();
     };
     if(!checkMilestone(doNext))doNext();
-  },1500);
+  },isWrong?2500:1500);
 }
 
 function showCatInterstitial(){

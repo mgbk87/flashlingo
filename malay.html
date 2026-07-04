@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2536172736464305"
+     crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashlingo 🇲🇾</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:       #7C3AED;
+      --purple-light: #A78BFA;
+      --purple-faint: #F3EEFF;
+      --purple-dark:  #5B21B6;
+      --yellow:       #F59E0B;
+      --yellow-light: #FDE68A;
+      --green:        #10B981;
+      --red:          #EF4444;
+      --bg:           #FAF9FF;
+      --white:        #FFFFFF;
+      --text:         #1E1B4B;
+      --text-mid:     #4B5563;
+      --text-muted:   #9CA3AF;
+      --radius:       20px;
+      --radius-lg:    28px;
+      --shadow:       0 8px 32px rgba(124,58,237,0.12);
+      --shadow-card:  0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    html, body { height: 100%; font-size: 112.5%; font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: block; }
+
+    .blob-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+    .blob-bg::before { content: ''; position: absolute; top: -120px; right: -100px; width: 420px; height: 420px; border-radius: 60% 40% 50% 70% / 50% 60% 40% 60%; background: #CCE0FF; opacity: 0.7; }
+    .blob-bg::after  { content: ''; position: absolute; bottom: -80px; left: -80px; width: 320px; height: 320px; border-radius: 70% 30% 60% 40% / 40% 70% 30% 60%; background: #FFD1D1; opacity: 0.4; }
+
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: var(--white); border-bottom: 3px solid var(--purple-faint); position: relative; z-index: 10; }
+    .nav-logo { font-size: 1.4rem; font-weight: 900; color: var(--purple); display: flex; align-items: center; gap: 6px; letter-spacing: -0.5px; }
+    .nav-logo .logo-flash { color: var(--purple); }
+    .nav-logo .logo-lingo { font-style: italic; color: var(--yellow); }
+    .nav-logo .logo-flag  { font-style: normal; }
+    .lang-home-btn { font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.82rem; color: var(--purple); text-decoration: none; background: var(--purple-faint); padding: 5px 12px; border-radius: 999px; white-space: nowrap; }
+    .lang-home-btn:hover { background: #DDD6FE; }
+    .flag-stripe { height: 6px; background: linear-gradient(90deg, #010066 33%, #FFCC00 33% 66%, #CC0001 66%); }
+    .home-lang-flag { width: 90px; height: auto; margin-bottom: 6px; display: block; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.25); }
+
+    #screen-home { background: #F0F5FF; }
+    .home-hero { text-align: center; padding: 28px 24px 14px; position: relative; z-index: 1; }
+    .home-hero h1 { font-size: clamp(1.8rem, 5.5vw, 2.8rem); font-weight: 900; line-height: 1.15; margin-bottom: 10px; }
+    .home-hero h1 em { font-style: italic; color: var(--purple); }
+    .home-hero p { font-size: 1rem; color: var(--text-mid); font-weight: 600; max-width: 420px; margin: 0 auto; }
+    .badge { display: inline-block; background: var(--yellow); color: var(--text); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.5px; padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; text-transform: uppercase; }
+
+    .high-score-bar { background: linear-gradient(135deg, #3B0764, #7C3AED); max-width: 480px; margin: 0 auto 4px; border-radius: var(--radius-lg); padding: 14px 18px; position: relative; z-index: 1; display: flex; flex-direction: column; gap: 8px; }
+    .hs-title { font-size: 0.78rem; font-weight: 900; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+    .hs-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .hs-row { display: flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.1); border-radius: 12px; padding: 6px 10px; }
+    .hs-rank { font-size: 0.85rem; font-weight: 900; color: rgba(255,255,255,0.85); min-width: 22px; }
+    .hs-name { flex: 1; font-size: 0.86rem; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hs-pts { font-size: 0.82rem; font-weight: 900; color: var(--yellow-light); white-space: nowrap; }
+
+    .name-input-wrap { margin-bottom: 16px; text-align: left; }
+    .name-error { color: var(--red); font-size: 0.75rem; font-weight: 700; margin-top: 6px; min-height: 16px; }
+
+    .mode-grid { display: flex; flex-direction: column; gap: 12px; max-width: 480px; margin: 14px auto 28px; padding: 0 18px; position: relative; z-index: 1; }
+    .mode-card { border-radius: var(--radius-lg); padding: 20px 24px; cursor: pointer; position: relative; overflow: hidden; border: none; text-align: left; transition: transform 0.18s ease, box-shadow 0.18s ease; box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
+    .mode-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,0.16); }
+    .mode-card:active { transform: translateY(0); }
+    .mode-card-bg { position: absolute; top: -40px; right: -40px; width: 150px; height: 150px; border-radius: 50%; opacity: 0.18; }
+    .mode-icon    { font-size: 2rem; margin-bottom: 7px; display: block; }
+    .mode-name    { font-size: 1.4rem; font-weight: 900; color: #fff; margin-bottom: 2px; }
+    .mode-tagline { font-size: 0.88rem; font-weight: 600; color: rgba(255,255,255,0.85); margin-bottom: 7px; }
+    .mode-desc    { font-size: 0.82rem; color: rgba(255,255,255,0.7); font-weight: 600; }
+    .mode-pill    { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.2); border-radius: 999px; padding: 3px 11px; font-size: 0.76rem; font-weight: 800; color: #fff; margin-top: 9px; }
+    .mode-card--category { background: linear-gradient(135deg, #2563EB, #60A5FA); }
+    .mode-card--category .mode-card-bg { background: #fff; }
+    .mode-card--endless  { background: linear-gradient(135deg, #EA580C, #FB923C); }
+    .mode-card--endless .mode-card-bg  { background: #fff; }
+    .mode-card--god      { background: linear-gradient(135deg, #3B0764, #7C3AED); }
+    .mode-card--god .mode-card-bg      { background: #C084FC; }
+
+    .home-stats { display: flex; justify-content: center; gap: 24px; padding: 12px 24px; background: var(--white); border-top: 2px solid var(--purple-faint); position: relative; z-index: 1; }
+    .home-stat { text-align: center; }
+    .home-stat-num   { display: block; font-size: 1.3rem; font-weight: 900; color: var(--purple); }
+    .home-stat-label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    #screen-categories { background: var(--bg); }
+    .screen-top { background: var(--purple); padding: 18px 22px 24px; position: relative; overflow: hidden; }
+    .screen-top::after { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255,255,255,0.08); }
+    .back-btn { background: rgba(255,255,255,0.18); border: none; cursor: pointer; color: #fff; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.88rem; padding: 5px 13px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; transition: background 0.15s; margin-bottom: 12px; }
+    .back-btn:hover { background: rgba(255,255,255,0.28); }
+    .screen-title    { font-size: 1.6rem; font-weight: 900; color: #fff; margin-bottom: 3px; }
+    .screen-subtitle { font-size: 0.86rem; color: rgba(255,255,255,0.8); font-weight: 600; }
+    .category-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(138px, 1fr)); gap: 11px; padding: 18px 14px 28px; max-width: 600px; margin: 0 auto; }
+    .cat-card { background: var(--white); border-radius: var(--radius); padding: 15px 11px; text-align: center; cursor: pointer; border: 2px solid transparent; transition: all 0.15s ease; box-shadow: var(--shadow-card); display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .cat-card:hover { border-color: var(--purple); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,0.15); }
+    .cat-icon  { font-size: 1.8rem; }
+    .cat-name  { font-size: 0.8rem; font-weight: 800; color: var(--text); }
+    .cat-count { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); background: var(--purple-faint); padding: 2px 7px; border-radius: 999px; }
+
+    #screen-quiz { background: var(--bg); display: flex; flex-direction: column; }
+    .quiz-header { padding: 13px 16px 16px; position: relative; overflow: hidden; transition: background 0.4s ease; }
+    .quiz-header::after { content: ''; position: absolute; bottom: -30px; right: -30px; width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,0.07); }
+    .quiz-top-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+    .quiz-left    { display: flex; align-items: center; gap: 8px; }
+    .quiz-right   { display: flex; align-items: center; gap: 8px; }
+    .stop-btn { background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.35); cursor: pointer; color: #fff; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.78rem; padding: 4px 11px; border-radius: 999px; transition: background 0.15s; white-space: nowrap; }
+    .stop-btn:hover { background: rgba(255,255,255,0.35); }
+    .quiz-category-tag { background: rgba(255,255,255,0.22); color: #fff; font-size: 0.76rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; }
+    .quiz-score-display { background: var(--yellow); color: #1E1B4B; font-size: 0.8rem; font-weight: 900; padding: 3px 10px; border-radius: 999px; }
+    .quiz-progress-text { color: rgba(255,255,255,0.85); font-size: 0.8rem; font-weight: 700; }
+    .quiz-lives { font-size: 1.25rem; letter-spacing: 3px; min-height: 24px; margin-bottom: 5px; }
+    .progress-track { height: 7px; background: rgba(255,255,255,0.2); border-radius: 999px; overflow: hidden; }
+    .progress-fill  { height: 100%; background: var(--yellow); border-radius: 999px; transition: width 0.4s ease; }
+
+    .quiz-body { flex: 1; padding: 20px 16px 24px; display: flex; flex-direction: column; align-items: center; max-width: 520px; margin: 0 auto; width: 100%; }
+    .quiz-direction { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 12px; }
+    .quiz-word-card { border-radius: var(--radius-lg); padding: 20px 24px 24px; text-align: center; width: 100%; box-shadow: var(--shadow); margin-bottom: 12px; border: 3px solid transparent; background: var(--white); transition: border-color 0.3s; }
+    .quiz-word-card.flash-correct { animation: flashGreen 0.5s ease; }
+    .quiz-word-card.flash-wrong   { animation: flashRed   0.5s ease; }
+    @keyframes flashGreen { 0%,100% { background:#fff; } 40% { background:#D1FAE5; } }
+    @keyframes flashRed   { 0%,100% { background:#fff; } 40% { background:#FEE2E2; } }
+    .quiz-word-emoji { font-size: 3.2rem; margin-bottom: 8px; display: block; line-height: 1; animation: emojiPop 0.35s ease; }
+    @keyframes emojiPop { 0% { transform: scale(0.5); opacity:0; } 70% { transform: scale(1.15); } 100% { transform: scale(1); opacity:1; } }
+    .quiz-word { font-size: clamp(1.6rem, 5.5vw, 2.2rem); font-weight: 900; color: var(--text); line-height: 1.2; }
+
+    .timer-wrap { width: 100%; margin-bottom: 16px; }
+    .timer-track { height: 12px; background: #E5E7EB; border-radius: 999px; overflow: hidden; position: relative; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); }
+    .timer-bar   { height: 100%; width: 100%; border-radius: 999px; transition: background 0.3s ease; }
+    .timer-bar.urgent { animation: timerPulse 0.4s ease-in-out infinite; }
+    @keyframes timerPulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+    .timer-time  { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-align: right; margin-top: 3px; }
+
+    .choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+    .choice-btn { background: var(--white); border: 3px solid var(--purple-faint); border-radius: var(--radius); padding: 14px 11px; font-family: 'Nunito', sans-serif; font-size: 0.94rem; font-weight: 800; color: var(--text); cursor: pointer; transition: all 0.12s ease; text-align: center; line-height: 1.3; box-shadow: var(--shadow-card); }
+    @media (hover: hover) { .choice-btn:hover:not(:disabled) { border-color: var(--purple); background: var(--purple-faint); transform: translateY(-2px); } }
+    .choice-btn:disabled { cursor: default; }
+    .choice-btn.correct { background: #D1FAE5; border-color: var(--green); color: #065F46; }
+    .choice-btn.wrong   { background: #FEE2E2; border-color: var(--red);   color: #991B1B; }
+    .choice-btn.correct::before { content: '✓ '; }
+    .choice-btn.wrong::before   { content: '✗ '; }
+
+    .pts-pop { position: fixed; font-size: 1.4rem; font-weight: 900; color: var(--green); pointer-events: none; z-index: 500; animation: ptsFly 1.1s ease forwards; }
+    @keyframes ptsFly { 0% { opacity:1; transform: translateY(0) scale(1); } 100% { opacity:0; transform: translateY(-60px) scale(1.4); } }
+
+    .quiz-feedback { margin-top: 14px; font-size: 0.97rem; font-weight: 800; min-height: 24px; text-align: center; }
+    .quiz-feedback strong { font-size: 1.97rem; }
+    .feedback-correct { color: var(--green); }
+    .feedback-wrong   { color: var(--red); }
+
+    .milestone-overlay { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 2000; display: flex; align-items: center; justify-content: center; background: rgba(30,5,60,0.88); backdrop-filter: blur(6px); animation: msIn 0.35s ease; }
+    @keyframes msIn { from { opacity:0; } to { opacity:1; } }
+    .milestone-overlay.fade-out { animation: msOut 0.5s ease forwards; }
+    @keyframes msOut { from { opacity:1; } to { opacity:0; } }
+    .milestone-box { text-align: center; position: relative; }
+    .milestone-emoji  { font-size: 5rem; display: block; margin-bottom: 8px; animation: msBounce 0.6s ease infinite alternate; }
+    @keyframes msBounce { from { transform: scale(1) rotate(-5deg); } to { transform: scale(1.15) rotate(5deg); } }
+    .milestone-count  { font-size: clamp(5rem, 20vw, 9rem); font-weight: 900; color: var(--yellow); line-height: 1; display: block; text-shadow: 0 0 40px rgba(245,158,11,0.6); animation: msPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
+    @keyframes msPop   { from { transform: scale(0.3); opacity:0; } to { transform: scale(1); opacity:1; } }
+    .milestone-label  { font-size: 1.5rem; font-weight: 900; color: rgba(255,255,255,0.9); margin-top: 4px; display: block; }
+    .milestone-sub    { font-size: 1rem; color: rgba(255,255,255,0.6); font-weight: 700; margin-top: 6px; display: block; }
+
+    #confetti-container { position: absolute; top: -40px; left: 50%; transform: translateX(-50%); width: 400px; height: 500px; pointer-events: none; overflow: visible; }
+    .conf-dot { position: absolute; border-radius: 50%; animation: confFall linear forwards; }
+    @keyframes confFall { 0% { transform: translateY(0) rotate(0deg) scale(1); opacity:1; } 100% { transform: translateY(500px) rotate(720deg) scale(0.5); opacity:0; } }
+
+    .stop-modal { position: fixed; top:0; left:0; width:100%; height:100%; z-index: 1500; display: flex; align-items: center; justify-content: center; background: rgba(30,27,74,0.7); backdrop-filter: blur(4px); }
+    .stop-modal-box { background: #fff; border-radius: var(--radius-lg); padding: 28px 28px 24px; max-width: 300px; width: 90%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .stop-modal-title { font-size: 1.3rem; font-weight: 900; color: var(--text); margin-bottom: 8px; }
+    .stop-modal-sub   { font-size: 0.88rem; font-weight: 600; color: var(--text-mid); margin-bottom: 20px; }
+    .stop-modal-btns  { display: flex; gap: 10px; }
+    .stop-modal-btns button { flex:1; padding: 13px; border-radius: var(--radius); font-family: 'Nunito', sans-serif; font-size: 0.92rem; font-weight: 800; cursor: pointer; border: none; }
+    .stop-cancel { background: var(--purple-faint); color: var(--purple); }
+    .stop-exit   { background: var(--red); color: #fff; }
+
+    #screen-results { background: var(--bg); }
+    .results-hero { background: linear-gradient(135deg, var(--purple-dark), var(--purple)); padding: 40px 22px 52px; text-align: center; position: relative; overflow: hidden; }
+    .results-hero::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+    .results-title    { font-size: clamp(1.6rem, 5.5vw, 2.4rem); font-weight: 900; color: #fff; margin-bottom: 5px; position: relative; }
+    .results-subtitle { font-size: 0.95rem; color: rgba(255,255,255,0.8); font-weight: 700; position: relative; }
+    .results-score-card { background: var(--white); border-radius: var(--radius-lg); margin: -32px 20px 18px; padding: 22px; box-shadow: 0 12px 40px rgba(124,58,237,0.18); text-align: center; position: relative; }
+    .score-label { font-size: 0.72rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .score-big   { font-size: clamp(2.6rem, 10vw, 4.2rem); font-weight: 900; color: var(--purple); line-height: 1; margin-bottom: 2px; }
+    .score-unit  { font-size: 0.95rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; }
+    .new-hs-badge  { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #F59E0B, #FBBF24); color: #1E1B4B; border-radius: 999px; padding: 5px 15px; font-weight: 900; font-size: 0.85rem; margin-top: 4px; }
+    .prev-hs-note  { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-top: 4px; }
+    .god-streak-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #3B0764, #7C3AED); color: #fff; border-radius: 999px; padding: 5px 16px; font-weight: 900; font-size: 0.9rem; margin-top: 6px; }
+    .results-stats { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 0 20px 18px; }
+    .stat-chip  { background: var(--white); border-radius: var(--radius); padding: 11px 14px; text-align: center; min-width: 72px; box-shadow: var(--shadow-card); }
+    .stat-num   { display: block; font-size: 1.45rem; font-weight: 900; color: var(--purple); }
+    .stat-label { font-size: 0.65rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .results-actions { display: flex; flex-direction: column; gap: 10px; padding: 0 20px 32px; max-width: 480px; margin: 0 auto; }
+    .btn-primary  { width:100%; padding:16px 20px; border-radius:var(--radius); font-family:'Nunito',sans-serif; font-size:0.97rem; font-weight:800; cursor:pointer; border:none; transition:all 0.15s ease; background:var(--purple); color:#fff; box-shadow:0 4px 16px rgba(124,58,237,0.3); }
+    .btn-primary:hover  { background:var(--purple-dark); transform:translateY(-1px); }
+    .btn-secondary { width:100%; padding:16px 20px; border-radius:var(--radius); font-family:'Nunito',sans-serif; font-size:0.97rem; font-weight:800; cursor:pointer; border:3px solid var(--purple-faint); transition:all 0.15s ease; background:var(--white); color:var(--purple); box-shadow:var(--shadow-card); }
+    .btn-secondary:hover { background:var(--purple-faint); transform:translateY(-1px); }
+
+    #screen-cat-complete { background: var(--bg); display:none; flex-direction:column; justify-content:center; align-items:center; min-height:100vh; padding:36px 22px; text-align:center; }
+    #screen-cat-complete.active { display:flex; }
+    .interstitial-icon  { font-size: 4.5rem; margin-bottom: 12px; }
+    .interstitial-title { font-size: 1.8rem; font-weight: 900; color: var(--purple); margin-bottom: 5px; }
+    .interstitial-sub   { font-size: 0.95rem; font-weight: 700; color: var(--text-mid); margin-bottom: 20px; }
+    .interstitial-lives { font-size: 1.9rem; letter-spacing: 5px; }
+
+    @media (max-width: 360px) { .choices-grid { grid-template-columns: 1fr; } }
+    @media (min-width: 480px) { .category-grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 13px; } }
+
+    .difficulty-wrap { max-width: 480px; margin: 10px auto 4px; padding: 0 18px; position: relative; z-index: 1; }
+    .difficulty-toggle { display: flex; align-items: center; gap: 8px; background: var(--white); border-radius: var(--radius); padding: 8px 12px; box-shadow: var(--shadow-card); }
+    .diff-label { font-size: 0.82rem; font-weight: 900; color: var(--text-mid); white-space: nowrap; }
+    .diff-btn { flex: 1; padding: 7px 0; border: 2px solid transparent; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 0.88rem; font-weight: 800; cursor: pointer; transition: all 0.18s; background: transparent; color: var(--text-mid); }
+    .diff-btn.active { background: var(--purple); color: #fff; border-color: var(--purple); box-shadow: 0 2px 8px rgba(124,58,237,0.3); }
+    .diff-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .diff-info-box { border-radius: 14px; padding: 10px 12px; font-size: 0.75rem; border: 2px solid transparent; transition: border-color 0.2s, box-shadow 0.2s; }
+    .diff-info-box--easy { background: #EDE9FE; border-color: #C4B5FD; }
+    .diff-info-box--easy.selected { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(124,58,237,0.18); }
+    .diff-info-box--hard { background: #FFF7ED; border-color: #FED7AA; }
+    .diff-info-box--hard.selected { border-color: #EA580C; box-shadow: 0 0 0 3px rgba(234,88,12,0.18); }
+    .diff-info-title { font-weight: 900; font-size: 0.82rem; margin-bottom: 6px; }
+    .diff-info-box--easy .diff-info-title { color: var(--purple); }
+    .diff-info-box--hard .diff-info-title { color: #EA580C; }
+    .diff-info-item { display: flex; align-items: flex-start; gap: 5px; margin-bottom: 3px; color: var(--text-mid); font-weight: 600; line-height: 1.4; }
+    .diff-info-item::before { content: '•'; font-weight: 900; flex-shrink: 0; }
+    .diff-info-box--easy .diff-info-item::before { color: var(--purple); }
+    .diff-info-box--hard .diff-info-item::before { color: #EA580C; }
+
+    /* Level selector */
+    .level-wrap { max-width: 480px; margin: 0 auto 14px; padding: 0 18px; position: relative; z-index: 1; }
+    .level-wrap-inner { background: rgba(255,255,255,0.85); border-radius: 18px; padding: 12px 14px; box-shadow: 0 2px 10px rgba(124,58,237,0.08); }
+    .level-label { font-size: 0.75rem; font-weight: 900; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+    .level-toggle { display: flex; flex-direction: column; gap: 6px; }
+    .level-btn { width: 100%; padding: 10px 4px; border: 2px solid #E9D5FF; border-radius: 12px; font-family: 'Nunito', sans-serif; font-size: 0.85rem; font-weight: 800; cursor: pointer; transition: all 0.18s; background: transparent; color: var(--text-mid); text-align: center; }
+    .level-btn.active { color: #fff; border-color: transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .level-btn.lv-beginner.active { background: linear-gradient(135deg,#059669,#34D399); }
+    .level-btn.lv-intermediate.active { background: linear-gradient(135deg,#2563EB,#60A5FA); }
+    .level-btn.lv-expert.active { background: linear-gradient(135deg,#DC2626,#F87171); }
+
+    .type-answer-wrap { display: flex; gap: 8px; align-items: stretch; width: 100%; }
+    .type-input { flex: 1; font-family: 'Nunito', sans-serif; font-size: 1.08rem; font-weight: 700; padding: 13px 16px; border: 3px solid var(--purple-light); border-radius: var(--radius); background: var(--white); color: var(--text); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .type-input:focus { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(124,58,237,0.12); }
+    .type-input:disabled { opacity: 0.6; }
+    .type-input::placeholder { color: var(--text-muted); font-weight: 600; }
+    .type-submit-btn { padding: 13px 18px; border-radius: var(--radius); border: none; background: var(--purple); color: #fff; font-size: 1.4rem; font-weight: 900; cursor: pointer; transition: background 0.18s, transform 0.1s; flex-shrink: 0; display: flex; align-items: center; }
+    .type-submit-btn:hover { background: var(--purple-dark); transform: translateY(-1px); }
+    .type-submit-btn:active { transform: scale(0.95); }
+    .type-submit-btn:disabled { opacity: 0.5; cursor: default; transform: none; }
+    #quiz-choices.type-mode { display: block; }
+
+    .hard-badge { display: inline-block; background: #EF4444; color: #fff; font-size: 0.65rem; font-weight: 900; padding: 2px 7px; border-radius: 999px; letter-spacing: 0.5px; text-transform: uppercase; vertical-align: middle; margin-left: 4px; }
+
+    #results-confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; overflow: hidden; }
+    .conf-rain { position: absolute; border-radius: 3px; animation: confRain linear forwards; }
+    @keyframes confRain { 0% { transform: translateY(-30px) rotate(0deg); opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(110vh) rotate(900deg); opacity: 0; } }
+    .score-big.counting { color: var(--yellow); }
+    .results-hero.celebrate { background: linear-gradient(135deg, #0F172A, #1D4ED8, #7C3AED); background-size: 200%; animation: heroPulse 2s ease infinite alternate; }
+    @keyframes heroPulse { from { background-position: 0%; } to { background-position: 100%; } }
+    .score-reveal { animation: scoreReveal 0.7s cubic-bezier(0.175,0.885,0.32,1.275) both; }
+    @keyframes scoreReveal { from { transform: scale(0.3) rotate(-10deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
+    .star-burst { position: absolute; font-size: 1.6rem; pointer-events: none; animation: starFly 1.4s ease forwards; }
+    @keyframes starFly { 0% { opacity: 1; transform: translate(0,0) scale(1); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.4); } }
+    .results-hero.game-over { background: linear-gradient(135deg, #1F1F1F, #4B0000, #7C0000); }
+  </style>
+</head>
+<body>
+
+<!-- ░░ HOME ░░ -->
+<div id="screen-home" class="screen active">
+  <div class="blob-bg"></div>
+  <nav class="nav">
+    <a href="index.html" class="lang-home-btn">← Languages</a>
+    <div class="nav-logo"><span class="logo-flag">🇲🇾</span><span class="logo-flash">Flash</span><span class="logo-lingo">lingo</span></div>
+    <div style="width:80px"></div>
+  </nav>
+  <div class="flag-stripe"></div>
+  <div class="home-hero">
+    <img src="Design/Flag_of_Malaysia.svg" class="home-lang-flag" alt="Malaysia flag">
+    <div class="badge" id="level-badge">✨ Beginner · 500 Words · 24 Categories</div>
+    <h1>Welcome to<br><em>Flashlingo!</em></h1>
+    <p>Flash-card quizzes to build your Malay vocabulary — semoga berjaya!</p>
+  </div>
+
+  <div id="high-score-bar" class="high-score-bar" style="display:none;">
+    <div class="hs-title">🏆 Top 5 — <span id="hs-level-label">Beginner</span></div>
+    <ol id="hs-list" class="hs-list"></ol>
+  </div>
+
+  <div class="level-wrap">
+    <div class="level-wrap-inner">
+      <div class="level-label">Vocabulary Level:</div>
+      <div class="level-toggle">
+        <button class="level-btn lv-beginner active" id="btn-lv-beginner"    onclick="setLevel('beginner')">🌱 Beginner</button>
+        <button class="level-btn lv-intermediate"    id="btn-lv-intermediate" onclick="setLevel('intermediate')">📘 Intermediate</button>
+        <button class="level-btn lv-expert"          id="btn-lv-expert"       onclick="setLevel('expert')">🎓 Expert</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="difficulty-wrap">
+    <div class="difficulty-toggle">
+      <span class="diff-label">Difficulty:</span>
+      <button class="diff-btn active" id="btn-easy" onclick="setDifficulty('easy')">⭐ Easy</button>
+      <button class="diff-btn"        id="btn-hard" onclick="setDifficulty('hard')">🔥 Hard</button>
+    </div>
+    <div class="diff-info-grid">
+      <div class="diff-info-box diff-info-box--easy selected" id="diff-box-easy">
+        <div class="diff-info-title">⭐ Easy Mode</div>
+        <div class="diff-info-item">Multiple choice</div>
+      </div>
+      <div class="diff-info-box diff-info-box--hard" id="diff-box-hard">
+        <div class="diff-info-title">🔥 Hard Mode</div>
+        <div class="diff-info-item">Type the answer</div>
+        <div class="diff-info-item">Double points</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mode-grid">
+    <button class="mode-card mode-card--category" onclick="startMode('category')">
+      <div class="mode-card-bg"></div>
+      <span class="mode-icon">📚</span>
+      <div class="mode-name">By Category</div>
+      <div class="mode-tagline">Master one topic at a time</div>
+      <div class="mode-desc">Pick any of 20 topics and answer every word within it.</div>
+      <div class="mode-pill" id="pill-category">🎯 No lives limit · Up to 6 pts/word</div>
+    </button>
+    <button class="mode-card mode-card--endless" onclick="startMode('endless')">
+      <div class="mode-card-bg"></div>
+      <span class="mode-icon">🔥</span>
+      <div class="mode-name">Endless Mode</div>
+      <div class="mode-tagline">Category after category</div>
+      <div class="mode-desc">Complete random categories back-to-back. 3 mistakes and you're out!</div>
+      <div class="mode-pill" id="pill-endless">❤️ 3 lives · Up to 6 pts/word</div>
+    </button>
+    <button class="mode-card mode-card--god" onclick="startMode('god')">
+      <div class="mode-card-bg"></div>
+      <span class="mode-icon">⚡</span>
+      <div class="mode-name">God Mode</div>
+      <div class="mode-tagline">One strike. You're out.</div>
+      <div class="mode-desc">Random words from every category. All 500 words. One mistake ends it.</div>
+      <div class="mode-pill" id="pill-god">💀 1 life · Up to 10 pts/word</div>
+    </button>
+  </div>
+
+  <div class="home-stats">
+    <div class="home-stat"><span class="home-stat-num">500</span><span class="home-stat-label">Words</span></div>
+    <div class="home-stat"><span class="home-stat-num">24</span><span class="home-stat-label">Categories</span></div>
+    <div class="home-stat"><span class="home-stat-num">2×</span><span class="home-stat-label">Hard pts</span></div>
+  </div>
+</div>
+
+
+<!-- ░░ CATEGORIES ░░ -->
+<div id="screen-categories" class="screen">
+  <div class="screen-top">
+    <button class="back-btn" onclick="showScreen('screen-home')">← Back</button>
+    <div class="screen-title">Pick a Category</div>
+    <div class="screen-subtitle">Complete all words · Faster = more points</div>
+  </div>
+  <div id="category-grid" class="category-grid"></div>
+</div>
+
+
+<!-- ░░ QUIZ ░░ -->
+<div id="screen-quiz" class="screen" style="flex-direction:column;">
+  <div class="quiz-header" id="quiz-header">
+    <div class="quiz-top-row">
+      <div class="quiz-left">
+        <button class="stop-btn" onclick="confirmStop()">⏹ Stop</button>
+        <span id="quiz-category-tag" class="quiz-category-tag">Category</span>
+      </div>
+      <div class="quiz-right">
+        <span id="quiz-score-display" class="quiz-score-display">0 pts</span>
+        <span id="quiz-progress-text" class="quiz-progress-text">1/20</span>
+      </div>
+    </div>
+    <div id="quiz-lives" class="quiz-lives"></div>
+    <div class="progress-track">
+      <div id="progress-fill" class="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="quiz-body">
+    <div class="quiz-direction" id="quiz-direction">What is the Malay translation?</div>
+    <div class="quiz-word-card" id="quiz-word-card">
+      <span class="quiz-word-emoji" id="quiz-word-emoji">❓</span>
+      <div class="quiz-word" id="quiz-word">—</div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-track">
+        <div id="timer-bar" class="timer-bar"></div>
+      </div>
+      <div class="timer-time" id="timer-time">5.0s</div>
+    </div>
+    <div class="choices-grid" id="quiz-choices"></div>
+    <div class="quiz-feedback" id="quiz-feedback"></div>
+  </div>
+</div>
+
+
+<!-- ░░ INTERSTITIAL ░░ -->
+<div id="screen-cat-complete" class="screen">
+  <div class="interstitial-icon"  id="ci-icon">🎉</div>
+  <div class="interstitial-title" id="ci-title">Category Complete!</div>
+  <div class="interstitial-sub"   id="ci-sub">Next up…</div>
+  <div class="interstitial-lives" id="ci-lives"></div>
+</div>
+
+
+<!-- ░░ RESULTS ░░ -->
+<div id="results-confetti"></div>
+<div id="screen-results" class="screen">
+  <div class="results-hero" id="results-hero">
+    <div class="results-title"    id="results-title">Nice work!</div>
+    <div class="results-subtitle" id="results-subtitle"></div>
+  </div>
+  <div class="results-score-card">
+    <div class="score-label">Session Score</div>
+    <div class="score-big" id="results-score-big">0</div>
+    <div class="score-unit">points</div>
+    <div id="results-hs-area"></div>
+  </div>
+  <div class="results-stats"   id="results-stats"></div>
+  <div class="results-actions" id="results-actions"></div>
+</div>
+
+
+<!-- ░░ MILESTONE OVERLAY ░░ -->
+<div id="milestone-overlay" class="milestone-overlay" style="display:none;">
+  <div id="confetti-container"></div>
+  <div class="milestone-box">
+    <span class="milestone-emoji" id="ms-emoji">🎉</span>
+    <span class="milestone-count" id="ms-count">50</span>
+    <span class="milestone-label">words correct!</span>
+    <span class="milestone-sub"   id="ms-sub">Keep going!</span>
+  </div>
+</div>
+
+
+<!-- ░░ STOP CONFIRM ░░ -->
+<div id="stop-modal" class="stop-modal" style="display:none;">
+  <div class="stop-modal-box">
+    <div class="stop-modal-title">End Session?</div>
+    <div class="stop-modal-sub">Your progress will not be saved.</div>
+    <div class="stop-modal-btns">
+      <button class="stop-cancel" onclick="closeStopModal()">Keep Playing</button>
+      <button class="stop-exit"   onclick="exitToHome()">Exit</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ░░ LEADERBOARD NAME ENTRY ░░ -->
+<div id="name-modal" class="stop-modal" style="display:none;">
+  <div class="stop-modal-box">
+    <div class="stop-modal-title">🏆 Top 5 Score!</div>
+    <div class="stop-modal-sub">You made the leaderboard — enter a name to save it:</div>
+    <div class="name-input-wrap">
+      <input id="name-input" class="type-input" type="text" maxlength="12" placeholder="Your name" autocomplete="off" onkeydown="if(event.key==='Enter')submitNameEntry()" />
+      <div id="name-error" class="name-error"></div>
+    </div>
+    <div class="stop-modal-btns">
+      <button class="stop-cancel" onclick="closeNameModal()">Skip</button>
+      <button class="stop-exit" style="background:var(--purple);" onclick="submitNameEntry()">Submit</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ░░░░░░░░░░░░░ SCRIPT ░░░░░░░░░░░░░ -->
+<script>
+
+/* ═══════ WORD LIST ═══════════════════════════════════════════════ */
+const WORDS = [
+  {malay:"kosong",english:"zero",category:"numbers",level:"beginner"},{malay:"satu",english:"one",category:"numbers",level:"beginner"},
+  {malay:"dua",english:"two",category:"numbers",level:"beginner"},{malay:"tiga",english:"three",category:"numbers",level:"beginner"},
+  {malay:"empat",english:"four",category:"numbers",level:"beginner"},{malay:"lima",english:"five",category:"numbers",level:"beginner"},
+  {malay:"enam",english:"six",category:"numbers",level:"beginner"},{malay:"tujuh",english:"seven",category:"numbers",level:"beginner"},
+  {malay:"lapan",english:"eight",category:"numbers",level:"beginner"},{malay:"sembilan",english:"nine",category:"numbers",level:"beginner"},
+  {malay:"sepuluh",english:"ten",category:"numbers",level:"beginner"},{malay:"sebelas",english:"eleven",category:"numbers",level:"beginner"},
+  {malay:"dua belas",english:"twelve",category:"numbers",level:"beginner"},{malay:"tiga belas",english:"thirteen",category:"numbers",level:"beginner"},
+  {malay:"empat belas",english:"fourteen",category:"numbers",level:"beginner"},{malay:"lima belas",english:"fifteen",category:"numbers",level:"beginner"},
+  {malay:"enam belas",english:"sixteen",category:"numbers",level:"beginner"},{malay:"tujuh belas",english:"seventeen",category:"numbers",level:"beginner"},
+  {malay:"lapan belas",english:"eighteen",category:"numbers",level:"beginner"},{malay:"sembilan belas",english:"nineteen",category:"numbers",level:"beginner"},
+  {malay:"dua puluh",english:"twenty",category:"numbers",level:"beginner"},{malay:"tiga puluh",english:"thirty",category:"numbers",level:"beginner"},
+  {malay:"empat puluh",english:"forty",category:"numbers",level:"beginner"},{malay:"lima puluh",english:"fifty",category:"numbers",level:"beginner"},
+  {malay:"enam puluh",english:"sixty",category:"numbers",level:"beginner"},{malay:"tujuh puluh",english:"seventy",category:"numbers",level:"beginner"},
+  {malay:"lapan puluh",english:"eighty",category:"numbers",level:"beginner"},{malay:"sembilan puluh",english:"ninety",category:"numbers",level:"beginner"},
+  {malay:"seratus",english:"hundred",category:"numbers",level:"beginner"},{malay:"seribu",english:"thousand",category:"numbers",level:"beginner"},
+  {malay:"merah",english:"red",category:"colors",level:"beginner"},{malay:"biru",english:"blue",category:"colors",level:"beginner"},
+  {malay:"hijau",english:"green",category:"colors",level:"beginner"},{malay:"kuning",english:"yellow",category:"colors",level:"beginner"},
+  {malay:"jingga",english:"orange",category:"colors",level:"beginner"},{malay:"ungu",english:"purple",category:"colors",level:"beginner"},
+  {malay:"merah jambu",english:"pink",category:"colors",level:"beginner"},{malay:"hitam",english:"black",category:"colors",level:"beginner"},
+  {malay:"putih",english:"white",category:"colors",level:"beginner"},{malay:"kelabu",english:"grey",category:"colors",level:"beginner"},
+  {malay:"coklat",english:"brown",category:"colors",level:"beginner"},{malay:"krem",english:"beige",category:"colors",level:"beginner"},
+  {malay:"Isnin",english:"Monday",category:"days",level:"beginner"},{malay:"Selasa",english:"Tuesday",category:"days",level:"beginner"},
+  {malay:"Rabu",english:"Wednesday",category:"days",level:"beginner"},{malay:"Khamis",english:"Thursday",category:"days",level:"beginner"},
+  {malay:"Jumaat",english:"Friday",category:"days",level:"beginner"},{malay:"Sabtu",english:"Saturday",category:"days",level:"beginner"},
+  {malay:"Ahad",english:"Sunday",category:"days",level:"beginner"},{malay:"Januari",english:"January",category:"months",level:"beginner"},
+  {malay:"Februari",english:"February",category:"months",level:"beginner"},{malay:"Mac",english:"March",category:"months",level:"beginner"},
+  {malay:"April",english:"April",category:"months",level:"beginner"},{malay:"Mei",english:"May",category:"months",level:"beginner"},
+  {malay:"Jun",english:"June",category:"months",level:"beginner"},{malay:"Julai",english:"July",category:"months",level:"beginner"},
+  {malay:"Ogos",english:"August",category:"months",level:"beginner"},{malay:"September",english:"September",category:"months",level:"beginner"},
+  {malay:"Oktober",english:"October",category:"months",level:"beginner"},{malay:"November",english:"November",category:"months",level:"beginner"},
+  {malay:"Disember",english:"December",category:"months",level:"beginner"},{malay:"musim bunga",english:"spring",category:"seasons",level:"beginner"},
+  {malay:"musim panas",english:"summer",category:"seasons",level:"beginner"},{malay:"musim luruh",english:"autumn",category:"seasons",level:"beginner"},
+  {malay:"musim sejuk",english:"winter",category:"seasons",level:"beginner"},{malay:"keluarga",english:"family",category:"family",level:"beginner"},
+  {malay:"bapa",english:"father",category:"family",level:"beginner"},{malay:"ibu",english:"mother",category:"family",level:"beginner"},
+  {malay:"anak lelaki",english:"son",category:"family",level:"beginner"},{malay:"anak perempuan",english:"daughter",category:"family",level:"beginner"},
+  {malay:"abang",english:"brother",category:"family",level:"beginner"},{malay:"kakak",english:"sister",category:"family",level:"beginner"},
+  {malay:"datuk",english:"grandfather",category:"family",level:"beginner"},{malay:"nenek",english:"grandmother",category:"family",level:"beginner"},
+  {malay:"pak cik",english:"uncle",category:"family",level:"beginner"},{malay:"mak cik",english:"aunt",category:"family",level:"beginner"},
+  {malay:"sepupu lelaki",english:"cousin (male)",category:"family",level:"beginner"},{malay:"sepupu perempuan",english:"cousin (female)",category:"family",level:"beginner"},
+  {malay:"suami",english:"husband",category:"family",level:"beginner"},{malay:"isteri",english:"wife",category:"family",level:"beginner"},
+  {malay:"anak",english:"child",category:"family",level:"beginner"},{malay:"bayi",english:"baby",category:"family",level:"beginner"},
+  {malay:"ibu bapa",english:"parents",category:"family",level:"beginner"},{malay:"kepala",english:"head",category:"body",level:"beginner"},
+  {malay:"muka",english:"face",category:"body",level:"beginner"},{malay:"rambut",english:"hair",category:"body",level:"beginner"},
+  {malay:"mata",english:"eye",category:"body",level:"beginner"},{malay:"mata",english:"eyes",category:"body",level:"beginner"},
+  {malay:"hidung",english:"nose",category:"body",level:"beginner"},{malay:"mulut",english:"mouth",category:"body",level:"beginner"},
+  {malay:"telinga",english:"ear",category:"body",level:"beginner"},{malay:"leher",english:"neck",category:"body",level:"beginner"},
+  {malay:"bahu",english:"shoulder",category:"body",level:"beginner"},{malay:"lengan",english:"arm",category:"body",level:"beginner"},
+  {malay:"tangan",english:"hand",category:"body",level:"beginner"},{malay:"jari",english:"finger",category:"body",level:"beginner"},
+  {malay:"perut",english:"stomach",category:"body",level:"beginner"},{malay:"belakang",english:"back",category:"body",level:"beginner"},
+  {malay:"kaki",english:"leg",category:"body",level:"beginner"},{malay:"lutut",english:"knee",category:"body",level:"beginner"},
+  {malay:"tapak kaki",english:"foot",category:"body",level:"beginner"},{malay:"jantung",english:"heart",category:"body",level:"beginner"},
+  {malay:"gigi",english:"tooth",category:"body",level:"beginner"},{malay:"lidah",english:"tongue",category:"body",level:"beginner"},
+  {malay:"kucing",english:"cat",category:"animals",level:"beginner"},{malay:"anjing",english:"dog",category:"animals",level:"beginner"},
+  {malay:"kuda",english:"horse",category:"animals",level:"beginner"},{malay:"lembu",english:"cow",category:"animals",level:"beginner"},
+  {malay:"babi",english:"pig",category:"animals",level:"beginner"},{malay:"biri-biri",english:"sheep",category:"animals",level:"beginner"},
+  {malay:"kambing",english:"goat",category:"animals",level:"beginner"},{malay:"ayam",english:"chicken",category:"animals",level:"beginner"},
+  {malay:"arnab",english:"rabbit",category:"animals",level:"beginner"},{malay:"tikus",english:"mouse",category:"animals",level:"beginner"},
+  {malay:"burung",english:"bird",category:"animals",level:"beginner"},{malay:"ikan",english:"fish",category:"animals",level:"beginner"},
+  {malay:"katak",english:"frog",category:"animals",level:"beginner"},{malay:"ular",english:"snake",category:"animals",level:"beginner"},
+  {malay:"gajah",english:"elephant",category:"animals",level:"beginner"},{malay:"singa",english:"lion",category:"animals",level:"beginner"},
+  {malay:"harimau",english:"tiger",category:"animals",level:"beginner"},{malay:"beruang",english:"bear",category:"animals",level:"beginner"},
+  {malay:"monyet",english:"monkey",category:"animals",level:"beginner"},{malay:"itik",english:"duck",category:"animals",level:"beginner"},
+  {malay:"ayam betina",english:"hen",category:"animals",level:"beginner"},{malay:"roti",english:"bread",category:"food",level:"beginner"},
+  {malay:"keju",english:"cheese",category:"food",level:"beginner"},{malay:"mentega",english:"butter",category:"food",level:"beginner"},
+  {malay:"susu",english:"milk",category:"food",level:"beginner"},{malay:"telur",english:"egg",category:"food",level:"beginner"},
+  {malay:"daging",english:"meat",category:"food",level:"beginner"},{malay:"daging babi",english:"pork",category:"food",level:"beginner"},
+  {malay:"daging lembu",english:"beef",category:"food",level:"beginner"},{malay:"epal",english:"apple",category:"food",level:"beginner"},
+  {malay:"pear",english:"pear",category:"food",level:"beginner"},{malay:"pisang",english:"banana",category:"food",level:"beginner"},
+  {malay:"oren",english:"orange",category:"food",level:"beginner"},{malay:"strawberi",english:"strawberry",category:"food",level:"beginner"},
+  {malay:"anggur",english:"grape",category:"food",level:"beginner"},{malay:"tomato",english:"tomato",category:"food",level:"beginner"},
+  {malay:"lobak merah",english:"carrot",category:"food",level:"beginner"},{malay:"kentang",english:"potato",category:"food",level:"beginner"},
+  {malay:"bawang",english:"onion",category:"food",level:"beginner"},{malay:"salad",english:"salad",category:"food",level:"beginner"},
+  {malay:"nasi",english:"rice",category:"food",level:"beginner"},{malay:"pasta",english:"pasta",category:"food",level:"beginner"},
+  {malay:"sup",english:"soup",category:"food",level:"beginner"},{malay:"kek",english:"cake",category:"food",level:"beginner"},
+  {malay:"coklat",english:"chocolate",category:"food",level:"beginner"},{malay:"gula",english:"sugar",category:"food",level:"beginner"},
+  {malay:"garam",english:"salt",category:"food",level:"beginner"},{malay:"lada hitam",english:"pepper",category:"food",level:"beginner"},
+  {malay:"minyak",english:"oil",category:"food",level:"beginner"},{malay:"hidangan",english:"meal",category:"food",level:"beginner"},
+  {malay:"sarapan",english:"breakfast",category:"food",level:"beginner"},{malay:"makan tengah hari",english:"lunch",category:"food",level:"beginner"},
+  {malay:"makan malam",english:"dinner",category:"food",level:"beginner"},{malay:"air",english:"water",category:"drinks",level:"beginner"},
+  {malay:"jus",english:"juice",category:"drinks",level:"beginner"},{malay:"kopi",english:"coffee",category:"drinks",level:"beginner"},
+  {malay:"teh",english:"tea",category:"drinks",level:"beginner"},{malay:"wain",english:"wine",category:"drinks",level:"beginner"},
+  {malay:"bir",english:"beer",category:"drinks",level:"beginner"},{malay:"jus oren",english:"orange juice",category:"drinks",level:"beginner"},
+  {malay:"pakaian",english:"clothes",category:"clothing",level:"beginner"},{malay:"kemeja",english:"shirt",category:"clothing",level:"beginner"},
+  {malay:"seluar",english:"trousers",category:"clothing",level:"beginner"},{malay:"gaun",english:"dress",category:"clothing",level:"beginner"},
+  {malay:"skirt",english:"skirt",category:"clothing",level:"beginner"},{malay:"kot",english:"coat",category:"clothing",level:"beginner"},
+  {malay:"jaket",english:"jacket",category:"clothing",level:"beginner"},{malay:"baju sejuk",english:"sweater",category:"clothing",level:"beginner"},
+  {malay:"kasut",english:"shoes",category:"clothing",level:"beginner"},{malay:"stokin",english:"socks",category:"clothing",level:"beginner"},
+  {malay:"topi",english:"hat",category:"clothing",level:"beginner"},{malay:"tali leher",english:"tie",category:"clothing",level:"beginner"},
+  {malay:"seluar jeans",english:"jeans",category:"clothing",level:"beginner"},{malay:"baju-T",english:"t-shirt",category:"clothing",level:"beginner"},
+  {malay:"seluar pendek",english:"shorts",category:"clothing",level:"beginner"},{malay:"sarung tangan",english:"gloves",category:"clothing",level:"beginner"},
+  {malay:"selendang",english:"scarf",category:"clothing",level:"beginner"},{malay:"rumah",english:"house",category:"home",level:"beginner"},
+  {malay:"apartmen",english:"apartment",category:"home",level:"beginner"},{malay:"bilik",english:"room",category:"home",level:"beginner"},
+  {malay:"bilik tidur",english:"bedroom",category:"home",level:"beginner"},{malay:"dapur",english:"kitchen",category:"home",level:"beginner"},
+  {malay:"bilik mandi",english:"bathroom",category:"home",level:"beginner"},{malay:"tandas",english:"toilet",category:"home",level:"beginner"},
+  {malay:"ruang tamu",english:"living room",category:"home",level:"beginner"},{malay:"ruang makan",english:"dining room",category:"home",level:"beginner"},
+  {malay:"taman",english:"garden",category:"home",level:"beginner"},{malay:"pintu",english:"door",category:"home",level:"beginner"},
+  {malay:"tingkap",english:"window",category:"home",level:"beginner"},{malay:"tangga",english:"stairs",category:"home",level:"beginner"},
+  {malay:"katil",english:"bed",category:"home",level:"beginner"},{malay:"kerusi",english:"chair",category:"home",level:"beginner"},
+  {malay:"meja",english:"table",category:"home",level:"beginner"},{malay:"sofa",english:"sofa",category:"home",level:"beginner"},
+  {malay:"almari pakaian",english:"wardrobe",category:"home",level:"beginner"},{malay:"meja tulis",english:"desk",category:"home",level:"beginner"},
+  {malay:"lampu",english:"lamp",category:"home",level:"beginner"},{malay:"cermin",english:"mirror",category:"home",level:"beginner"},
+  {malay:"permaidani",english:"rug",category:"home",level:"beginner"},{malay:"peti sejuk",english:"fridge",category:"home",level:"beginner"},
+  {malay:"ketuhar",english:"oven",category:"home",level:"beginner"},{malay:"ialah",english:"to be",category:"verbs",level:"beginner"},
+  {malay:"ada",english:"to have",category:"verbs",level:"beginner"},{malay:"pergi",english:"to go",category:"verbs",level:"beginner"},
+  {malay:"buat",english:"to do / to make",category:"verbs",level:"beginner"},{malay:"berkata",english:"to say",category:"verbs",level:"beginner"},
+  {malay:"lihat",english:"to see",category:"verbs",level:"beginner"},{malay:"tahu",english:"to know (fact)",category:"verbs",level:"beginner"},
+  {malay:"boleh",english:"to be able to",category:"verbs",level:"beginner"},{malay:"mahu",english:"to want",category:"verbs",level:"beginner"},
+  {malay:"datang",english:"to come",category:"verbs",level:"beginner"},{malay:"ambil",english:"to take",category:"verbs",level:"beginner"},
+  {malay:"beri",english:"to give",category:"verbs",level:"beginner"},{malay:"jumpa",english:"to find",category:"verbs",level:"beginner"},
+  {malay:"bercakap",english:"to speak",category:"verbs",level:"beginner"},{malay:"makan",english:"to eat",category:"verbs",level:"beginner"},
+  {malay:"minum",english:"to drink",category:"verbs",level:"beginner"},{malay:"tidur",english:"to sleep",category:"verbs",level:"beginner"},
+  {malay:"bekerja",english:"to work",category:"verbs",level:"beginner"},{malay:"tinggal",english:"to live (reside)",category:"verbs",level:"beginner"},
+  {malay:"suka",english:"to like / to love",category:"verbs",level:"beginner"},{malay:"baca",english:"to read",category:"verbs",level:"beginner"},
+  {malay:"tulis",english:"to write",category:"verbs",level:"beginner"},{malay:"dengar",english:"to listen",category:"verbs",level:"beginner"},
+  {malay:"tonton",english:"to watch",category:"verbs",level:"beginner"},{malay:"beli",english:"to buy",category:"verbs",level:"beginner"},
+  {malay:"jual",english:"to sell",category:"verbs",level:"beginner"},{malay:"buka",english:"to open",category:"verbs",level:"beginner"},
+  {malay:"tutup",english:"to close",category:"verbs",level:"beginner"},{malay:"mula",english:"to begin",category:"verbs",level:"beginner"},
+  {malay:"selesai",english:"to finish",category:"verbs",level:"beginner"},{malay:"berjalan",english:"to walk",category:"verbs",level:"beginner"},
+  {malay:"lari",english:"to run",category:"verbs",level:"beginner"},{malay:"main",english:"to play",category:"verbs",level:"beginner"},
+  {malay:"nyanyi",english:"to sing",category:"verbs",level:"beginner"},{malay:"menari",english:"to dance",category:"verbs",level:"beginner"},
+  {malay:"panggil",english:"to call",category:"verbs",level:"beginner"},{malay:"jawab",english:"to answer",category:"verbs",level:"beginner"},
+  {malay:"cari",english:"to look for",category:"verbs",level:"beginner"},{malay:"tolong",english:"to help",category:"verbs",level:"beginner"},
+  {malay:"fikir",english:"to think",category:"verbs",level:"beginner"},{malay:"percaya",english:"to believe",category:"verbs",level:"beginner"},
+  {malay:"kenal",english:"to know (person)",category:"verbs",level:"beginner"},{malay:"guna",english:"to use",category:"verbs",level:"beginner"},
+  {malay:"tunggu",english:"to wait",category:"verbs",level:"beginner"},{malay:"tinggalkan",english:"to leave",category:"verbs",level:"beginner"},
+  {malay:"tiba",english:"to arrive",category:"verbs",level:"beginner"},{malay:"masuk",english:"to enter",category:"verbs",level:"beginner"},
+  {malay:"keluar",english:"to go out",category:"verbs",level:"beginner"},{malay:"letak",english:"to put",category:"verbs",level:"beginner"},
+  {malay:"pakai",english:"to carry / wear",category:"verbs",level:"beginner"},{malay:"hidup",english:"to live (be alive)",category:"verbs",level:"beginner"},
+  {malay:"berenang",english:"to swim",category:"verbs",level:"beginner"},{malay:"masak",english:"to cook",category:"verbs",level:"beginner"},
+  {malay:"memandu",english:"to drive",category:"verbs",level:"beginner"},{malay:"melancong",english:"to travel",category:"verbs",level:"beginner"},
+  {malay:"belajar",english:"to learn",category:"verbs",level:"beginner"},{malay:"faham",english:"to understand",category:"verbs",level:"beginner"},
+  {malay:"tanya",english:"to ask",category:"verbs",level:"beginner"},{malay:"tunjuk",english:"to show",category:"verbs",level:"beginner"},
+  {malay:"ketawa",english:"to laugh",category:"verbs",level:"beginner"},{malay:"menangis",english:"to cry",category:"verbs",level:"beginner"},
+  {malay:"jatuh",english:"to fall",category:"verbs",level:"beginner"},{malay:"kekal",english:"to stay",category:"verbs",level:"beginner"},
+  {malay:"bayar",english:"to pay",category:"verbs",level:"beginner"},{malay:"besar",english:"big / tall",category:"adjectives",level:"beginner"},
+  {malay:"kecil",english:"small / little",category:"adjectives",level:"beginner"},{malay:"baik",english:"good",category:"adjectives",level:"beginner"},
+  {malay:"buruk",english:"bad",category:"adjectives",level:"beginner"},{malay:"cantik",english:"beautiful",category:"adjectives",level:"beginner"},
+  {malay:"comel",english:"pretty",category:"adjectives",level:"beginner"},{malay:"tua",english:"old",category:"adjectives",level:"beginner"},
+  {malay:"muda",english:"young",category:"adjectives",level:"beginner"},{malay:"baru",english:"new",category:"adjectives",level:"beginner"},
+  {malay:"panjang",english:"long",category:"adjectives",level:"beginner"},{malay:"pendek",english:"short",category:"adjectives",level:"beginner"},
+  {malay:"panas",english:"hot / warm",category:"adjectives",level:"beginner"},{malay:"sejuk",english:"cold",category:"adjectives",level:"beginner"},
+  {malay:"mudah",english:"easy",category:"adjectives",level:"beginner"},{malay:"susah",english:"difficult",category:"adjectives",level:"beginner"},
+  {malay:"cepat",english:"fast",category:"adjectives",level:"beginner"},{malay:"perlahan",english:"slow",category:"adjectives",level:"beginner"},
+  {malay:"kuat",english:"strong",category:"adjectives",level:"beginner"},{malay:"lemah",english:"weak",category:"adjectives",level:"beginner"},
+  {malay:"kaya",english:"rich",category:"adjectives",level:"beginner"},{malay:"miskin",english:"poor",category:"adjectives",level:"beginner"},
+  {malay:"gembira",english:"happy / pleased",category:"adjectives",level:"beginner"},{malay:"sedih",english:"sad",category:"adjectives",level:"beginner"},
+  {malay:"penat",english:"tired",category:"adjectives",level:"beginner"},{malay:"sakit",english:"ill / sick",category:"adjectives",level:"beginner"},
+  {malay:"bersih",english:"clean",category:"adjectives",level:"beginner"},{malay:"kotor",english:"dirty",category:"adjectives",level:"beginner"},
+  {malay:"terbuka",english:"open",category:"adjectives",level:"beginner"},{malay:"tertutup",english:"closed",category:"adjectives",level:"beginner"},
+  {malay:"penuh",english:"full",category:"adjectives",level:"beginner"},{malay:"kosong",english:"empty",category:"adjectives",level:"beginner"},
+  {malay:"sendirian",english:"alone",category:"adjectives",level:"beginner"},{malay:"bebas",english:"free",category:"adjectives",level:"beginner"},
+  {malay:"sibuk",english:"busy",category:"adjectives",level:"beginner"},{malay:"gembira",english:"happy",category:"adjectives",level:"beginner"},
+  {malay:"peramah",english:"nice / friendly",category:"adjectives",level:"beginner"},{malay:"menarik",english:"interesting",category:"adjectives",level:"beginner"},
+  {malay:"selamat pagi",english:"hello / good morning",category:"greetings",level:"beginner"},{malay:"selamat petang",english:"good evening",category:"greetings",level:"beginner"},
+  {malay:"selamat malam",english:"good night",category:"greetings",level:"beginner"},{malay:"selamat tinggal",english:"goodbye",category:"greetings",level:"beginner"},
+  {malay:"hai",english:"hi",category:"greetings",level:"beginner"},{malay:"terima kasih",english:"thank you",category:"greetings",level:"beginner"},
+  {malay:"sila",english:"please (formal)",category:"greetings",level:"beginner"},{malay:"tolong",english:"please (informal)",category:"greetings",level:"beginner"},
+  {malay:"sama-sama",english:"you're welcome",category:"greetings",level:"beginner"},{malay:"maaf",english:"excuse me / sorry",category:"greetings",level:"beginner"},
+  {malay:"maafkan saya",english:"excuse me (formal)",category:"greetings",level:"beginner"},{malay:"ya",english:"yes",category:"greetings",level:"beginner"},
+  {malay:"tidak",english:"no",category:"greetings",level:"beginner"},{malay:"hari ini",english:"today",category:"time",level:"beginner"},
+  {malay:"esok",english:"tomorrow",category:"time",level:"beginner"},{malay:"semalam",english:"yesterday",category:"time",level:"beginner"},
+  {malay:"sekarang",english:"now",category:"time",level:"beginner"},{malay:"sentiasa",english:"always",category:"time",level:"beginner"},
+  {malay:"tidak pernah",english:"never",category:"time",level:"beginner"},{malay:"selalu",english:"often",category:"time",level:"beginner"},
+  {malay:"kadang-kadang",english:"sometimes",category:"time",level:"beginner"},{malay:"awal",english:"early",category:"time",level:"beginner"},
+  {malay:"lewat",english:"late",category:"time",level:"beginner"},{malay:"jam",english:"hour / time",category:"time",level:"beginner"},
+  {malay:"minit",english:"minute",category:"time",level:"beginner"},{malay:"hari",english:"day",category:"time",level:"beginner"},
+  {malay:"minggu",english:"week",category:"time",level:"beginner"},{malay:"bulan",english:"month",category:"time",level:"beginner"},
+  {malay:"tahun",english:"year",category:"time",level:"beginner"},{malay:"pagi",english:"morning",category:"time",level:"beginner"},
+  {malay:"tengah hari",english:"noon",category:"time",level:"beginner"},{malay:"petang",english:"afternoon",category:"time",level:"beginner"},
+  {malay:"senja",english:"evening",category:"time",level:"beginner"},{malay:"malam",english:"night",category:"time",level:"beginner"},
+  {malay:"matahari",english:"sun",category:"weather",level:"beginner"},{malay:"hujan",english:"rain",category:"weather",level:"beginner"},
+  {malay:"salji",english:"snow",category:"weather",level:"beginner"},{malay:"angin",english:"wind",category:"weather",level:"beginner"},
+  {malay:"awan",english:"cloud",category:"weather",level:"beginner"},{malay:"ribut",english:"storm",category:"weather",level:"beginner"},
+  {malay:"kabus",english:"fog",category:"weather",level:"beginner"},{malay:"kepanasan",english:"heat",category:"weather",level:"beginner"},
+  {malay:"cuaca baik",english:"the weather is nice",category:"weather",level:"beginner"},{malay:"hujan turun",english:"it is raining",category:"weather",level:"beginner"},
+  {malay:"salji turun",english:"it is snowing",category:"weather",level:"beginner"},{malay:"kereta",english:"car",category:"transport",level:"beginner"},
+  {malay:"kereta api",english:"train",category:"transport",level:"beginner"},{malay:"bas",english:"bus",category:"transport",level:"beginner"},
+  {malay:"kereta api bawah tanah",english:"metro / subway",category:"transport",level:"beginner"},{malay:"kapal terbang",english:"plane",category:"transport",level:"beginner"},
+  {malay:"bot",english:"boat",category:"transport",level:"beginner"},{malay:"teksi",english:"taxi",category:"transport",level:"beginner"},
+  {malay:"basikal",english:"bicycle",category:"transport",level:"beginner"},{malay:"motosikal",english:"motorcycle",category:"transport",level:"beginner"},
+  {malay:"stesen kereta api",english:"train station",category:"transport",level:"beginner"},{malay:"lapangan terbang",english:"airport",category:"transport",level:"beginner"},
+  {malay:"perhentian bas",english:"bus stop",category:"transport",level:"beginner"},{malay:"sekolah",english:"school",category:"places",level:"beginner"},
+  {malay:"universiti",english:"university",category:"places",level:"beginner"},{malay:"pejabat",english:"office",category:"places",level:"beginner"},
+  {malay:"kedai",english:"shop / store",category:"places",level:"beginner"},{malay:"pasar",english:"market",category:"places",level:"beginner"},
+  {malay:"pasar raya",english:"supermarket",category:"places",level:"beginner"},{malay:"restoran",english:"restaurant",category:"places",level:"beginner"},
+  {malay:"kafe",english:"café",category:"places",level:"beginner"},{malay:"hospital",english:"hospital",category:"places",level:"beginner"},
+  {malay:"farmasi",english:"pharmacy",category:"places",level:"beginner"},{malay:"bank",english:"bank",category:"places",level:"beginner"},
+  {malay:"gereja",english:"church",category:"places",level:"beginner"},{malay:"jalan",english:"street",category:"places",level:"beginner"},
+  {malay:"bandar",english:"city",category:"places",level:"beginner"},{malay:"kampung",english:"village",category:"places",level:"beginner"},
+  {malay:"negara",english:"country",category:"places",level:"beginner"},{malay:"Malaysia",english:"Malaysia",category:"places",level:"beginner"},
+  {malay:"taman",english:"park",category:"places",level:"beginner"},{malay:"pantai",english:"beach",category:"places",level:"beginner"},
+  {malay:"gunung",english:"mountain",category:"places",level:"beginner"},{malay:"hutan",english:"forest",category:"places",level:"beginner"},
+  {malay:"laut",english:"sea",category:"places",level:"beginner"},{malay:"sungai",english:"river",category:"places",level:"beginner"},
+  {malay:"buku",english:"book",category:"objects",level:"beginner"},{malay:"pen",english:"pen",category:"objects",level:"beginner"},
+  {malay:"pensel",english:"pencil",category:"objects",level:"beginner"},{malay:"buku nota",english:"notebook",category:"objects",level:"beginner"},
+  {malay:"telefon",english:"phone",category:"objects",level:"beginner"},{malay:"komputer",english:"computer",category:"objects",level:"beginner"},
+  {malay:"kunci",english:"key",category:"objects",level:"beginner"},{malay:"beg",english:"bag",category:"objects",level:"beginner"},
+  {malay:"jam tangan",english:"watch",category:"objects",level:"beginner"},{malay:"wang",english:"money",category:"objects",level:"beginner"},
+  {malay:"peta",english:"card / map",category:"objects",level:"beginner"},{malay:"surat khabar",english:"newspaper",category:"objects",level:"beginner"},
+  {malay:"gambar",english:"photo",category:"objects",level:"beginner"},{malay:"surat",english:"letter",category:"objects",level:"beginner"},
+  {malay:"hadiah",english:"gift",category:"objects",level:"beginner"},{malay:"mainan",english:"toy",category:"objects",level:"beginner"},
+  {malay:"doktor",english:"doctor",category:"professions",level:"beginner"},{malay:"jururawat",english:"nurse",category:"professions",level:"beginner"},
+  {malay:"guru",english:"teacher",category:"professions",level:"beginner"},{malay:"pelajar",english:"student",category:"professions",level:"beginner"},
+  {malay:"tukang masak",english:"cook",category:"professions",level:"beginner"},{malay:"polis",english:"police officer",category:"professions",level:"beginner"},
+  {malay:"bomba",english:"firefighter",category:"professions",level:"beginner"},{malay:"peguam",english:"lawyer",category:"professions",level:"beginner"},
+  {malay:"jurutera",english:"engineer",category:"professions",level:"beginner"},{malay:"pelayan",english:"waiter",category:"professions",level:"beginner"},
+  {malay:"pelakon",english:"actor",category:"professions",level:"beginner"},{malay:"doktor gigi",english:"dentist",category:"professions",level:"beginner"},
+  {malay:"pengurus",english:"manager",category:"professions",level:"beginner"},{malay:"wartawan",english:"journalist",category:"professions",level:"beginner"},
+  {malay:"pemandu",english:"driver",category:"professions",level:"beginner"},{malay:"bilik darjah",english:"classroom",category:"school",level:"beginner"},
+  {malay:"pelajaran",english:"lesson",category:"school",level:"beginner"},{malay:"kerja rumah",english:"homework",category:"school",level:"beginner"},
+  {malay:"peperiksaan",english:"exam",category:"school",level:"beginner"},{malay:"gred",english:"grade",category:"school",level:"beginner"},
+  {malay:"papan hitam",english:"blackboard",category:"school",level:"beginner"},{malay:"perpustakaan",english:"library",category:"school",level:"beginner"},
+  {malay:"kamus",english:"dictionary",category:"school",level:"beginner"},{malay:"kalkulator",english:"calculator",category:"school",level:"beginner"},
+  {malay:"pembaris",english:"ruler",category:"school",level:"beginner"},{malay:"soalan",english:"question",category:"school",level:"beginner"},
+  {malay:"jawapan",english:"answer",category:"school",level:"beginner"},{malay:"subjek",english:"subject",category:"school",level:"beginner"},
+  {malay:"kesilapan",english:"mistake",category:"school",level:"beginner"},{malay:"waktu rehat",english:"break / recess",category:"school",level:"beginner"},
+  {malay:"siapa",english:"who",category:"questions",level:"beginner"},{malay:"apa",english:"what",category:"questions",level:"beginner"},
+  {malay:"di mana",english:"where",category:"questions",level:"beginner"},{malay:"bila",english:"when",category:"questions",level:"beginner"},
+  {malay:"bagaimana",english:"how",category:"questions",level:"beginner"},{malay:"kenapa",english:"why",category:"questions",level:"beginner"},
+  {malay:"berapa",english:"how much / how many",category:"questions",level:"beginner"},{malay:"yang mana",english:"which",category:"questions",level:"beginner"},
+  {malay:"dan",english:"and",category:"essentials",level:"beginner"},{malay:"atau",english:"or",category:"essentials",level:"beginner"},
+  {malay:"tetapi",english:"but",category:"essentials",level:"beginner"},{malay:"kerana",english:"because",category:"essentials",level:"beginner"},
+  {malay:"jadi",english:"so / therefore",category:"essentials",level:"beginner"},{malay:"jika",english:"if",category:"essentials",level:"beginner"},
+  {malay:"juga",english:"also / too",category:"essentials",level:"beginner"},{malay:"sangat",english:"very",category:"essentials",level:"beginner"},
+  {malay:"cukup",english:"quite / enough",category:"essentials",level:"beginner"},{malay:"mungkin",english:"maybe",category:"essentials",level:"beginner"},
+  {malay:"sudah tentu",english:"of course",category:"essentials",level:"beginner"},{malay:"baiklah",english:"ok / agreed",category:"essentials",level:"beginner"},
+  {malay:"bersihkan",english:"to clean",category:"verbs",level:"beginner"},{malay:"pilih",english:"to choose",category:"verbs",level:"beginner"},
+  {malay:"menang",english:"to win / to earn",category:"verbs",level:"beginner"},{malay:"kalah",english:"to lose",category:"verbs",level:"beginner"},
+  {malay:"lupa",english:"to forget",category:"verbs",level:"beginner"},{malay:"ingat",english:"to remember",category:"verbs",level:"beginner"},
+  {malay:"kongsi",english:"to share",category:"verbs",level:"beginner"},{malay:"sediakan",english:"to prepare",category:"verbs",level:"beginner"},
+  {malay:"terima",english:"to accept",category:"verbs",level:"beginner"},{malay:"menolak",english:"to refuse",category:"verbs",level:"beginner"},
+  {malay:"terangkan",english:"to explain",category:"verbs",level:"beginner"},{malay:"teruskan",english:"to continue",category:"verbs",level:"beginner"},
+  {malay:"kembali",english:"to return",category:"verbs",level:"beginner"},{malay:"lawat",english:"to visit",category:"verbs",level:"beginner"},
+  {malay:"tukar",english:"to change",category:"verbs",level:"beginner"},{malay:"tawar",english:"to offer",category:"verbs",level:"beginner"},
+  {malay:"benarkan",english:"to allow",category:"verbs",level:"beginner"},{malay:"tempah",english:"to book / to reserve",category:"verbs",level:"beginner"},
+  {malay:"ulang",english:"to repeat",category:"verbs",level:"beginner"},{malay:"jemput",english:"to invite",category:"verbs",level:"beginner"},
+  {malay:"perbaiki",english:"to improve",category:"verbs",level:"beginner"},{malay:"sertai",english:"to join",category:"verbs",level:"beginner"},
+  {malay:"putuskan",english:"to decide",category:"verbs",level:"beginner"},{malay:"cuba",english:"to try",category:"verbs",level:"beginner"},
+  {malay:"berjaya",english:"to succeed",category:"verbs",level:"beginner"},{malay:"pandai",english:"intelligent",category:"adjectives",level:"beginner"},
+  {malay:"moden",english:"modern",category:"adjectives",level:"beginner"},{malay:"semula jadi",english:"natural",category:"adjectives",level:"beginner"},
+  {malay:"penting",english:"important",category:"adjectives",level:"beginner"},{malay:"berbeza",english:"different",category:"adjectives",level:"beginner"},
+  {malay:"sempurna",english:"perfect",category:"adjectives",level:"beginner"},{malay:"sedap",english:"delicious",category:"adjectives",level:"beginner"},
+  {malay:"bahaya",english:"dangerous",category:"adjectives",level:"beginner"},{malay:"tenang",english:"calm",category:"adjectives",level:"beginner"},
+  {malay:"bising",english:"noisy",category:"adjectives",level:"beginner"},{malay:"istimewa",english:"special",category:"adjectives",level:"beginner"},
+  {malay:"terakhir",english:"last",category:"adjectives",level:"beginner"},{malay:"pertama",english:"first",category:"adjectives",level:"beginner"},
+  {malay:"seterusnya",english:"next",category:"adjectives",level:"beginner"},{malay:"sama",english:"same",category:"adjectives",level:"beginner"},
+  {malay:"istana",english:"castle",category:"places",level:"beginner"},{malay:"muzium",english:"museum",category:"places",level:"beginner"},
+  {malay:"teater",english:"theatre",category:"places",level:"beginner"},{malay:"kolam renang",english:"swimming pool",category:"places",level:"beginner"},
+  {malay:"stadium",english:"stadium",category:"places",level:"beginner"},{malay:"pusat membeli-belah",english:"shopping centre",category:"places",level:"beginner"},
+  {malay:"hotel",english:"hotel",category:"places",level:"beginner"},{malay:"katedral",english:"cathedral",category:"places",level:"beginner"},
+  {malay:"pekerjaan",english:"employment",category:"work",level:"intermediate"},{malay:"pengangguran",english:"unemployment",category:"work",level:"intermediate"},
+  {malay:"syarikat",english:"company",category:"work",level:"intermediate"},{malay:"gaji",english:"salary",category:"work",level:"intermediate"},
+  {malay:"kontrak",english:"contract",category:"work",level:"intermediate"},{malay:"kerjaya",english:"career",category:"work",level:"intermediate"},
+  {malay:"latihan",english:"training",category:"work",level:"intermediate"},{malay:"pengambilan pekerja",english:"recruitment",category:"work",level:"intermediate"},
+  {malay:"jawatan",english:"position",category:"work",level:"intermediate"},{malay:"bajet",english:"budget",category:"work",level:"intermediate"},
+  {malay:"laporan",english:"report",category:"work",level:"intermediate"},{malay:"tarikh akhir",english:"deadline",category:"work",level:"intermediate"},
+  {malay:"objektif",english:"objective",category:"work",level:"intermediate"},{malay:"produktiviti",english:"productivity",category:"work",level:"intermediate"},
+  {malay:"kontraktor",english:"contractor",category:"work",level:"intermediate"},{malay:"kerja jarak jauh",english:"remote work",category:"work",level:"intermediate"},
+  {malay:"pelatih",english:"intern",category:"work",level:"intermediate"},{malay:"bonus",english:"bonus",category:"work",level:"intermediate"},
+  {malay:"kesatuan sekerja",english:"union",category:"work",level:"intermediate"},{malay:"mogok",english:"strike",category:"work",level:"intermediate"},
+  {malay:"majikan",english:"employer",category:"work",level:"intermediate"},{malay:"memecat",english:"to fire",category:"work",level:"intermediate"},
+  {malay:"berhenti kerja",english:"to resign",category:"work",level:"intermediate"},{malay:"resume",english:"résumé",category:"work",level:"intermediate"},
+  {malay:"temu duga kerja",english:"job interview",category:"work",level:"intermediate"},{malay:"memohon",english:"to apply",category:"work",level:"intermediate"},
+  {malay:"mesyuarat",english:"meeting",category:"work",level:"intermediate"},{malay:"pasukan",english:"team",category:"work",level:"intermediate"},
+  {malay:"projek",english:"project",category:"work",level:"intermediate"},{malay:"rakan sekerja",english:"colleague",category:"work",level:"intermediate"},
+  {malay:"presiden",english:"president",category:"politics",level:"intermediate"},{malay:"parlimen",english:"parliament",category:"politics",level:"intermediate"},
+  {malay:"pilihan raya",english:"election",category:"politics",level:"intermediate"},{malay:"undang-undang",english:"law",category:"politics",level:"intermediate"},
+  {malay:"undi",english:"vote",category:"politics",level:"intermediate"},{malay:"parti",english:"party",category:"politics",level:"intermediate"},
+  {malay:"demokrasi",english:"democracy",category:"politics",level:"intermediate"},{malay:"warganegara",english:"citizen",category:"politics",level:"intermediate"},
+  {malay:"perlembagaan",english:"constitution",category:"politics",level:"intermediate"},{malay:"menteri",english:"minister",category:"politics",level:"intermediate"},
+  {malay:"senat",english:"senate",category:"politics",level:"intermediate"},{malay:"duta besar",english:"ambassador",category:"politics",level:"intermediate"},
+  {malay:"perjanjian",english:"agreement",category:"politics",level:"intermediate"},{malay:"traktat",english:"treaty",category:"politics",level:"intermediate"},
+  {malay:"reformasi",english:"reform",category:"politics",level:"intermediate"},{malay:"debat",english:"debate",category:"politics",level:"intermediate"},
+  {malay:"ucapan",english:"speech",category:"politics",level:"intermediate"},{malay:"kempen",english:"campaign",category:"politics",level:"intermediate"},
+  {malay:"calon",english:"candidate",category:"politics",level:"intermediate"},{malay:"pembangkang",english:"opposition",category:"politics",level:"intermediate"},
+  {malay:"gabungan",english:"coalition",category:"politics",level:"intermediate"},{malay:"kebebasan",english:"freedom",category:"politics",level:"intermediate"},
+  {malay:"hak",english:"right",category:"politics",level:"intermediate"},{malay:"sempadan",english:"border",category:"politics",level:"intermediate"},
+  {malay:"kerajaan",english:"government",category:"politics",level:"intermediate"},{malay:"ubat",english:"medication",category:"health",level:"intermediate"},
+  {malay:"pembedahan",english:"operation",category:"health",level:"intermediate"},{malay:"penyakit",english:"illness",category:"health",level:"intermediate"},
+  {malay:"gejala",english:"symptom",category:"health",level:"intermediate"},{malay:"diagnosis",english:"diagnosis",category:"health",level:"intermediate"},
+  {malay:"rawatan",english:"treatment",category:"health",level:"intermediate"},{malay:"pemulihan",english:"recovery",category:"health",level:"intermediate"},
+  {malay:"pembedahan",english:"surgery",category:"health",level:"intermediate"},{malay:"bilik kecemasan",english:"emergency room",category:"health",level:"intermediate"},
+  {malay:"preskripsi",english:"prescription",category:"health",level:"intermediate"},{malay:"vaksin",english:"vaccine",category:"health",level:"intermediate"},
+  {malay:"alahan",english:"allergy",category:"health",level:"intermediate"},{malay:"kesakitan",english:"pain",category:"health",level:"intermediate"},
+  {malay:"demam",english:"fever",category:"health",level:"intermediate"},{malay:"tekanan darah",english:"blood pressure",category:"health",level:"intermediate"},
+  {malay:"kencing manis",english:"diabetes",category:"health",level:"intermediate"},{malay:"kanser",english:"cancer",category:"health",level:"intermediate"},
+  {malay:"terapi",english:"therapy",category:"health",level:"intermediate"},{malay:"kecederaan",english:"injury",category:"health",level:"intermediate"},
+  {malay:"patah tulang",english:"fracture",category:"health",level:"intermediate"},{malay:"klinik doktor",english:"doctor's office",category:"health",level:"intermediate"},
+  {malay:"konsultasi",english:"consultation",category:"health",level:"intermediate"},{malay:"insurans kesihatan",english:"health insurance",category:"health",level:"intermediate"},
+  {malay:"ahli farmasi",english:"pharmacist",category:"health",level:"intermediate"},{malay:"penawar",english:"remedy",category:"health",level:"intermediate"},
+  {malay:"klinik",english:"clinic",category:"health",level:"intermediate"},{malay:"pakar bedah",english:"surgeon",category:"health",level:"intermediate"},
+  {malay:"jururawat",english:"nurse",category:"health",level:"intermediate"},{malay:"pakar",english:"specialist",category:"health",level:"intermediate"},
+  {malay:"x-ray",english:"X-ray",category:"health",level:"intermediate"},{malay:"alam sekitar",english:"environment",category:"environment",level:"intermediate"},
+  {malay:"pencemaran",english:"pollution",category:"environment",level:"intermediate"},{malay:"pemanasan",english:"warming",category:"environment",level:"intermediate"},
+  {malay:"ekologi",english:"ecology",category:"environment",level:"intermediate"},{malay:"kitar semula",english:"recycling",category:"environment",level:"intermediate"},
+  {malay:"sisa",english:"waste",category:"environment",level:"intermediate"},{malay:"biodiversiti",english:"biodiversity",category:"environment",level:"intermediate"},
+  {malay:"pembangunan lestari",english:"sustainable development",category:"environment",level:"intermediate"},{malay:"jejak karbon",english:"carbon footprint",category:"environment",level:"intermediate"},
+  {malay:"turbin angin",english:"wind turbine",category:"environment",level:"intermediate"},{malay:"tenaga suria",english:"solar energy",category:"environment",level:"intermediate"},
+  {malay:"pelepasan",english:"emissions",category:"environment",level:"intermediate"},{malay:"kemarau",english:"drought",category:"environment",level:"intermediate"},
+  {malay:"banjir",english:"flood",category:"environment",level:"intermediate"},{malay:"gempa bumi",english:"earthquake",category:"environment",level:"intermediate"},
+  {malay:"atmosfera",english:"atmosphere",category:"environment",level:"intermediate"},{malay:"lapisan ozon",english:"ozone layer",category:"environment",level:"intermediate"},
+  {malay:"penebangan hutan",english:"deforestation",category:"environment",level:"intermediate"},{malay:"hidupan liar",english:"wildlife",category:"environment",level:"intermediate"},
+  {malay:"flora",english:"flora",category:"environment",level:"intermediate"},{malay:"baja kompos",english:"compost",category:"environment",level:"intermediate"},
+  {malay:"kesan rumah hijau",english:"greenhouse effect",category:"environment",level:"intermediate"},{malay:"tenaga boleh diperbaharui",english:"renewable energy",category:"environment",level:"intermediate"},
+  {malay:"tumpahan minyak",english:"oil spill",category:"environment",level:"intermediate"},{malay:"perubahan iklim",english:"climate change",category:"environment",level:"intermediate"},
+  {malay:"rangkaian",english:"network",category:"technology",level:"intermediate"},{malay:"perisian",english:"software",category:"technology",level:"intermediate"},
+  {malay:"aplikasi",english:"app",category:"technology",level:"intermediate"},{malay:"data",english:"data",category:"technology",level:"intermediate"},
+  {malay:"digital",english:"digital",category:"technology",level:"intermediate"},{malay:"kecerdasan buatan",english:"artificial intelligence",category:"technology",level:"intermediate"},
+  {malay:"robot",english:"robot",category:"technology",level:"intermediate"},{malay:"muat turun",english:"to download",category:"technology",level:"intermediate"},
+  {malay:"keselamatan siber",english:"cybersecurity",category:"technology",level:"intermediate"},{malay:"inovasi",english:"innovation",category:"technology",level:"intermediate"},
+  {malay:"skrin",english:"screen",category:"technology",level:"intermediate"},{malay:"tablet",english:"tablet",category:"technology",level:"intermediate"},
+  {malay:"sandaran",english:"backup",category:"technology",level:"intermediate"},{malay:"awan",english:"cloud",category:"technology",level:"intermediate"},
+  {malay:"algoritma",english:"algorithm",category:"technology",level:"intermediate"},{malay:"pengaturcaraan",english:"programming",category:"technology",level:"intermediate"},
+  {malay:"kod",english:"code",category:"technology",level:"intermediate"},{malay:"antara muka",english:"interface",category:"technology",level:"intermediate"},
+  {malay:"kemas kini",english:"update",category:"technology",level:"intermediate"},{malay:"penggodaman",english:"hacking",category:"technology",level:"intermediate"},
+  {malay:"kata laluan",english:"password",category:"technology",level:"intermediate"},{malay:"pelayan",english:"server",category:"technology",level:"intermediate"},
+  {malay:"sambungan",english:"connection",category:"technology",level:"intermediate"},{malay:"rangkaian sosial",english:"social network",category:"technology",level:"intermediate"},
+  {malay:"penstriman",english:"streaming",category:"technology",level:"intermediate"},{malay:"seni lukis",english:"painting",category:"culture",level:"intermediate"},
+  {malay:"arca",english:"sculpture",category:"culture",level:"intermediate"},{malay:"kesusasteraan",english:"literature",category:"culture",level:"intermediate"},
+  {malay:"novel",english:"novel",category:"culture",level:"intermediate"},{malay:"puisi",english:"poetry",category:"culture",level:"intermediate"},
+  {malay:"pameran",english:"exhibition",category:"culture",level:"intermediate"},{malay:"galeri",english:"gallery",category:"culture",level:"intermediate"},
+  {malay:"konsert",english:"concert",category:"culture",level:"intermediate"},{malay:"pesta",english:"festival",category:"culture",level:"intermediate"},
+  {malay:"warisan",english:"heritage",category:"culture",level:"intermediate"},{malay:"tradisi",english:"tradition",category:"culture",level:"intermediate"},
+  {malay:"adat",english:"custom",category:"culture",level:"intermediate"},{malay:"artis",english:"artist",category:"culture",level:"intermediate"},
+  {malay:"komposer",english:"composer",category:"culture",level:"intermediate"},{malay:"pengarah",english:"director",category:"culture",level:"intermediate"},
+  {malay:"watak",english:"character",category:"culture",level:"intermediate"},{malay:"karya agung",english:"masterpiece",category:"culture",level:"intermediate"},
+  {malay:"ulasan",english:"review",category:"culture",level:"intermediate"},{malay:"pertunjukan",english:"show",category:"culture",level:"intermediate"},
+  {malay:"pentas",english:"stage",category:"culture",level:"intermediate"},{malay:"muzium",english:"museum",category:"culture",level:"intermediate"},
+  {malay:"karya seni",english:"work of art",category:"culture",level:"intermediate"},{malay:"lukisan",english:"painting",category:"culture",level:"intermediate"},
+  {malay:"tarian",english:"dance",category:"culture",level:"intermediate"},{malay:"opera",english:"opera",category:"culture",level:"intermediate"},
+  {malay:"tempahan",english:"reservation",category:"travel",level:"intermediate"},{malay:"tiket",english:"ticket",category:"travel",level:"intermediate"},
+  {malay:"pasport",english:"passport",category:"travel",level:"intermediate"},{malay:"visa",english:"visa",category:"travel",level:"intermediate"},
+  {malay:"kastam",english:"customs",category:"travel",level:"intermediate"},{malay:"beg pakaian",english:"suitcase",category:"travel",level:"intermediate"},
+  {malay:"itinerari",english:"itinerary",category:"travel",level:"intermediate"},{malay:"lawatan",english:"excursion",category:"travel",level:"intermediate"},
+  {malay:"pemandu pelancong",english:"guide",category:"travel",level:"intermediate"},{malay:"destinasi",english:"destination",category:"travel",level:"intermediate"},
+  {malay:"penginapan",english:"accommodation",category:"travel",level:"intermediate"},{malay:"rumah tumpangan",english:"guesthouse",category:"travel",level:"intermediate"},
+  {malay:"rumah rehat",english:"inn",category:"travel",level:"intermediate"},{malay:"sewaan",english:"rental",category:"travel",level:"intermediate"},
+  {malay:"pelayaran",english:"cruise",category:"travel",level:"intermediate"},{malay:"persinggahan",english:"stopover",category:"travel",level:"intermediate"},
+  {malay:"sambungan penerbangan",english:"connection",category:"travel",level:"intermediate"},{malay:"penginapan",english:"stay",category:"travel",level:"intermediate"},
+  {malay:"luar negara",english:"abroad",category:"travel",level:"intermediate"},{malay:"pelancong",english:"tourist",category:"travel",level:"intermediate"},
+  {malay:"penerbangan",english:"flight",category:"travel",level:"intermediate"},{malay:"menaiki",english:"boarding",category:"travel",level:"intermediate"},
+  {malay:"bagasi",english:"luggage",category:"travel",level:"intermediate"},{malay:"pas menaiki",english:"boarding pass",category:"travel",level:"intermediate"},
+  {malay:"kelewatan",english:"delay",category:"travel",level:"intermediate"},{malay:"pasaran",english:"market",category:"economy",level:"intermediate"},
+  {malay:"perdagangan",english:"trade",category:"economy",level:"intermediate"},{malay:"pertumbuhan",english:"growth",category:"economy",level:"intermediate"},
+  {malay:"inflasi",english:"inflation",category:"economy",level:"intermediate"},{malay:"kemelesetan",english:"recession",category:"economy",level:"intermediate"},
+  {malay:"cukai",english:"tax",category:"economy",level:"intermediate"},{malay:"duti",english:"tax",category:"economy",level:"intermediate"},
+  {malay:"hutang",english:"debt",category:"economy",level:"intermediate"},{malay:"pelaburan",english:"investment",category:"economy",level:"intermediate"},
+  {malay:"bursa saham",english:"stock exchange",category:"economy",level:"intermediate"},{malay:"saham",english:"share",category:"economy",level:"intermediate"},
+  {malay:"dividen",english:"dividend",category:"economy",level:"intermediate"},{malay:"mata wang",english:"currency",category:"economy",level:"intermediate"},
+  {malay:"eksport",english:"export",category:"economy",level:"intermediate"},{malay:"import",english:"import",category:"economy",level:"intermediate"},
+  {malay:"pengguna",english:"consumer",category:"economy",level:"intermediate"},{malay:"pengeluaran",english:"production",category:"economy",level:"intermediate"},
+  {malay:"industri",english:"industry",category:"economy",level:"intermediate"},{malay:"perdagangan bebas",english:"free trade",category:"economy",level:"intermediate"},
+  {malay:"persaingan",english:"competition",category:"economy",level:"intermediate"},{malay:"keuntungan",english:"profit",category:"economy",level:"intermediate"},
+  {malay:"kerugian",english:"loss",category:"economy",level:"intermediate"},{malay:"pendapatan",english:"income",category:"economy",level:"intermediate"},
+  {malay:"kekayaan",english:"wealth",category:"economy",level:"intermediate"},{malay:"modal",english:"capital",category:"economy",level:"intermediate"},
+  {malay:"kebahagiaan",english:"happiness",category:"emotions",level:"intermediate"},{malay:"kebimbangan",english:"anxiety",category:"emotions",level:"intermediate"},
+  {malay:"tekanan",english:"stress",category:"emotions",level:"intermediate"},{malay:"keyakinan",english:"confidence",category:"emotions",level:"intermediate"},
+  {malay:"rasa malu",english:"shame",category:"emotions",level:"intermediate"},{malay:"cemburu",english:"jealousy",category:"emotions",level:"intermediate"},
+  {malay:"kebanggaan",english:"pride",category:"emotions",level:"intermediate"},{malay:"nostalgia",english:"nostalgia",category:"emotions",level:"intermediate"},
+  {malay:"harapan",english:"hope",category:"emotions",level:"intermediate"},{malay:"keputusasaan",english:"despair",category:"emotions",level:"intermediate"},
+  {malay:"semangat",english:"enthusiasm",category:"emotions",level:"intermediate"},{malay:"kekecewaan",english:"disappointment",category:"emotions",level:"intermediate"},
+  {malay:"ketakutan",english:"fear",category:"emotions",level:"intermediate"},{malay:"kebencian",english:"hatred",category:"emotions",level:"intermediate"},
+  {malay:"belas kasihan",english:"pity",category:"emotions",level:"intermediate"},{malay:"penyesalan",english:"regret",category:"emotions",level:"intermediate"},
+  {malay:"kegembiraan",english:"joy",category:"emotions",level:"intermediate"},{malay:"kegusaran",english:"frustration",category:"emotions",level:"intermediate"},
+  {malay:"kelegaan",english:"relief",category:"emotions",level:"intermediate"},{malay:"ketidaksabaran",english:"impatience",category:"emotions",level:"intermediate"},
+  {malay:"perasaan malu",english:"shyness",category:"emotions",level:"intermediate"},{malay:"kesunyian",english:"loneliness",category:"emotions",level:"intermediate"},
+  {malay:"rasa bersalah",english:"guilt",category:"emotions",level:"intermediate"},{malay:"keberanian",english:"courage",category:"emotions",level:"intermediate"},
+  {malay:"kemurahan hati",english:"generosity",category:"emotions",level:"intermediate"},{malay:"persahabatan",english:"friendship",category:"relationships",level:"intermediate"},
+  {malay:"pasangan",english:"couple",category:"relationships",level:"intermediate"},{malay:"perkahwinan",english:"marriage",category:"relationships",level:"intermediate"},
+  {malay:"perceraian",english:"divorce",category:"relationships",level:"intermediate"},{malay:"perpisahan",english:"separation",category:"relationships",level:"intermediate"},
+  {malay:"pertunangan",english:"engagement",category:"relationships",level:"intermediate"},{malay:"putus cinta",english:"breakup",category:"relationships",level:"intermediate"},
+  {malay:"pendamaian",english:"reconciliation",category:"relationships",level:"intermediate"},{malay:"konflik",english:"conflict",category:"relationships",level:"intermediate"},
+  {malay:"hormat",english:"respect",category:"relationships",level:"intermediate"},{malay:"perpaduan",english:"solidarity",category:"relationships",level:"intermediate"},
+  {malay:"bantuan bersama",english:"mutual help",category:"relationships",level:"intermediate"},{malay:"kepercayaan bersama",english:"mutual trust",category:"relationships",level:"intermediate"},
+  {malay:"sokongan",english:"support",category:"relationships",level:"intermediate"},{malay:"pengkhianatan",english:"betrayal",category:"relationships",level:"intermediate"},
+  {malay:"kesetiaan",english:"loyalty",category:"relationships",level:"intermediate"},{malay:"persubahatan",english:"complicity",category:"relationships",level:"intermediate"},
+  {malay:"kasih sayang",english:"affection",category:"relationships",level:"intermediate"},{malay:"kelembutan",english:"tenderness",category:"relationships",level:"intermediate"},
+  {malay:"pasangan hidup",english:"partner",category:"relationships",level:"intermediate"},{malay:"kejohanan",english:"championship",category:"sports",level:"intermediate"},
+  {malay:"pertandingan",english:"competition",category:"sports",level:"intermediate"},{malay:"latihan sukan",english:"training",category:"sports",level:"intermediate"},
+  {malay:"pengadil",english:"referee",category:"sports",level:"intermediate"},{malay:"kemenangan",english:"victory",category:"sports",level:"intermediate"},
+  {malay:"kekalahan",english:"defeat",category:"sports",level:"intermediate"},{malay:"turnamen",english:"tournament",category:"sports",level:"intermediate"},
+  {malay:"pingat",english:"medal",category:"sports",level:"intermediate"},{malay:"atlet",english:"athlete",category:"sports",level:"intermediate"},
+  {malay:"rekod",english:"record",category:"sports",level:"intermediate"},{malay:"penalti",english:"penalty",category:"sports",level:"intermediate"},
+  {malay:"gol",english:"goal",category:"sports",level:"intermediate"},{malay:"padang",english:"field",category:"sports",level:"intermediate"},
+  {malay:"renang",english:"swimming",category:"sports",level:"intermediate"},{malay:"berbasikal",english:"cycling",category:"sports",level:"intermediate"},
+  {malay:"tenis",english:"tennis",category:"sports",level:"intermediate"},{malay:"bola sepak",english:"football",category:"sports",level:"intermediate"},
+  {malay:"ragbi",english:"rugby",category:"sports",level:"intermediate"},{malay:"tinju",english:"boxing",category:"sports",level:"intermediate"},
+  {malay:"mendaki",english:"climbing",category:"sports",level:"intermediate"},{malay:"perlumbaan",english:"race",category:"sports",level:"intermediate"},
+  {malay:"lompat",english:"jump",category:"sports",level:"intermediate"},{malay:"lontaran",english:"throw",category:"sports",level:"intermediate"},
+  {malay:"berenang",english:"swimming",category:"sports",level:"intermediate"},{malay:"pecut",english:"sprint",category:"sports",level:"intermediate"},
+  {malay:"eksperimen",english:"experiment",category:"science",level:"intermediate"},{malay:"penyelidikan",english:"research",category:"science",level:"intermediate"},
+  {malay:"makmal",english:"laboratory",category:"science",level:"intermediate"},{malay:"teori",english:"theory",category:"science",level:"intermediate"},
+  {malay:"hipotesis",english:"hypothesis",category:"science",level:"intermediate"},{malay:"penemuan",english:"discovery",category:"science",level:"intermediate"},
+  {malay:"biologi",english:"biology",category:"science",level:"intermediate"},{malay:"kimia",english:"chemistry",category:"science",level:"intermediate"},
+  {malay:"fizik",english:"physics",category:"science",level:"intermediate"},{malay:"astronomi",english:"astronomy",category:"science",level:"intermediate"},
+  {malay:"geologi",english:"geology",category:"science",level:"intermediate"},{malay:"evolusi",english:"evolution",category:"science",level:"intermediate"},
+  {malay:"genetik",english:"genetics",category:"science",level:"intermediate"},{malay:"sel",english:"cell",category:"science",level:"intermediate"},
+  {malay:"atom",english:"atom",category:"science",level:"intermediate"},{malay:"molekul",english:"molecule",category:"science",level:"intermediate"},
+  {malay:"graviti",english:"gravity",category:"science",level:"intermediate"},{malay:"elektrik",english:"electricity",category:"science",level:"intermediate"},
+  {malay:"mikroskop",english:"microscope",category:"science",level:"intermediate"},{malay:"DNA",english:"DNA",category:"science",level:"intermediate"},
+  {malay:"sekolah menengah",english:"high school",category:"education_adv",level:"intermediate"},{malay:"diploma",english:"diploma",category:"education_adv",level:"intermediate"},
+  {malay:"sijil peperiksaan",english:"baccalaureate",category:"education_adv",level:"intermediate"},{malay:"pengajian",english:"studies",category:"education_adv",level:"intermediate"},
+  {malay:"peperiksaan kemasukan",english:"competitive exam",category:"education_adv",level:"intermediate"},{malay:"kurikulum",english:"curriculum",category:"education_adv",level:"intermediate"},
+  {malay:"pengetahuan",english:"knowledge",category:"education_adv",level:"intermediate"},{malay:"kemahiran",english:"skill",category:"education_adv",level:"intermediate"},
+  {malay:"pembelajaran",english:"learning",category:"education_adv",level:"intermediate"},{malay:"biasiswa",english:"scholarship",category:"education_adv",level:"intermediate"},
+  {malay:"tesis",english:"thesis",category:"education_adv",level:"intermediate"},{malay:"fakulti",english:"faculty",category:"education_adv",level:"intermediate"},
+  {malay:"disertasi",english:"dissertation",category:"education_adv",level:"intermediate"},{malay:"dewan kuliah",english:"lecture hall",category:"education_adv",level:"intermediate"},
+  {malay:"kuliah",english:"lecture",category:"education_adv",level:"intermediate"},{malay:"ijazah sarjana",english:"master's degree",category:"education_adv",level:"intermediate"},
+  {malay:"ijazah sarjana muda",english:"bachelor's degree",category:"education_adv",level:"intermediate"},{malay:"ijazah kedoktoran",english:"doctorate",category:"education_adv",level:"intermediate"},
+  {malay:"resipi",english:"recipe",category:"food_adv",level:"intermediate"},{malay:"bahan",english:"ingredient",category:"food_adv",level:"intermediate"},
+  {malay:"rempah",english:"spice",category:"food_adv",level:"intermediate"},{malay:"sos",english:"sauce",category:"food_adv",level:"intermediate"},
+  {malay:"hidangan pembuka selera",english:"starter",category:"food_adv",level:"intermediate"},{malay:"gastronomi",english:"gastronomy",category:"food_adv",level:"intermediate"},
+  {malay:"diet",english:"diet",category:"food_adv",level:"intermediate"},{malay:"vegetarian",english:"vegetarian",category:"food_adv",level:"intermediate"},
+  {malay:"vegan",english:"vegan",category:"food_adv",level:"intermediate"},{malay:"organik",english:"organic",category:"food_adv",level:"intermediate"},
+  {malay:"nutrien",english:"nutrient",category:"food_adv",level:"intermediate"},{malay:"kalori",english:"calorie",category:"food_adv",level:"intermediate"},
+  {malay:"perisa",english:"flavour",category:"food_adv",level:"intermediate"},{malay:"tekstur",english:"texture",category:"food_adv",level:"intermediate"},
+  {malay:"aroma",english:"aroma",category:"food_adv",level:"intermediate"},{malay:"hidangan utama",english:"main course",category:"food_adv",level:"intermediate"},
+  {malay:"bufet",english:"buffet",category:"food_adv",level:"intermediate"},{malay:"perapan",english:"marinade",category:"food_adv",level:"intermediate"},
+  {malay:"perencah",english:"condiment",category:"food_adv",level:"intermediate"},{malay:"yis",english:"yeast",category:"food_adv",level:"intermediate"},
+  {malay:"perumahan",english:"housing",category:"housing",level:"intermediate"},{malay:"sewa",english:"rent",category:"housing",level:"intermediate"},
+  {malay:"tuan rumah",english:"landlord",category:"housing",level:"intermediate"},{malay:"penyewa",english:"tenant",category:"housing",level:"intermediate"},
+  {malay:"pajakan",english:"lease",category:"housing",level:"intermediate"},{malay:"bangunan pangsapuri",english:"apartment building",category:"housing",level:"intermediate"},
+  {malay:"kediaman",english:"residence",category:"housing",level:"intermediate"},{malay:"kawasan kejiranan",english:"neighbourhood",category:"housing",level:"intermediate"},
+  {malay:"pengubahsuaian",english:"renovation",category:"housing",level:"intermediate"},{malay:"arkitek",english:"architect",category:"housing",level:"intermediate"},
+  {malay:"pembinaan",english:"construction",category:"housing",level:"intermediate"},{malay:"lif",english:"lift",category:"housing",level:"intermediate"},
+  {malay:"pemilikan bersama",english:"co-ownership",category:"housing",level:"intermediate"},{malay:"caj perkhidmatan",english:"service charges",category:"housing",level:"intermediate"},
+  {malay:"berpindah rumah",english:"moving",category:"housing",level:"intermediate"},{malay:"berperabot",english:"furnished",category:"housing",level:"intermediate"},
+  {malay:"tingkat bawah tanah",english:"basement",category:"housing",level:"intermediate"},{malay:"loteng",english:"attic",category:"housing",level:"intermediate"},
+  {malay:"teres",english:"terrace",category:"housing",level:"intermediate"},{malay:"jiran tetangga",english:"neighbourhood",category:"housing",level:"intermediate"},
+  {malay:"mahkamah",english:"court",category:"law",level:"intermediate"},{malay:"hakim",english:"judge",category:"law",level:"intermediate"},
+  {malay:"peguam",english:"lawyer",category:"law",level:"intermediate"},{malay:"perbicaraan",english:"trial",category:"law",level:"intermediate"},
+  {malay:"tertuduh",english:"accused",category:"law",level:"intermediate"},{malay:"saksi",english:"witness",category:"law",level:"intermediate"},
+  {malay:"hukuman",english:"sentence",category:"law",level:"intermediate"},{malay:"denda berat",english:"punishment",category:"law",level:"intermediate"},
+  {malay:"denda",english:"fine",category:"law",level:"intermediate"},{malay:"penjara",english:"prison",category:"law",level:"intermediate"},
+  {malay:"jenayah",english:"crime",category:"law",level:"intermediate"},{malay:"mangsa",english:"victim",category:"law",level:"intermediate"},
+  {malay:"siasatan",english:"investigation",category:"law",level:"intermediate"},{malay:"bukti",english:"evidence",category:"law",level:"intermediate"},
+  {malay:"peraturan",english:"regulation",category:"law",level:"intermediate"},{malay:"saman trafik",english:"traffic fine",category:"law",level:"intermediate"},
+  {malay:"aduan",english:"complaint",category:"law",level:"intermediate"},{malay:"penangkapan",english:"arrest",category:"law",level:"intermediate"},
+  {malay:"hukuman mati",english:"death penalty",category:"law",level:"intermediate"},{malay:"tidak bersalah",english:"innocence",category:"law",level:"intermediate"},
+  {malay:"laporan berita",english:"report",category:"media",level:"intermediate"},{malay:"wartawan",english:"journalist",category:"media",level:"intermediate"},
+  {malay:"rancangan",english:"programme",category:"media",level:"intermediate"},{malay:"saluran",english:"channel",category:"media",level:"intermediate"},
+  {malay:"artikel",english:"article",category:"media",level:"intermediate"},{malay:"temu bual",english:"interview",category:"media",level:"intermediate"},
+  {malay:"tajuk utama",english:"headline",category:"media",level:"intermediate"},{malay:"pengiklanan",english:"advertising",category:"media",level:"intermediate"},
+  {malay:"pelanggan",english:"subscriber",category:"media",level:"intermediate"},{malay:"komen",english:"comment",category:"media",level:"intermediate"},
+  {malay:"blog",english:"blog",category:"media",level:"intermediate"},{malay:"podcast",english:"podcast",category:"media",level:"intermediate"},
+  {malay:"siaran",english:"broadcast",category:"media",level:"intermediate"},{malay:"siaran langsung",english:"live broadcast",category:"media",level:"intermediate"},
+  {malay:"penapisan",english:"censorship",category:"media",level:"intermediate"},{malay:"kebebasan akhbar",english:"press freedom",category:"media",level:"intermediate"},
+  {malay:"editor",english:"editor",category:"media",level:"intermediate"},{malay:"bilik berita",english:"newsroom",category:"media",level:"intermediate"},
+  {malay:"koresponden",english:"correspondent",category:"media",level:"intermediate"},{malay:"surat khabar",english:"newspaper",category:"media",level:"intermediate"},
+  {malay:"memperoleh",english:"to obtain",category:"advanced_verbs",level:"intermediate"},{malay:"menyelesaikan",english:"to resolve",category:"advanced_verbs",level:"intermediate"},
+  {malay:"mencapai",english:"to reach",category:"advanced_verbs",level:"intermediate"},{malay:"mengabaikan",english:"to neglect",category:"advanced_verbs",level:"intermediate"},
+  {malay:"menyempurnakan",english:"to accomplish",category:"advanced_verbs",level:"intermediate"},{malay:"merealisasikan",english:"to achieve",category:"advanced_verbs",level:"intermediate"},
+  {malay:"mengekalkan",english:"to maintain",category:"advanced_verbs",level:"intermediate"},{malay:"membangunkan",english:"to develop",category:"advanced_verbs",level:"intermediate"},
+  {malay:"mencadangkan",english:"to propose",category:"advanced_verbs",level:"intermediate"},{malay:"menubuhkan",english:"to establish",category:"advanced_verbs",level:"intermediate"},
+  {malay:"menyokong",english:"to support",category:"advanced_verbs",level:"intermediate"},{malay:"mempromosikan",english:"to promote",category:"advanced_verbs",level:"intermediate"},
+  {malay:"mengiktiraf",english:"to recognise",category:"advanced_verbs",level:"intermediate"},{malay:"menganalisis",english:"to analyse",category:"advanced_verbs",level:"intermediate"},
+  {malay:"menilai",english:"to evaluate",category:"advanced_verbs",level:"intermediate"},{malay:"memperbaiki",english:"to improve",category:"advanced_verbs",level:"intermediate"},
+  {malay:"merancang",english:"to plan",category:"advanced_verbs",level:"intermediate"},{malay:"menguruskan",english:"to manage",category:"advanced_verbs",level:"intermediate"},
+  {malay:"menyesuaikan diri",english:"to adapt",category:"advanced_verbs",level:"intermediate"},{malay:"mencegah",english:"to prevent",category:"advanced_verbs",level:"intermediate"},
+  {malay:"memantau",english:"to monitor",category:"advanced_verbs",level:"intermediate"},{malay:"mengambil bahagian",english:"to participate",category:"advanced_verbs",level:"intermediate"},
+  {malay:"menyumbang",english:"to contribute",category:"advanced_verbs",level:"intermediate"},{malay:"meluluskan",english:"to approve",category:"advanced_verbs",level:"intermediate"},
+  {malay:"menuntut",english:"to demand",category:"advanced_verbs",level:"intermediate"},{malay:"menasihati",english:"to advise",category:"advanced_verbs",level:"intermediate"},
+  {malay:"melindungi",english:"to protect",category:"advanced_verbs",level:"intermediate"},{malay:"mengurangkan",english:"to reduce",category:"advanced_verbs",level:"intermediate"},
+  {malay:"meningkatkan",english:"to increase",category:"advanced_verbs",level:"intermediate"},{malay:"melabur",english:"to invest",category:"advanced_verbs",level:"intermediate"},
+  {malay:"kompleks",english:"complex",category:"advanced_adj",level:"intermediate"},{malay:"tepat",english:"precise",category:"advanced_adj",level:"intermediate"},
+  {malay:"berkesan",english:"effective",category:"advanced_adj",level:"intermediate"},{malay:"ketara",english:"considerable",category:"advanced_adj",level:"intermediate"},
+  {malay:"asas",english:"fundamental",category:"advanced_adj",level:"intermediate"},{malay:"penting",english:"essential",category:"advanced_adj",level:"intermediate"},
+  {malay:"luar biasa",english:"remarkable",category:"advanced_adj",level:"intermediate"},{malay:"cemerlang",english:"exceptional",category:"advanced_adj",level:"intermediate"},
+  {malay:"mendalam",english:"deep",category:"advanced_adj",level:"intermediate"},{malay:"cetek",english:"superficial",category:"advanced_adj",level:"intermediate"},
+  {malay:"ikhlas",english:"sincere",category:"advanced_adj",level:"intermediate"},{malay:"bercita-cita tinggi",english:"ambitious",category:"advanced_adj",level:"intermediate"},
+  {malay:"bertanggungjawab",english:"responsible",category:"advanced_adj",level:"intermediate"},{malay:"kreatif",english:"creative",category:"advanced_adj",level:"intermediate"},
+  {malay:"logik",english:"logical",category:"advanced_adj",level:"intermediate"},{malay:"teliti",english:"rigorous",category:"advanced_adj",level:"intermediate"},
+  {malay:"adil",english:"fair",category:"advanced_adj",level:"intermediate"},{malay:"lestari",english:"sustainable",category:"advanced_adj",level:"intermediate"},
+  {malay:"progresif",english:"progressive",category:"advanced_adj",level:"intermediate"},{malay:"kontemporari",english:"contemporary",category:"advanced_adj",level:"intermediate"},
+  {malay:"inovatif",english:"innovative",category:"advanced_adj",level:"intermediate"},{malay:"relevan",english:"relevant",category:"advanced_adj",level:"intermediate"},
+  {malay:"sah",english:"legitimate",category:"advanced_adj",level:"intermediate"},{malay:"global",english:"global",category:"advanced_adj",level:"intermediate"},
+  {malay:"spesifik",english:"specific",category:"advanced_adj",level:"intermediate"},{malay:"nuansa",english:"nuance",category:"abstract",level:"expert"},
+  {malay:"kehalusan",english:"subtlety",category:"abstract",level:"expert"},{malay:"paradoks",english:"paradox",category:"abstract",level:"expert"},
+  {malay:"dilema",english:"dilemma",category:"abstract",level:"expert"},{malay:"kekaburan",english:"ambiguity",category:"abstract",level:"expert"},
+  {malay:"kesamaran",english:"ambiguity",category:"abstract",level:"expert"},{malay:"kekangan",english:"constraint",category:"abstract",level:"expert"},
+  {malay:"jurang",english:"gap",category:"abstract",level:"expert"},{malay:"prasangka",english:"prejudice",category:"abstract",level:"expert"},
+  {malay:"stereotaip",english:"stereotype",category:"abstract",level:"expert"},{malay:"klise",english:"cliché",category:"abstract",level:"expert"},
+  {malay:"eufemisme",english:"euphemism",category:"abstract",level:"expert"},{malay:"alegori",english:"allegory",category:"abstract",level:"expert"},
+  {malay:"metafora",english:"metaphor",category:"abstract",level:"expert"},{malay:"ironi",english:"irony",category:"abstract",level:"expert"},
+  {malay:"sindiran",english:"sarcasm",category:"abstract",level:"expert"},{malay:"sinisme",english:"cynicism",category:"abstract",level:"expert"},
+  {malay:"empirisisme",english:"empiricism",category:"abstract",level:"expert"},{malay:"rasionalisme",english:"rationalism",category:"abstract",level:"expert"},
+  {malay:"dogmatisme",english:"dogmatism",category:"abstract",level:"expert"},{malay:"pragmatisme",english:"pragmatism",category:"abstract",level:"expert"},
+  {malay:"relativisme",english:"relativism",category:"abstract",level:"expert"},{malay:"nihilisme",english:"nihilism",category:"abstract",level:"expert"},
+  {malay:"skeptisisme",english:"scepticism",category:"abstract",level:"expert"},{malay:"dialektik",english:"dialectics",category:"abstract",level:"expert"},
+  {malay:"sofisme",english:"sophism",category:"abstract",level:"expert"},{malay:"antitesis",english:"antithesis",category:"abstract",level:"expert"},
+  {malay:"aksiom",english:"axiom",category:"abstract",level:"expert"},{malay:"postulat",english:"postulate",category:"abstract",level:"expert"},
+  {malay:"paradigma",english:"paradigm",category:"abstract",level:"expert"},{malay:"plebisit",english:"plebiscite",category:"politics_adv",level:"expert"},
+  {malay:"hak mengundi universal",english:"universal suffrage",category:"politics_adv",level:"expert"},{malay:"kedaulatan undang-undang",english:"rule of law",category:"politics_adv",level:"expert"},
+  {malay:"pengasingan kuasa",english:"separation of powers",category:"politics_adv",level:"expert"},{malay:"sekularisme",english:"secularism",category:"politics_adv",level:"expert"},
+  {malay:"federalisme",english:"federalism",category:"politics_adv",level:"expert"},{malay:"desentralisasi",english:"decentralisation",category:"politics_adv",level:"expert"},
+  {malay:"kedaulatan",english:"sovereignty",category:"politics_adv",level:"expert"},{malay:"autonomi",english:"autonomy",category:"politics_adv",level:"expert"},
+  {malay:"geopolitik",english:"geopolitics",category:"politics_adv",level:"expert"},{malay:"globalisasi",english:"globalisation",category:"politics_adv",level:"expert"},
+  {malay:"multilateralisme",english:"multilateralism",category:"politics_adv",level:"expert"},{malay:"tidak campur tangan",english:"non-interference",category:"politics_adv",level:"expert"},
+  {malay:"embargo",english:"embargo",category:"politics_adv",level:"expert"},{malay:"pengesahan",english:"ratification",category:"politics_adv",level:"expert"},
+  {malay:"berkecuali mengundi",english:"abstention",category:"politics_adv",level:"expert"},{malay:"pembubaran",english:"dissolution",category:"politics_adv",level:"expert"},
+  {malay:"pentadbiran kongsi",english:"cohabitation",category:"politics_adv",level:"expert"},{malay:"mandat",english:"mandate",category:"politics_adv",level:"expert"},
+  {malay:"tanpa hukuman",english:"impunity",category:"politics_adv",level:"expert"},{malay:"pembangkangan",english:"dissidence",category:"politics_adv",level:"expert"},
+  {malay:"totalitarianisme",english:"totalitarianism",category:"politics_adv",level:"expert"},{malay:"demokrasi penyertaan",english:"participatory democracy",category:"politics_adv",level:"expert"},
+  {malay:"oligarki",english:"oligarchy",category:"politics_adv",level:"expert"},{malay:"teknokrasi",english:"technocracy",category:"politics_adv",level:"expert"},
+  {malay:"referendum",english:"referendum",category:"politics_adv",level:"expert"},{malay:"sistem dua dewan",english:"bicameralism",category:"politics_adv",level:"expert"},
+  {malay:"ketidakpercayaan",english:"mistrust",category:"politics_adv",level:"expert"},{malay:"perwakilan berkadar",english:"proportional representation",category:"politics_adv",level:"expert"},
+  {malay:"keterwakilan",english:"representativeness",category:"politics_adv",level:"expert"},{malay:"undang-undang kes",english:"case law",category:"law_adv",level:"expert"},
+  {malay:"kesahihan perlembagaan",english:"constitutionality",category:"law_adv",level:"expert"},{malay:"hak prerogatif",english:"prerogative",category:"law_adv",level:"expert"},
+  {malay:"bidang kuasa",english:"jurisdiction",category:"law_adv",level:"expert"},{malay:"pertikaian",english:"dispute",category:"law_adv",level:"expert"},
+  {malay:"litigasi",english:"litigation",category:"law_adv",level:"expert"},{malay:"rayuan",english:"legal appeal",category:"law_adv",level:"expert"},
+  {malay:"pembatalan",english:"annulment",category:"law_adv",level:"expert"},{malay:"siasatan rasmi",english:"formal investigation",category:"law_adv",level:"expert"},
+  {malay:"pembebasan",english:"acquittal",category:"law_adv",level:"expert"},{malay:"faktor meringankan",english:"mitigating circumstances",category:"law_adv",level:"expert"},
+  {malay:"faktor memberatkan",english:"aggravating circumstances",category:"law_adv",level:"expert"},{malay:"mengulangi jenayah",english:"reoffending",category:"law_adv",level:"expert"},
+  {malay:"anggapan tidak bersalah",english:"presumption of innocence",category:"law_adv",level:"expert"},{malay:"imuniti",english:"immunity",category:"law_adv",level:"expert"},
+  {malay:"ekstradisi",english:"extradition",category:"law_adv",level:"expert"},{malay:"had masa tuntutan",english:"statute of limitations",category:"law_adv",level:"expert"},
+  {malay:"amnesti",english:"amnesty",category:"law_adv",level:"expert"},{malay:"pengampunan",english:"pardon",category:"law_adv",level:"expert"},
+  {malay:"pendakwa raya",english:"prosecutor",category:"law_adv",level:"expert"},{malay:"defendan",english:"defendant",category:"law_adv",level:"expert"},
+  {malay:"rayuan pembelaan",english:"plea",category:"law_adv",level:"expert"},{malay:"hujah pendakwaan",english:"indictment speech",category:"law_adv",level:"expert"},
+  {malay:"keputusan mahkamah",english:"verdict",category:"law_adv",level:"expert"},{malay:"rayuan",english:"appeal",category:"law_adv",level:"expert"},
+  {malay:"mahkamah tinggi",english:"crown court",category:"law_adv",level:"expert"},{malay:"hakim penyiasat",english:"investigating judge",category:"law_adv",level:"expert"},
+  {malay:"jaminan",english:"bail",category:"law_adv",level:"expert"},{malay:"ganti rugi",english:"damages",category:"law_adv",level:"expert"},
+  {malay:"kesalahan",english:"offence",category:"law_adv",level:"expert"},{malay:"genom",english:"genome",category:"science_adv",level:"expert"},
+  {malay:"penjujukan",english:"sequencing",category:"science_adv",level:"expert"},{malay:"nanoteknologi",english:"nanotechnology",category:"science_adv",level:"expert"},
+  {malay:"bioteknologi",english:"biotechnology",category:"science_adv",level:"expert"},{malay:"robotik",english:"robotics",category:"science_adv",level:"expert"},
+  {malay:"sibernetik",english:"cybernetics",category:"science_adv",level:"expert"},{malay:"kuantum",english:"quantum",category:"science_adv",level:"expert"},
+  {malay:"semikonduktor",english:"semiconductor",category:"science_adv",level:"expert"},{malay:"superkonduktor",english:"superconductor",category:"science_adv",level:"expert"},
+  {malay:"neurosains",english:"neuroscience",category:"science_adv",level:"expert"},{malay:"epigenetik",english:"epigenetics",category:"science_adv",level:"expert"},
+  {malay:"mikrobiom",english:"microbiome",category:"science_adv",level:"expert"},{malay:"entropi",english:"entropy",category:"science_adv",level:"expert"},
+  {malay:"termodinamik",english:"thermodynamics",category:"science_adv",level:"expert"},{malay:"teori kerelatifan",english:"relativity",category:"science_adv",level:"expert"},
+  {malay:"pelakuran nuklear",english:"nuclear fusion",category:"science_adv",level:"expert"},{malay:"pembelahan nuklear",english:"fission",category:"science_adv",level:"expert"},
+  {malay:"antijirim",english:"antimatter",category:"science_adv",level:"expert"},{malay:"fotosintesis",english:"photosynthesis",category:"science_adv",level:"expert"},
+  {malay:"pemangkinan",english:"catalysis",category:"science_adv",level:"expert"},{malay:"osmosis",english:"osmosis",category:"science_adv",level:"expert"},
+  {malay:"pembelauan",english:"diffraction",category:"science_adv",level:"expert"},{malay:"spektrometri",english:"spectrometry",category:"science_adv",level:"expert"},
+  {malay:"kromatografi",english:"chromatography",category:"science_adv",level:"expert"},{malay:"kuark",english:"quark",category:"science_adv",level:"expert"},
+  {malay:"lohong hitam",english:"black hole",category:"science_adv",level:"expert"},{malay:"singulariti",english:"singularity",category:"science_adv",level:"expert"},
+  {malay:"biofarmaseutikal",english:"biopharmaceutics",category:"science_adv",level:"expert"},{malay:"transhumanisme",english:"transhumanism",category:"science_adv",level:"expert"},
+  {malay:"rangkaian neural",english:"neural network",category:"science_adv",level:"expert"},{malay:"epistemologi",english:"epistemology",category:"philosophy",level:"expert"},
+  {malay:"ontologi",english:"ontology",category:"philosophy",level:"expert"},{malay:"fenomenologi",english:"phenomenology",category:"philosophy",level:"expert"},
+  {malay:"hermeneutik",english:"hermeneutics",category:"philosophy",level:"expert"},{malay:"deontologi",english:"deontology",category:"philosophy",level:"expert"},
+  {malay:"utilitarianisme",english:"utilitarianism",category:"philosophy",level:"expert"},{malay:"konsekuensialisme",english:"consequentialism",category:"philosophy",level:"expert"},
+  {malay:"transendens",english:"transcendence",category:"philosophy",level:"expert"},{malay:"keimanenan",english:"immanence",category:"philosophy",level:"expert"},
+  {malay:"pengasingan",english:"alienation",category:"philosophy",level:"expert"},{malay:"pembendaan",english:"reification",category:"philosophy",level:"expert"},
+  {malay:"antara-subjektiviti",english:"intersubjectivity",category:"philosophy",level:"expert"},{malay:"keberlainan",english:"alterity",category:"philosophy",level:"expert"},
+  {malay:"eksistensialisme",english:"existentialism",category:"philosophy",level:"expert"},{malay:"strukturalisme",english:"structuralism",category:"philosophy",level:"expert"},
+  {malay:"pascamodenisme",english:"postmodernism",category:"philosophy",level:"expert"},{malay:"dekonstruksi",english:"deconstruction",category:"philosophy",level:"expert"},
+  {malay:"teleologi",english:"teleology",category:"philosophy",level:"expert"},{malay:"fatalisme",english:"fatalism",category:"philosophy",level:"expert"},
+  {malay:"kehendak bebas",english:"free will",category:"philosophy",level:"expert"},{malay:"determinisme",english:"determinism",category:"philosophy",level:"expert"},
+  {malay:"intensionaliti",english:"intentionality",category:"philosophy",level:"expert"},{malay:"kesedaran",english:"consciousness",category:"philosophy",level:"expert"},
+  {malay:"etika normatif",english:"normative ethics",category:"philosophy",level:"expert"},{malay:"metafizik",english:"metaphysics",category:"philosophy",level:"expert"},
+  {malay:"nominalisme",english:"nominalism",category:"philosophy",level:"expert"},{malay:"dualisme",english:"dualism",category:"philosophy",level:"expert"},
+  {malay:"materialisme",english:"materialism",category:"philosophy",level:"expert"},{malay:"reduksionisme",english:"reductionism",category:"philosophy",level:"expert"},
+  {malay:"kebajikan",english:"virtue",category:"philosophy",level:"expert"},{malay:"kecairan",english:"liquidity",category:"economy_adv",level:"expert"},
+  {malay:"kesolvenan",english:"solvency",category:"economy_adv",level:"expert"},{malay:"permodalan pasaran",english:"market capitalisation",category:"economy_adv",level:"expert"},
+  {malay:"penggabungan dan pengambilalihan",english:"merger and acquisition",category:"economy_adv",level:"expert"},{malay:"tawaran pengambilalihan",english:"takeover bid",category:"economy_adv",level:"expert"},
+  {malay:"dagangan dalaman",english:"insider trading",category:"economy_adv",level:"expert"},{malay:"dana lindung nilai",english:"hedge fund",category:"economy_adv",level:"expert"},
+  {malay:"kepelbagaian",english:"diversification",category:"economy_adv",level:"expert"},{malay:"arbitraj",english:"arbitrage",category:"economy_adv",level:"expert"},
+  {malay:"leveraj kewangan",english:"financial leverage",category:"economy_adv",level:"expert"},{malay:"pelunasan",english:"amortisation",category:"economy_adv",level:"expert"},
+  {malay:"susut nilai",english:"depreciation",category:"economy_adv",level:"expert"},{malay:"perbendaharaan",english:"treasury",category:"economy_adv",level:"expert"},
+  {malay:"aliran tunai",english:"cash flow",category:"economy_adv",level:"expert"},{malay:"kunci kira-kira",english:"balance sheet",category:"economy_adv",level:"expert"},
+  {malay:"penyata pendapatan",english:"income statement",category:"economy_adv",level:"expert"},{malay:"margin keuntungan",english:"profit margin",category:"economy_adv",level:"expert"},
+  {malay:"nilai tambah",english:"added value",category:"economy_adv",level:"expert"},{malay:"indeks saham",english:"stock index",category:"economy_adv",level:"expert"},
+  {malay:"stagflasi",english:"stagflation",category:"economy_adv",level:"expert"},{malay:"deflasi",english:"deflation",category:"economy_adv",level:"expert"},
+  {malay:"hiperinflasi",english:"hyperinflation",category:"economy_adv",level:"expert"},{malay:"risiko moral",english:"moral hazard",category:"economy_adv",level:"expert"},
+  {malay:"eksternaliti",english:"externality",category:"economy_adv",level:"expert"},{malay:"hasil",english:"yield",category:"economy_adv",level:"expert"},
+  {malay:"aset",english:"asset",category:"economy_adv",level:"expert"},{malay:"liabiliti",english:"liability",category:"economy_adv",level:"expert"},
+  {malay:"bon",english:"bond",category:"economy_adv",level:"expert"},{malay:"kapitalisme kewangan",english:"financial capitalism",category:"economy_adv",level:"expert"},
+  {malay:"spekulasi",english:"speculation",category:"economy_adv",level:"expert"},{malay:"prolog",english:"prologue",category:"rhetoric",level:"expert"},
+  {malay:"epilog",english:"epilogue",category:"rhetoric",level:"expert"},{malay:"peleraian",english:"denouement",category:"rhetoric",level:"expert"},
+  {malay:"pusingan plot",english:"plot twist",category:"rhetoric",level:"expert"},{malay:"protagonis",english:"protagonist",category:"rhetoric",level:"expert"},
+  {malay:"antagonis",english:"antagonist",category:"rhetoric",level:"expert"},{malay:"narator",english:"narrator",category:"rhetoric",level:"expert"},
+  {malay:"pemfokusan",english:"focalisation",category:"rhetoric",level:"expert"},{malay:"elipsis",english:"ellipsis",category:"rhetoric",level:"expert"},
+  {malay:"anakronisme",english:"anachronism",category:"rhetoric",level:"expert"},{malay:"oksimoron",english:"oxymoron",category:"rhetoric",level:"expert"},
+  {malay:"pleonasme",english:"pleonasm",category:"rhetoric",level:"expert"},{malay:"litotes",english:"litotes",category:"rhetoric",level:"expert"},
+  {malay:"hiperbola",english:"hyperbole",category:"rhetoric",level:"expert"},{malay:"perifrasis",english:"periphrasis",category:"rhetoric",level:"expert"},
+  {malay:"kiasmus",english:"chiasmus",category:"rhetoric",level:"expert"},{malay:"anafora",english:"anaphora",category:"rhetoric",level:"expert"},
+  {malay:"epifora",english:"epiphora",category:"rhetoric",level:"expert"},{malay:"aliterasi",english:"alliteration",category:"rhetoric",level:"expert"},
+  {malay:"asonansi",english:"assonance",category:"rhetoric",level:"expert"},{malay:"onomatopeia",english:"onomatopoeia",category:"rhetoric",level:"expert"},
+  {malay:"puisi epik",english:"epic poem",category:"rhetoric",level:"expert"},{malay:"tragedi",english:"tragedy",category:"rhetoric",level:"expert"},
+  {malay:"komedi",english:"comedy",category:"rhetoric",level:"expert"},{malay:"satira",english:"satire",category:"rhetoric",level:"expert"},
+  {malay:"impresionisme",english:"impressionism",category:"arts_adv",level:"expert"},{malay:"kubisme",english:"cubism",category:"arts_adv",level:"expert"},
+  {malay:"surealisme",english:"surrealism",category:"arts_adv",level:"expert"},{malay:"dadaisme",english:"dadaism",category:"arts_adv",level:"expert"},
+  {malay:"ekspresionisme",english:"expressionism",category:"arts_adv",level:"expert"},{malay:"avant-garde",english:"avant-garde",category:"arts_adv",level:"expert"},
+  {malay:"ikonoklas",english:"iconoclast",category:"arts_adv",level:"expert"},{malay:"barok",english:"baroque",category:"arts_adv",level:"expert"},
+  {malay:"klasikisme",english:"classicism",category:"arts_adv",level:"expert"},{malay:"romantisisme",english:"romanticism",category:"arts_adv",level:"expert"},
+  {malay:"naturalisme",english:"naturalism",category:"arts_adv",level:"expert"},{malay:"realisme",english:"realism",category:"arts_adv",level:"expert"},
+  {malay:"simbolisme",english:"symbolism",category:"arts_adv",level:"expert"},{malay:"neoklasikisme",english:"neoclassicism",category:"arts_adv",level:"expert"},
+  {malay:"fauvisme",english:"fauvism",category:"arts_adv",level:"expert"},{malay:"abstraksi",english:"abstraction",category:"arts_adv",level:"expert"},
+  {malay:"minimalisme",english:"minimalism",category:"arts_adv",level:"expert"},{malay:"konseptualisme",english:"conceptualism",category:"arts_adv",level:"expert"},
+  {malay:"instalasi seni",english:"art installation",category:"arts_adv",level:"expert"},{malay:"seni persembahan",english:"performance art",category:"arts_adv",level:"expert"},
+  {malay:"biennale",english:"biennale",category:"arts_adv",level:"expert"},{malay:"penaung",english:"patron",category:"arts_adv",level:"expert"},
+  {malay:"retrospektif",english:"retrospective",category:"arts_adv",level:"expert"},{malay:"ikonografi",english:"iconography",category:"arts_adv",level:"expert"},
+  {malay:"manerisme",english:"mannerism",category:"arts_adv",level:"expert"},{malay:"geosistem",english:"geosystem",category:"environment_adv",level:"expert"},
+  {malay:"biosfera",english:"biosphere",category:"environment_adv",level:"expert"},{malay:"litosfera",english:"lithosphere",category:"environment_adv",level:"expert"},
+  {malay:"hidrosfera",english:"hydrosphere",category:"environment_adv",level:"expert"},{malay:"kriosfera",english:"cryosphere",category:"environment_adv",level:"expert"},
+  {malay:"rantai makanan",english:"food chain",category:"environment_adv",level:"expert"},{malay:"relung ekologi",english:"ecological niche",category:"environment_adv",level:"expert"},
+  {malay:"biojisim",english:"biomass",category:"environment_adv",level:"expert"},{malay:"fitoplankton",english:"phytoplankton",category:"environment_adv",level:"expert"},
+  {malay:"zooplankton",english:"zooplankton",category:"environment_adv",level:"expert"},{malay:"pengasidan",english:"acidification",category:"environment_adv",level:"expert"},
+  {malay:"eutrofikasi",english:"eutrophication",category:"environment_adv",level:"expert"},{malay:"penggurunan",english:"desertification",category:"environment_adv",level:"expert"},
+  {malay:"larut lesap",english:"leaching",category:"environment_adv",level:"expert"},{malay:"akuifer",english:"aquifer",category:"environment_adv",level:"expert"},
+  {malay:"aras air bawah tanah",english:"water table",category:"environment_adv",level:"expert"},{malay:"permafrost",english:"permafrost",category:"environment_adv",level:"expert"},
+  {malay:"metana",english:"methane",category:"environment_adv",level:"expert"},{malay:"karbon dioksida",english:"carbon dioxide",category:"environment_adv",level:"expert"},
+  {malay:"nitrus oksida",english:"nitrous oxide",category:"environment_adv",level:"expert"},{malay:"albedo",english:"albedo",category:"environment_adv",level:"expert"},
+  {malay:"bioluminesens",english:"bioluminescence",category:"environment_adv",level:"expert"},{malay:"daya tahan ekologi",english:"ecological resilience",category:"environment_adv",level:"expert"},
+  {malay:"spesies invasif",english:"invasive species",category:"environment_adv",level:"expert"},{malay:"kepupusan besar-besaran",english:"mass extinction",category:"environment_adv",level:"expert"},
+  {malay:"skizofrenia",english:"schizophrenia",category:"psychology_adv",level:"expert"},{malay:"gangguan bipolar",english:"bipolar disorder",category:"psychology_adv",level:"expert"},
+  {malay:"kebimbangan umum",english:"generalised anxiety",category:"psychology_adv",level:"expert"},{malay:"gangguan obsesif kompulsif",english:"OCD",category:"psychology_adv",level:"expert"},
+  {malay:"gangguan personaliti",english:"personality disorder",category:"psychology_adv",level:"expert"},{malay:"narsisisme",english:"narcissism",category:"psychology_adv",level:"expert"},
+  {malay:"psikosis",english:"psychosis",category:"psychology_adv",level:"expert"},{malay:"neurosis",english:"neurosis",category:"psychology_adv",level:"expert"},
+  {malay:"terapi kognitif tingkah laku",english:"cognitive behavioural therapy",category:"psychology_adv",level:"expert"},{malay:"psikoanalisis",english:"psychoanalysis",category:"psychology_adv",level:"expert"},
+  {malay:"alam bawah sedar kolektif",english:"collective unconscious",category:"psychology_adv",level:"expert"},{malay:"arketaip",english:"archetype",category:"psychology_adv",level:"expert"},
+  {malay:"represi",english:"repression",category:"psychology_adv",level:"expert"},{malay:"unjuran",english:"projection",category:"psychology_adv",level:"expert"},
+  {malay:"sublimasi",english:"sublimation",category:"psychology_adv",level:"expert"},{malay:"pemindahan psikologi",english:"transference",category:"psychology_adv",level:"expert"},
+  {malay:"pemindahan balas",english:"countertransference",category:"psychology_adv",level:"expert"},{malay:"disosiasi",english:"dissociation",category:"psychology_adv",level:"expert"},
+  {malay:"aleksitimia",english:"alexithymia",category:"psychology_adv",level:"expert"},{malay:"daya tahan",english:"resilience",category:"psychology_adv",level:"expert"},
+  {malay:"trauma",english:"trauma",category:"psychology_adv",level:"expert"},{malay:"anamnesis",english:"anamnesis",category:"psychology_adv",level:"expert"},
+  {malay:"etiologi",english:"aetiology",category:"psychology_adv",level:"expert"},{malay:"komorbiditi",english:"comorbidity",category:"psychology_adv",level:"expert"},
+  {malay:"kewaspadaan berlebihan",english:"hypervigilance",category:"psychology_adv",level:"expert"},{malay:"ketidaksamaan",english:"inequality",category:"social_adv",level:"expert"},
+  {malay:"diskriminasi",english:"discrimination",category:"social_adv",level:"expert"},{malay:"rasisme sistemik",english:"systemic racism",category:"social_adv",level:"expert"},
+  {malay:"antisemitisme",english:"antisemitism",category:"social_adv",level:"expert"},{malay:"islamofobia",english:"islamophobia",category:"social_adv",level:"expert"},
+  {malay:"xenofobia",english:"xenophobia",category:"social_adv",level:"expert"},{malay:"homofobia",english:"homophobia",category:"social_adv",level:"expert"},
+  {malay:"transfobia",english:"transphobia",category:"social_adv",level:"expert"},{malay:"seksisme",english:"sexism",category:"social_adv",level:"expert"},
+  {malay:"misogini",english:"misogyny",category:"social_adv",level:"expert"},{malay:"patriarki",english:"patriarchy",category:"social_adv",level:"expert"},
+  {malay:"feminisme",english:"feminism",category:"social_adv",level:"expert"},{malay:"interseksionaliti",english:"intersectionality",category:"social_adv",level:"expert"},
+  {malay:"pengecualian sosial",english:"social exclusion",category:"social_adv",level:"expert"},{malay:"ketidaktentuan",english:"precariousness",category:"social_adv",level:"expert"},
+  {malay:"peminggiran",english:"marginalisation",category:"social_adv",level:"expert"},{malay:"penstigmaan",english:"stigmatisation",category:"social_adv",level:"expert"},
+  {malay:"kemerosotan sosial",english:"downward mobility",category:"social_adv",level:"expert"},{malay:"mobiliti sosial",english:"social mobility",category:"social_adv",level:"expert"},
+  {malay:"proletariat",english:"proletariat",category:"social_adv",level:"expert"},{malay:"borjuasi",english:"bourgeoisie",category:"social_adv",level:"expert"},
+  {malay:"neoliberalisme",english:"neoliberalism",category:"social_adv",level:"expert"},{malay:"gentrifikasi",english:"gentrification",category:"social_adv",level:"expert"},
+  {malay:"komunitarianisme",english:"communitarianism",category:"social_adv",level:"expert"},{malay:"multikulturalisme",english:"multiculturalism",category:"social_adv",level:"expert"},
+  {malay:"asimilasi",english:"assimilation",category:"social_adv",level:"expert"},{malay:"integrasi",english:"integration",category:"social_adv",level:"expert"},
+  {malay:"penyahasingan",english:"desegregation",category:"social_adv",level:"expert"},{malay:"emansipasi",english:"emancipation",category:"social_adv",level:"expert"},
+  {malay:"penegasan identiti",english:"identity affirmation",category:"social_adv",level:"expert"},{malay:"menegaskan",english:"to accentuate",category:"expert_verbs",level:"expert"},
+  {malay:"memperkuat",english:"to amplify",category:"expert_verbs",level:"expert"},{malay:"melemahkan",english:"to attenuate",category:"expert_verbs",level:"expert"},
+  {malay:"berkembang maju",english:"to flourish",category:"expert_verbs",level:"expert"},{malay:"mengesan",english:"to detect",category:"expert_verbs",level:"expert"},
+  {malay:"menandakan",english:"to denote",category:"expert_verbs",level:"expert"},{malay:"menggagalkan",english:"to thwart",category:"expert_verbs",level:"expert"},
+  {malay:"menyimpang",english:"to derogate",category:"expert_verbs",level:"expert"},{malay:"membebaskan diri",english:"to free oneself",category:"expert_verbs",level:"expert"},
+  {malay:"memperdalam",english:"to deepen",category:"expert_verbs",level:"expert"},{malay:"mensintesis",english:"to synthesise",category:"expert_verbs",level:"expert"},
+  {malay:"mengesahkan",english:"to substantiate",category:"expert_verbs",level:"expert"},{malay:"menyangkal",english:"to refute",category:"expert_verbs",level:"expert"},
+  {malay:"mengukuhkan",english:"to corroborate",category:"expert_verbs",level:"expert"},{malay:"membantah",english:"to rebut",category:"expert_verbs",level:"expert"},
+  {malay:"memberi nuansa",english:"to nuance",category:"expert_verbs",level:"expert"},{malay:"melihat secara relatif",english:"to put in perspective",category:"expert_verbs",level:"expert"},
+  {malay:"menimbang",english:"to weigh up",category:"expert_verbs",level:"expert"},{malay:"menimbang tara",english:"to arbitrate",category:"expert_verbs",level:"expert"},
+  {malay:"memaksa",english:"to compel",category:"expert_verbs",level:"expert"},{malay:"melanggar",english:"to infringe",category:"expert_verbs",level:"expert"},
+  {malay:"melangkaui",english:"to transgress",category:"expert_verbs",level:"expert"},{malay:"melampaui",english:"to overstep",category:"expert_verbs",level:"expert"},
+  {malay:"campur tangan",english:"to interfere",category:"expert_verbs",level:"expert"},{malay:"mencampuri",english:"to meddle",category:"expert_verbs",level:"expert"},
+  {malay:"menuntut",english:"to claim",category:"expert_verbs",level:"expert"},{malay:"berjaya",english:"to succeed",category:"expert_verbs",level:"expert"},
+  {malay:"mengatasi",english:"to prevail",category:"expert_verbs",level:"expert"},{malay:"meratifikasi",english:"to ratify",category:"expert_verbs",level:"expert"},
+  {malay:"menyokong",english:"to endorse",category:"expert_verbs",level:"expert"},{malay:"tidak boleh dipisahkan",english:"inalienable",category:"expert_adj",level:"expert"},
+  {malay:"tidak berubah",english:"immutable",category:"expert_adj",level:"expert"},{malay:"tidak dapat disangkal",english:"irrefutable",category:"expert_adj",level:"expert"},
+  {malay:"tidak boleh ditarik balik",english:"irrevocable",category:"expert_adj",level:"expert"},{malay:"dominan",english:"preponderant",category:"expert_adj",level:"expert"},
+  {malay:"berkaitan",english:"concomitant",category:"expert_adj",level:"expert"},{malay:"sedia ada",english:"inherent",category:"expert_adj",level:"expert"},
+  {malay:"intrinsik",english:"intrinsic",category:"expert_adj",level:"expert"},{malay:"ekstrinsik",english:"extrinsic",category:"expert_adj",level:"expert"},
+  {malay:"tidak dapat dielakkan",english:"inescapable",category:"expert_adj",level:"expert"},{malay:"pasti berlaku",english:"unavoidable",category:"expert_adj",level:"expert"},
+  {malay:"sukar difahami",english:"elusive",category:"expert_adj",level:"expert"},{malay:"tidak pernah gagal",english:"unfailing",category:"expert_adj",level:"expert"},
+  {malay:"berulang",english:"recurring",category:"expert_adj",level:"expert"},{malay:"tidak ketara",english:"intangible",category:"expert_adj",level:"expert"},
+  {malay:"berbelah bahagi",english:"ambivalent",category:"expert_adj",level:"expert"},{malay:"bijaksana",english:"judicious",category:"expert_adj",level:"expert"},
+  {malay:"mutlak",english:"peremptory",category:"expert_adj",level:"expert"},{malay:"bersemangat kuat",english:"vehement",category:"expert_adj",level:"expert"},
+  {malay:"pedas",english:"acerbic",category:"expert_adj",level:"expert"},{malay:"eliptik",english:"elliptical",category:"expert_adj",level:"expert"},
+  {malay:"khayalan",english:"chimerical",category:"expert_adj",level:"expert"},{malay:"salah",english:"fallacious",category:"expert_adj",level:"expert"},
+  {malay:"tidak dapat dipertikaikan",english:"indisputable",category:"expert_adj",level:"expert"},{malay:"paksaan",english:"coercive",category:"expert_adj",level:"expert"},
+  {malay:"keadaan semasa",english:"conjuncture",category:"expert_nouns",level:"expert"},{malay:"kawasan pilihan raya",english:"constituency",category:"expert_nouns",level:"expert"},
+  {malay:"dekri",english:"decree",category:"expert_nouns",level:"expert"},{malay:"perintah",english:"order",category:"expert_nouns",level:"expert"},
+  {malay:"ekuiti",english:"equity",category:"expert_nouns",level:"expert"},{malay:"preseden",english:"precedent",category:"expert_nouns",level:"expert"},
+  {malay:"penyimpangan",english:"derogation",category:"expert_nouns",level:"expert"},{malay:"konsesi",english:"concession",category:"expert_nouns",level:"expert"},
+  {malay:"klausa",english:"clause",category:"expert_nouns",level:"expert"},{malay:"syarat",english:"stipulation",category:"expert_nouns",level:"expert"},
+  {malay:"modaliti",english:"modality",category:"expert_nouns",level:"expert"},{malay:"keperluan",english:"requirement",category:"expert_nouns",level:"expert"},
+  {malay:"prasyarat",english:"prerequisite",category:"expert_nouns",level:"expert"},{malay:"isu yang dipertaruhkan",english:"issue at stake",category:"expert_nouns",level:"expert"},
+  {malay:"penyebut sepunya",english:"common denominator",category:"expert_nouns",level:"expert"},{malay:"vektor",english:"vector",category:"expert_nouns",level:"expert"},
+  {malay:"pemangkin",english:"catalyst",category:"expert_nouns",level:"expert"},{malay:"asas utama",english:"cornerstone",category:"expert_nouns",level:"expert"},
+  {malay:"petunjuk",english:"indicator",category:"expert_nouns",level:"expert"},{malay:"metodologi",english:"methodology",category:"expert_nouns",level:"expert"},
+  {malay:"tatanama",english:"nomenclature",category:"expert_nouns",level:"expert"},{malay:"ambang",english:"threshold",category:"expert_nouns",level:"expert"},
+  {malay:"korelasi",english:"correlation",category:"expert_nouns",level:"expert"},{malay:"penanda aras",english:"benchmark",category:"expert_nouns",level:"expert"},
+  {malay:"kerangka analitikal",english:"analytical framework",category:"expert_nouns",level:"expert"},{malay:"membran mukus",english:"mucous membrane",category:"medicine_adv",level:"expert"},
+  {malay:"kelenjar tiroid",english:"thyroid",category:"medicine_adv",level:"expert"},{malay:"adrenalin",english:"adrenaline",category:"medicine_adv",level:"expert"},
+  {malay:"kortisol",english:"cortisol",category:"medicine_adv",level:"expert"},{malay:"serotonin",english:"serotonin",category:"medicine_adv",level:"expert"},
+  {malay:"dopamin",english:"dopamine",category:"medicine_adv",level:"expert"},{malay:"insulin",english:"insulin",category:"medicine_adv",level:"expert"},
+  {malay:"glukagon",english:"glucagon",category:"medicine_adv",level:"expert"},{malay:"hemoglobin",english:"haemoglobin",category:"medicine_adv",level:"expert"},
+  {malay:"platelet",english:"platelet",category:"medicine_adv",level:"expert"},{malay:"limfosit",english:"lymphocyte",category:"medicine_adv",level:"expert"},
+  {malay:"leukosit",english:"leukocyte",category:"medicine_adv",level:"expert"},{malay:"sel darah merah",english:"red blood cell",category:"medicine_adv",level:"expert"},
+  {malay:"mitosis",english:"mitosis",category:"medicine_adv",level:"expert"},{malay:"meiosis",english:"meiosis",category:"medicine_adv",level:"expert"},
+  {malay:"patologi",english:"pathology",category:"medicine_adv",level:"expert"},{malay:"imunosupresan",english:"immunosuppressant",category:"medicine_adv",level:"expert"},
+  {malay:"kemoterapi",english:"chemotherapy",category:"medicine_adv",level:"expert"},{malay:"radioterapi",english:"radiotherapy",category:"medicine_adv",level:"expert"},
+  {malay:"biopsi",english:"biopsy",category:"medicine_adv",level:"expert"},{malay:"liku sungai",english:"meander",category:"geography_adv",level:"expert"},
+  {malay:"muara",english:"estuary",category:"geography_adv",level:"expert"},{malay:"tanjung",english:"promontory",category:"geography_adv",level:"expert"},
+  {malay:"lagun",english:"lagoon",category:"geography_adv",level:"expert"},{malay:"kepulauan",english:"archipelago",category:"geography_adv",level:"expert"},
+  {malay:"semenanjung",english:"peninsula",category:"geography_adv",level:"expert"},{malay:"tanah tuar",english:"isthmus",category:"geography_adv",level:"expert"},
+  {malay:"selat",english:"strait",category:"geography_adv",level:"expert"},{malay:"terumbu karang",english:"coral reef",category:"geography_adv",level:"expert"},
+  {malay:"bakau",english:"mangrove",category:"geography_adv",level:"expert"},{malay:"paya gambut",english:"peat bog",category:"geography_adv",level:"expert"},
+  {malay:"tundra",english:"tundra",category:"geography_adv",level:"expert"},{malay:"sabana",english:"savanna",category:"geography_adv",level:"expert"},
+  {malay:"kawasan tadahan air",english:"watershed",category:"geography_adv",level:"expert"},{malay:"pentas benua",english:"continental shelf",category:"geography_adv",level:"expert"},
+  {malay:"antropologi",english:"anthropology",category:"sciences_humanas",level:"expert"},{malay:"sosiologi",english:"sociology",category:"sciences_humanas",level:"expert"},
+  {malay:"demografi",english:"demography",category:"sciences_humanas",level:"expert"},{malay:"epidemiologi",english:"epidemiology",category:"sciences_humanas",level:"expert"},
+  {malay:"toksikologi",english:"toxicology",category:"sciences_humanas",level:"expert"},{malay:"imunologi",english:"immunology",category:"sciences_humanas",level:"expert"},
+  {malay:"farmakologi",english:"pharmacology",category:"sciences_humanas",level:"expert"},{malay:"virologi",english:"virology",category:"sciences_humanas",level:"expert"},
+  {malay:"bakteriologi",english:"bacteriology",category:"sciences_humanas",level:"expert"},{malay:"parasitologi",english:"parasitology",category:"sciences_humanas",level:"expert"},
+  {malay:"endokrinologi",english:"endocrinology",category:"sciences_humanas",level:"expert"},{malay:"arkeologi",english:"archaeology",category:"sciences_humanas",level:"expert"},
+  {malay:"epigrafi",english:"epigraphy",category:"sciences_humanas",level:"expert"},{malay:"paleontologi",english:"palaeontology",category:"sciences_humanas",level:"expert"},
+  {malay:"etnologi",english:"ethnology",category:"sciences_humanas",level:"expert"},{malay:"linguistik",english:"linguistics",category:"sciences_humanas",level:"expert"},
+  {malay:"semiologi",english:"semiology",category:"sciences_humanas",level:"expert"},{malay:"psikolinguistik",english:"psycholinguistics",category:"sciences_humanas",level:"expert"},
+  {malay:"sosiolinguistik",english:"sociolinguistics",category:"sciences_humanas",level:"expert"},{malay:"dialektologi",english:"dialectology",category:"sciences_humanas",level:"expert"},
+  {malay:"kenaikan pangkat",english:"promotion",category:"work",level:"intermediate"},{malay:"tempat kerja",english:"workplace",category:"work",level:"intermediate"},
+  {malay:"kerja lebih masa",english:"overtime",category:"work",level:"intermediate"},{malay:"pengundi",english:"voter",category:"politics",level:"intermediate"},
+  {malay:"dasar",english:"policy",category:"politics",level:"intermediate"},{malay:"sistem imun",english:"immune system",category:"health",level:"intermediate"},
+  {malay:"pemeriksaan kesihatan",english:"checkup",category:"health",level:"intermediate"},{malay:"wabak",english:"epidemic",category:"health",level:"intermediate"},
+  {malay:"pemuliharaan",english:"conservation",category:"environment",level:"intermediate"},{malay:"ekosistem",english:"ecosystem",category:"environment",level:"intermediate"},
+  {malay:"pangkalan data",english:"database",category:"technology",level:"intermediate"},{malay:"tembok api",english:"firewall",category:"technology",level:"intermediate"},
+  {malay:"monumen",english:"monument",category:"culture",level:"intermediate"},{malay:"cerita rakyat",english:"folklore",category:"culture",level:"intermediate"},
+  {malay:"melancong",english:"sightseeing",category:"travel",level:"intermediate"},{malay:"pertukaran mata wang",english:"currency exchange",category:"travel",level:"intermediate"},
+  {malay:"subsidi",english:"subsidy",category:"economy",level:"intermediate"},{malay:"monopoli",english:"monopoly",category:"economy",level:"intermediate"},
+  {malay:"empati",english:"empathy",category:"emotions",level:"intermediate"},{malay:"rasa syukur",english:"gratitude",category:"emotions",level:"intermediate"},
+  {malay:"komitmen",english:"commitment",category:"relationships",level:"intermediate"},{malay:"keintiman",english:"intimacy",category:"relationships",level:"intermediate"},
+  {malay:"kesetiakawanan",english:"companionship",category:"relationships",level:"intermediate"},{malay:"penonton",english:"spectator",category:"sports",level:"intermediate"},
+  {malay:"kelayakan",english:"qualification",category:"sports",level:"intermediate"},{malay:"spesimen",english:"specimen",category:"science",level:"intermediate"},
+  {malay:"pemboleh ubah",english:"variable",category:"science",level:"intermediate"},{malay:"kumpulan kawalan",english:"control group",category:"science",level:"intermediate"},
+  {malay:"seminar",english:"seminar",category:"education_adv",level:"intermediate"},{malay:"tahun akademik",english:"academic year",category:"education_adv",level:"intermediate"},
+  {malay:"transkrip",english:"transcript",category:"education_adv",level:"intermediate"},{malay:"penapaian",english:"fermentation",category:"food_adv",level:"intermediate"},
+  {malay:"bahan pengawet",english:"preservative",category:"food_adv",level:"intermediate"},{malay:"bahagian",english:"portion",category:"food_adv",level:"intermediate"},
+  {malay:"utiliti",english:"utilities",category:"housing",level:"intermediate"},{malay:"cukai harta",english:"property tax",category:"housing",level:"intermediate"},
+  {malay:"pengusiran",english:"eviction",category:"housing",level:"intermediate"},{malay:"sepina",english:"subpoena",category:"law",level:"intermediate"},
+  {malay:"keterangan",english:"testimony",category:"law",level:"intermediate"},{malay:"penyelesaian",english:"settlement",category:"law",level:"intermediate"},
+  {malay:"edaran",english:"circulation",category:"media",level:"intermediate"},{malay:"penonton televisyen",english:"viewer",category:"media",level:"intermediate"},
+  {malay:"saluran media",english:"outlet",category:"media",level:"intermediate"},{malay:"mewajarkan",english:"to justify",category:"advanced_verbs",level:"intermediate"},
+  {malay:"menjejaskan",english:"to undermine",category:"advanced_verbs",level:"intermediate"},{malay:"kontroversi",english:"controversial",category:"advanced_adj",level:"intermediate"},
+  {malay:"kabur",english:"ambiguous",category:"advanced_adj",level:"intermediate"},{malay:"teka-teki",english:"conundrum",category:"abstract",level:"expert"},
+  {malay:"silogisme",english:"syllogism",category:"abstract",level:"expert"},{malay:"heuristik",english:"heuristic",category:"abstract",level:"expert"},
+  {malay:"hegemoni",english:"hegemony",category:"politics_adv",level:"expert"},{malay:"dasar pendamaian",english:"appeasement",category:"politics_adv",level:"expert"},
+  {malay:"realpolitik",english:"realpolitik",category:"politics_adv",level:"expert"},{malay:"kesalahan sivil",english:"tort",category:"law_adv",level:"expert"},
+  {malay:"injunksi",english:"injunction",category:"law_adv",level:"expert"},{malay:"afidavit",english:"affidavit",category:"law_adv",level:"expert"},
+  {malay:"isotop",english:"isotope",category:"science_adv",level:"expert"},{malay:"polimer",english:"polymer",category:"science_adv",level:"expert"},
+  {malay:"bioinformatik",english:"bioinformatics",category:"science_adv",level:"expert"},{malay:"fenomenalisme",english:"phenomenalism",category:"philosophy",level:"expert"},
+  {malay:"monisme",english:"monism",category:"philosophy",level:"expert"},{malay:"panpsikisme",english:"panpsychism",category:"philosophy",level:"expert"},
+  {malay:"cagaran",english:"collateral",category:"economy_adv",level:"expert"},{malay:"jaminan pengunderaitan",english:"underwriting",category:"economy_adv",level:"expert"},
+  {malay:"sekuritisasi",english:"securitisation",category:"economy_adv",level:"expert"},{malay:"zeugma",english:"zeugma",category:"rhetoric",level:"expert"},
+  {malay:"sinekdoke",english:"synecdoche",category:"rhetoric",level:"expert"},{malay:"apostrofe",english:"apostrophe (rhetoric)",category:"rhetoric",level:"expert"},
+  {malay:"seni kinetik",english:"kinetic art",category:"arts_adv",level:"expert"},{malay:"seni siap sedia",english:"readymade",category:"arts_adv",level:"expert"},
+  {malay:"objek dijumpai",english:"found object",category:"arts_adv",level:"expert"},{malay:"rosot karbon",english:"carbon sink",category:"environment_adv",level:"expert"},
+  {malay:"lata trofik",english:"trophic cascade",category:"environment_adv",level:"expert"},{malay:"spesies utama",english:"keystone species",category:"environment_adv",level:"expert"},
+  {malay:"disonansi kognitif",english:"cognitive dissonance",category:"psychology_adv",level:"expert"},{malay:"ketidakberdayaan yang dipelajari",english:"learned helplessness",category:"psychology_adv",level:"expert"},
+  {malay:"teori kelekatan",english:"attachment theory",category:"psychology_adv",level:"expert"},{malay:"modal sosial",english:"social capital",category:"social_adv",level:"expert"},
+  {malay:"mikroagresi",english:"microaggression",category:"social_adv",level:"expert"},{malay:"tokenisme",english:"tokenism",category:"social_adv",level:"expert"},
+  {malay:"mengelak",english:"to circumvent",category:"expert_verbs",level:"expert"},{malay:"mempercepatkan",english:"to expedite",category:"expert_verbs",level:"expert"},
+  {malay:"menggerakkan",english:"to galvanize",category:"expert_verbs",level:"expert"},{malay:"ada di mana-mana",english:"ubiquitous",category:"expert_adj",level:"expert"},
+  {malay:"esoterik",english:"esoteric",category:"expert_adj",level:"expert"},{malay:"tidak berbahaya",english:"innocuous",category:"expert_adj",level:"expert"},
+  {malay:"lambang",english:"epitome",category:"expert_nouns",level:"expert"},{malay:"jukstaposisi",english:"juxtaposition",category:"expert_nouns",level:"expert"},
+  {malay:"titik perubahan",english:"turning point",category:"expert_nouns",level:"expert"},{malay:"idiopatik",english:"idiopathic",category:"medicine_adv",level:"expert"},
+  {malay:"tanpa gejala",english:"asymptomatic",category:"medicine_adv",level:"expert"},{malay:"rawatan paliatif",english:"palliative care",category:"medicine_adv",level:"expert"},
+  {malay:"prognosis",english:"prognosis",category:"medicine_adv",level:"expert"},{malay:"cenuram",english:"escarpment",category:"geography_adv",level:"expert"},
+  {malay:"fjord",english:"fjord",category:"geography_adv",level:"expert"},{malay:"dataran tinggi",english:"plateau",category:"geography_adv",level:"expert"},
+  {malay:"delta",english:"delta",category:"geography_adv",level:"expert"},{malay:"morain",english:"moraine",category:"geography_adv",level:"expert"},
+  {malay:"kartografi",english:"cartography",category:"sciences_humanas",level:"expert"},{malay:"paleografi",english:"paleography",category:"sciences_humanas",level:"expert"},
+  {malay:"numismatik",english:"numismatics",category:"sciences_humanas",level:"expert"},{malay:"filologi",english:"philology",category:"sciences_humanas",level:"expert"}
+];
+
+/* ═══════ WORD EMOJI MAP ══════════════════════════════════════════ */
+const WORD_EMOJI = {
+  "zero":"0️⃣","one":"1️⃣","two":"2️⃣","three":"3️⃣","four":"4️⃣","five":"5️⃣",
+  "six":"6️⃣","seven":"7️⃣","eight":"8️⃣","nine":"9️⃣","ten":"🔟",
+  "eleven":"1️⃣1️⃣","twelve":"1️⃣2️⃣","thirteen":"1️⃣3️⃣","fourteen":"1️⃣4️⃣","fifteen":"1️⃣5️⃣",
+  "sixteen":"1️⃣6️⃣","seventeen":"1️⃣7️⃣","eighteen":"1️⃣8️⃣","nineteen":"1️⃣9️⃣",
+  "twenty":"2️⃣0️⃣","thirty":"3️⃣0️⃣","forty":"4️⃣0️⃣","fifty":"5️⃣0️⃣","sixty":"6️⃣0️⃣",
+  "seventy":"7️⃣0️⃣","eighty":"8️⃣0️⃣","ninety":"9️⃣0️⃣","hundred":"💯","thousand":"🔢",
+  "red":"🔴","blue":"🔵","green":"🟢","yellow":"🟡","orange":"🟠","purple":"🟣",
+  "pink":"🩷","black":"⚫","white":"⚪","grey":"🩶","brown":"🟤","beige":"🏜️",
+  "Monday":"📅","Tuesday":"📅","Wednesday":"📅","Thursday":"📅",
+  "Friday":"🎉","Saturday":"🎊","Sunday":"⛪",
+  "January":"❄️","February":"💕","March":"🌱","April":"🌸","May":"🌷",
+  "June":"☀️","July":"🏖️","August":"🌊","September":"🍂","October":"🎃",
+  "November":"🍁","December":"🎄",
+  "spring":"🌸","summer":"☀️","autumn":"🍂","winter":"❄️",
+  "family":"👨‍👩‍👧‍👦","father":"👨","mother":"👩","son":"👦","daughter":"👧",
+  "brother":"🧑","sister":"👧","grandfather":"👴","grandmother":"👵",
+  "uncle":"🧔","aunt":"👩‍🦱","cousin (male)":"🧑","cousin (female)":"👩",
+  "husband":"💍","wife":"💍","child":"🧒","baby":"👶","parents":"👨‍👩‍👧",
+  "head":"🧠","face":"😊","hair":"💇","eye":"👁️","eyes":"👀","nose":"👃",
+  "mouth":"👄","ear":"👂","neck":"🦒","shoulder":"🦾","arm":"💪",
+  "hand":"🖐️","finger":"☝️","stomach":"🫃","back":"🔙","leg":"🦵",
+  "knee":"🦵","foot":"🦶","heart":"❤️","tooth":"🦷","tongue":"👅",
+  "cat":"🐱","dog":"🐶","horse":"🐴","cow":"🐄","pig":"🐷","sheep":"🐑",
+  "goat":"🐐","chicken":"🐔","rabbit":"🐰","mouse":"🐭","bird":"🐦","fish":"🐟",
+  "frog":"🐸","snake":"🐍","elephant":"🐘","lion":"🦁","tiger":"🐯","bear":"🐻",
+  "monkey":"🐒","duck":"🦆","hen":"🐓",
+  "bread":"🍞","cheese":"🧀","butter":"🧈","milk":"🥛","egg":"🥚","meat":"🥩",
+  "pork":"🥓","beef":"🥩","apple":"🍎","pear":"🍐","banana":"🍌",
+  "orange":"🍊","strawberry":"🍓","grape":"🍇","tomato":"🍅","carrot":"🥕",
+  "potato":"🥔","onion":"🧅","salad":"🥗","rice":"🍚","pasta":"🍝","soup":"🍜",
+  "cake":"🎂","chocolate":"🍫","sugar":"🍬","salt":"🧂","pepper":"🌶️","oil":"🫒",
+  "meal":"🍽️","breakfast":"🌅","lunch":"🥪","dinner":"🍽️",
+  "water":"💧","juice":"🧃","coffee":"☕","tea":"🍵","wine":"🍷",
+  "beer":"🍺","orange juice":"🍊",
+  "clothes":"👗","shirt":"👔","trousers":"👖","dress":"👗","skirt":"🩱",
+  "coat":"🧥","jacket":"🧥","sweater":"🧶","shoes":"👟","socks":"🧦",
+  "hat":"🎩","tie":"👔","jeans":"👖","t-shirt":"👕","shorts":"🩳",
+  "gloves":"🧤","scarf":"🧣",
+  "house":"🏠","apartment":"🏢","room":"🚪","bedroom":"🛏️","kitchen":"🍳",
+  "bathroom":"🛁","toilet":"🚽","living room":"🛋️","dining room":"🍽️",
+  "garden":"🌿","door":"🚪","window":"🪟","stairs":"🪜","bed":"🛏️",
+  "chair":"🪑","table":"🪑","sofa":"🛋️","wardrobe":"👚","desk":"🖥️",
+  "lamp":"💡","mirror":"🪞","rug":"🏠","fridge":"🧊","oven":"🍳",
+  "to be":"💫","to have":"🤲","to go":"🚶","to do / to make":"🔨","to say":"💬",
+  "to see":"👀","to know (fact)":"🧠","to be able to":"💪","to want":"💝",
+  "to come":"🤝","to take":"✊","to give":"🎁","to find":"🔍","to speak":"🗣️",
+  "to eat":"🍽️","to drink":"🥤","to sleep":"😴","to work":"💼",
+  "to live (reside)":"🏡","to like / to love":"❤️","to read":"📖",
+  "to write":"✍️","to listen":"👂","to watch":"👁️","to buy":"🛒","to sell":"💰",
+  "to open":"🔓","to close":"🔒","to begin":"🚀","to finish":"🏁",
+  "to walk":"🚶","to run":"🏃","to play":"🎮","to sing":"🎤","to dance":"💃",
+  "to call":"📞","to answer":"💬","to look for":"🔍","to help":"🤝",
+  "to think":"🤔","to believe":"🙏","to know (person)":"🧑","to use":"🔧",
+  "to wait":"⏳","to leave":"🚪","to arrive":"🛬","to enter":"🚪",
+  "to go out":"🚪","to put":"📦","to carry / wear":"👜","to live (be alive)":"🏡",
+  "to swim":"🏊","to cook":"👨‍🍳","to drive":"🚗","to travel":"✈️",
+  "to learn":"📚","to understand":"💡","to ask":"❓","to show":"👇",
+  "to laugh":"😂","to cry":"😢","to fall":"⬇️","to stay":"🪑","to pay":"💳",
+  "big / tall":"🏔️","small / little":"🐜","good":"👍","bad":"👎","beautiful":"✨",
+  "pretty":"🌸","old":"👴","young":"👶","new":"🆕","long":"📏","short":"📏",
+  "hot / warm":"🔥","cold":"🧊","easy":"✅","difficult":"😤","fast":"⚡",
+  "slow":"🐢","strong":"💪","weak":"🍃","rich":"💰","poor":"🏚️",
+  "happy / pleased":"😊","sad":"😢","tired":"😴","ill / sick":"🤒",
+  "clean":"🧹","dirty":"🪣","open":"🔓","closed":"🔒","full":"🫙",
+  "empty":"📭","alone":"🧍","free":"🕊️","busy":"😰","happy":"😄",
+  "nice / friendly":"🤗","interesting":"💭",
+  "hello / good morning":"👋","good evening":"🌆","good night":"🌙",
+  "goodbye":"👋","hi":"🙋","thank you":"🙏","please (formal)":"🤲",
+  "please (informal)":"🤲","you're welcome":"😊","excuse me / sorry":"🙏",
+  "excuse me (formal)":"🙏","yes":"✅","no":"❌",
+  "today":"📅","tomorrow":"⏭️","yesterday":"⏮️","now":"⚡","always":"♾️",
+  "never":"🚫","often":"🔄","sometimes":"⏳","early":"🌅","late":"🌙",
+  "hour / time":"⏰","minute":"⏱️","day":"☀️","week":"📅","month":"🗓️",
+  "year":"🗓️","morning":"🌄","noon":"☀️","afternoon":"🌤️","evening":"🌆","night":"🌙",
+  "sun":"☀️","rain":"🌧️","snow":"❄️","wind":"💨","cloud":"☁️","storm":"⛈️",
+  "fog":"🌫️","heat":"🔥","the weather is nice":"🌤️","it is raining":"🌧️","it is snowing":"❄️",
+  "car":"🚗","train":"🚂","bus":"🚌","metro / subway":"🚇","plane":"✈️",
+  "boat":"⛵","taxi":"🚕","bicycle":"🚲","motorcycle":"🏍️",
+  "train station":"🚉","airport":"✈️","bus stop":"🚏",
+  "school":"🏫","university":"🎓","office":"🏢","shop / store":"🏪",
+  "market":"🏬","supermarket":"🛒","restaurant":"🍽️","café":"☕",
+  "hospital":"🏥","pharmacy":"💊","bank":"🏦","church":"⛪",
+  "street":"🛣️","city":"🏙️","village":"🏘️","country":"🌍","Malaysia":"🇲🇾",
+  "park":"🌳","beach":"🏖️","mountain":"⛰️","forest":"🌲","sea":"🌊","river":"🏞️",
+  "book":"📚","pen":"🖊️","pencil":"✏️","notebook":"📔","phone":"📱",
+  "computer":"💻","key":"🔑","bag":"👜","watch":"⌚","money":"💰",
+  "card / map":"🗺️","newspaper":"📰","photo":"📷","letter":"✉️",
+  "gift":"🎁","toy":"🪀",
+  // Professions
+  "doctor":"👨‍⚕️","nurse":"👩‍⚕️","teacher":"👨‍🏫","student":"👨‍🎓",
+  "cook":"👨‍🍳","police officer":"👮","firefighter":"🚒","lawyer":"⚖️",
+  "engineer":"👷","waiter":"🤵","actor":"🎭","dentist":"🦷",
+  "manager":"💼","journalist":"📰","driver":"🚗",
+  // School
+  "classroom":"🏫","lesson":"📖","homework":"📝","exam":"🧪",
+  "grade":"🏅","blackboard":"📋","library":"📚","dictionary":"📓",
+  "calculator":"🔢","ruler":"📏","question":"❓","answer":"💡",
+  "subject":"📚","mistake":"⚠️","break / recess":"☕",
+  // Question words
+  "who":"🙋","what":"🤷","where":"📍","when":"⏰","how":"🤔",
+  "why":"💭","how much / how many":"🔢","which":"👉",
+  // Essentials
+  "and":"➕","or":"🔀","but":"↩️","because":"🔍",
+  "so / therefore":"➡️","if":"🎲","also / too":"✅","very":"💯",
+  "quite / enough":"👌","maybe":"🤔","of course":"💫","ok / agreed":"🤝",
+  // New verbs
+  "to clean":"🧹","to choose":"🎯","to win / to earn":"🏆","to lose":"📉",
+  "to forget":"🌫️","to remember":"🧠","to share":"📤","to prepare":"🍳",
+  "to accept":"✅","to refuse":"🙅","to explain":"📢","to continue":"▶️",
+  "to return":"↩️","to visit":"🗺️","to change":"🔄","to offer":"🎀",
+  "to allow":"✔️","to book / to reserve":"📅","to repeat":"🔁",
+  "to invite":"💌","to improve":"📈","to join":"🔗","to decide":"💡",
+  "to try":"🤞","to succeed":"🏅",
+  // New adjectives
+  "intelligent":"🧠","modern":"🏙️","natural":"🌿","important":"❗",
+  "different":"🌈","perfect":"⭐","delicious":"😋","dangerous":"⚠️",
+  "calm":"😌","noisy":"📢","special":"🌟","last":"🔚","first":"🥇",
+  "next":"👉","same":"↔️",
+  // New places
+  "castle":"🏰","museum":"🏛️","theatre":"🎪","swimming pool":"🏊",
+  "stadium":"🏟️","shopping centre":"🛍️","hotel":"🏨","cathedral":"⛪"
+};
+
+/* ═══════ CATEGORY META ═══════════════════════════════════════════ */
+const CAT_DISPLAY = {
+  numbers:"Numbers", colors:"Colours", days:"Days of the Week",
+  months:"Months", seasons:"Seasons", family:"Family", body:"Body Parts",
+  animals:"Animals", food:"Food", drinks:"Drinks", clothing:"Clothing",
+  home:"Home & Furniture", verbs:"Verbs", adjectives:"Adjectives",
+  greetings:"Greetings", time:"Time & When", weather:"Weather",
+  transport:"Transport", places:"Places", objects:"Objects",
+  professions:"Professions", school:"School & Study",
+  questions:"Question Words", essentials:"Essential Words",
+  // Intermediate
+  work:"Work & Career", politics:"Politics", health:"Health & Medicine",
+  environment:"Environment", technology:"Technology", culture:"Culture & Arts",
+  travel:"Travel", economy:"Economy & Finance", emotions:"Emotions",
+  relationships:"Relationships", sports:"Sports", science:"Science",
+  education_adv:"Education (Advanced)", food_adv:"Food & Cuisine (Advanced)",
+  housing:"Housing & Urban Life", law:"Law & Justice", media:"Media & Communication",
+  advanced_verbs:"Verbs (Advanced)", advanced_adj:"Adjectives (Advanced)",
+  // Expert
+  abstract:"Abstract Concepts", politics_adv:"Politics (Expert)", law_adv:"Law (Expert)",
+  science_adv:"Science (Expert)", philosophy:"Philosophy", economy_adv:"Economy (Expert)",
+  rhetoric:"Rhetoric & Language", arts_adv:"Arts & Literature (Expert)",
+  environment_adv:"Environment (Expert)", psychology_adv:"Psychology (Expert)",
+  formal_lang:"Formal Language", social_adv:"Social Sciences (Expert)",
+  expert_verbs:"Verbs (Expert)", expert_adj:"Adjectives (Expert)",
+  expert_nouns:"Nouns (Expert)", formal_expressions:"Formal Expressions",
+  medicine_adv:"Medicine (Expert)", geography_adv:"Geography (Expert)",
+  sciences_humaines:"Human Sciences", sciences_humanas:"Human Sciences"
+};
+const CAT_ICONS = {
+  numbers:"🔢", colors:"🎨", days:"📅", months:"🗓️", seasons:"🌸",
+  family:"👨‍👩‍👧", body:"💪", animals:"🐾", food:"🍎", drinks:"🥤",
+  clothing:"👕", home:"🏠", verbs:"⚡", adjectives:"✨", greetings:"👋",
+  time:"⏰", weather:"☀️", transport:"🚗", places:"📍", objects:"📦",
+  professions:"👔", school:"🏫", questions:"❓", essentials:"💬",
+  // Intermediate
+  work:"💼", politics:"🏛️", health:"🏥", environment:"🌿", technology:"💻",
+  culture:"🎭", travel:"✈️", economy:"📈", emotions:"❤️", relationships:"🤝",
+  sports:"⚽", science:"🔬", education_adv:"🎓", food_adv:"👨‍🍳",
+  housing:"🏘️", law:"⚖️", media:"📺", advanced_verbs:"🔤", advanced_adj:"💫",
+  // Expert
+  abstract:"🧠", politics_adv:"🗳️", law_adv:"📜", science_adv:"⚛️",
+  philosophy:"🦉", economy_adv:"💹", rhetoric:"📖", arts_adv:"🎨",
+  environment_adv:"🌍", psychology_adv:"🧬", formal_lang:"🎩",
+  social_adv:"👥", expert_verbs:"⚡", expert_adj:"💎", expert_nouns:"📚",
+  formal_expressions:"🖊️", medicine_adv:"🩺", geography_adv:"🗺️",
+  sciences_humaines:"🔭"
+};
+const CAT_BG = {
+  numbers:"linear-gradient(135deg,#1D4ED8,#60A5FA)",
+  colors:"linear-gradient(135deg,#7C3AED,#C084FC)",
+  days:"linear-gradient(135deg,#9D174D,#F472B6)",
+  months:"linear-gradient(135deg,#0E7490,#22D3EE)",
+  seasons:"linear-gradient(135deg,#15803D,#86EFAC)",
+  family:"linear-gradient(135deg,#B91C1C,#F87171)",
+  body:"linear-gradient(135deg,#C2410C,#FB923C)",
+  animals:"linear-gradient(135deg,#166534,#4ADE80)",
+  food:"linear-gradient(135deg,#B45309,#FCD34D)",
+  drinks:"linear-gradient(135deg,#0369A1,#38BDF8)",
+  clothing:"linear-gradient(135deg,#6B21A8,#C084FC)",
+  home:"linear-gradient(135deg,#92400E,#FBBF24)",
+  verbs:"linear-gradient(135deg,#4C1D95,#8B5CF6)",
+  adjectives:"linear-gradient(135deg,#9D174D,#F472B6)",
+  greetings:"linear-gradient(135deg,#064E3B,#34D399)",
+  time:"linear-gradient(135deg,#312E81,#818CF8)",
+  weather:"linear-gradient(135deg,#0C4A6E,#38BDF8)",
+  transport:"linear-gradient(135deg,#991B1B,#F87171)",
+  places:"linear-gradient(135deg,#1E3A8A,#93C5FD)",
+  objects:"linear-gradient(135deg,#4C1D95,#A78BFA)",
+  professions:"linear-gradient(135deg,#0C4A6E,#0EA5E9)",
+  school:"linear-gradient(135deg,#1E1B4B,#6366F1)",
+  questions:"linear-gradient(135deg,#7C2D12,#F97316)",
+  essentials:"linear-gradient(135deg,#1F2937,#6B7280)",
+  // Intermediate
+  work:"linear-gradient(135deg,#1E40AF,#3B82F6)",
+  politics:"linear-gradient(135deg,#312E81,#6366F1)",
+  health:"linear-gradient(135deg,#065F46,#34D399)",
+  environment:"linear-gradient(135deg,#14532D,#86EFAC)",
+  technology:"linear-gradient(135deg,#1E3A5F,#38BDF8)",
+  culture:"linear-gradient(135deg,#701A75,#E879F9)",
+  travel:"linear-gradient(135deg,#0C4A6E,#7DD3FC)",
+  economy:"linear-gradient(135deg,#14532D,#4ADE80)",
+  emotions:"linear-gradient(135deg,#9F1239,#FB7185)",
+  relationships:"linear-gradient(135deg,#7C2D12,#FDBA74)",
+  sports:"linear-gradient(135deg,#1D4ED8,#93C5FD)",
+  science:"linear-gradient(135deg,#0E7490,#67E8F9)",
+  education_adv:"linear-gradient(135deg,#1E1B4B,#818CF8)",
+  food_adv:"linear-gradient(135deg,#92400E,#FDE68A)",
+  housing:"linear-gradient(135deg,#78350F,#FCD34D)",
+  law:"linear-gradient(135deg,#1F2937,#9CA3AF)",
+  media:"linear-gradient(135deg,#4C1D95,#C4B5FD)",
+  advanced_verbs:"linear-gradient(135deg,#3B0764,#A855F7)",
+  advanced_adj:"linear-gradient(135deg,#831843,#F9A8D4)",
+  // Expert
+  abstract:"linear-gradient(135deg,#0F172A,#475569)",
+  politics_adv:"linear-gradient(135deg,#1E1B4B,#4338CA)",
+  law_adv:"linear-gradient(135deg,#111827,#6B7280)",
+  science_adv:"linear-gradient(135deg,#0C4A6E,#0284C7)",
+  philosophy:"linear-gradient(135deg,#3B0764,#6D28D9)",
+  economy_adv:"linear-gradient(135deg,#064E3B,#059669)",
+  rhetoric:"linear-gradient(135deg,#451A03,#B45309)",
+  arts_adv:"linear-gradient(135deg,#6B21A8,#D946EF)",
+  environment_adv:"linear-gradient(135deg,#14532D,#16A34A)",
+  psychology_adv:"linear-gradient(135deg,#4C1D95,#7C3AED)",
+  formal_lang:"linear-gradient(135deg,#1F2937,#374151)",
+  social_adv:"linear-gradient(135deg,#0C4A6E,#1D4ED8)",
+  expert_verbs:"linear-gradient(135deg,#2E1065,#7E22CE)",
+  expert_adj:"linear-gradient(135deg,#701A75,#A21CAF)",
+  expert_nouns:"linear-gradient(135deg,#1E3A8A,#2563EB)",
+  formal_expressions:"linear-gradient(135deg,#0F172A,#1E293B)",
+  medicine_adv:"linear-gradient(135deg,#065F46,#0D9488)",
+  geography_adv:"linear-gradient(135deg,#1C3D5A,#0EA5E9)",
+  sciences_humaines:"linear-gradient(135deg,#312E81,#4F46E5)"
+};
+const CAT_BG_DEFAULT = "linear-gradient(135deg,#3B0764,#7C3AED)";
+
+/* ═══════ AUDIO ENGINE ════════════════════════════════════════════ */
+let _audioCtx = null;
+function getCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+function tone(freq, type, vol, dur, t0=0) {
+  try {
+    const ctx = getCtx();
+    const osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.connect(g); g.connect(ctx.destination);
+    osc.type = type; osc.frequency.value = freq;
+    const t = ctx.currentTime + t0;
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.start(t); osc.stop(t + dur + 0.01);
+  } catch(e){}
+}
+function sfxCorrect() {
+  tone(659.25, 'sine', 0.55, 0.18, 0.00);
+  tone(987.77, 'sine', 0.55, 0.18, 0.11);
+  tone(1318.5, 'sine', 0.55, 0.28, 0.22);
+  tone(1318.5*1.5,'sine', 0.28, 0.22, 0.22);
+}
+function sfxWrong() {
+  [0, 0.26].forEach(delay => {
+    try {
+      const ctx = getCtx();
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination);
+      osc.type = 'square';
+      const t = ctx.currentTime + delay;
+      osc.frequency.setValueAtTime(185, t);
+      osc.frequency.linearRampToValueAtTime(130, t + 0.22);
+      g.gain.setValueAtTime(0.6, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+      osc.start(t); osc.stop(t + 0.24);
+    } catch(e){}
+  });
+}
+function sfxTick(timeRemaining) {
+  const urgency = 1 - (timeRemaining / getTimerDur());
+  const vol  = 0.25 + urgency * 0.45;
+  const freq = 700 + urgency * 600;
+  tone(freq, 'square', vol, 0.055);
+}
+function sfxMilestone() {
+  [0,0.12,0.24,0.36,0.48].forEach((d,i) => {
+    const freqs = [523.25, 659.25, 783.99, 1046.5, 1318.5];
+    tone(freqs[i], 'sine', 0.5, 0.3, d);
+  });
+}
+
+/* ═══════ TIMER ═══════════════════════════════════════════════════ */
+function getTimerDur() { return difficulty === 'hard' ? 10.0 : 5.0; }
+let timerInterval = null, timeLeft = 5.0, lastTickSec = -1;
+
+function startTimer() {
+  const dur = getTimerDur();
+  timeLeft = dur; lastTickSec = Math.ceil(dur);
+  updateTimerUI();
+  sfxTick(dur);
+  timerInterval = setInterval(() => {
+    timeLeft = Math.max(0, parseFloat((timeLeft - 0.05).toFixed(2)));
+    updateTimerUI();
+    const w = Math.ceil(timeLeft);
+    if (w < lastTickSec && w >= 1) { lastTickSec = w; sfxTick(timeLeft); }
+    if (timeLeft <= 0) { stopTimer(); handleTimeout(); }
+  }, 50);
+}
+function stopTimer() { clearInterval(timerInterval); timerInterval = null; }
+function updateTimerUI() {
+  const dur = getTimerDur();
+  const pct = (timeLeft / dur) * 100;
+  const bar = document.getElementById('timer-bar');
+  const lbl = document.getElementById('timer-time');
+  if (!bar) return;
+  bar.style.width = pct + '%';
+  const urgentThresh = dur * 0.3;
+  const yellowThresh = dur * 0.6;
+  bar.classList.toggle('urgent', timeLeft <= urgentThresh);
+  bar.style.background = timeLeft > yellowThresh ? '#10B981' : timeLeft > urgentThresh ? '#F59E0B' : '#EF4444';
+  if (lbl) lbl.textContent = timeLeft.toFixed(1) + 's';
+}
+
+/* ═══════ SCORING ═════════════════════════════════════════════════ */
+function calcPoints(tLeft, isNearMiss = false) {
+  const baseMax = gameMode === 'god' ? 10 : 6;
+  const dur = getTimerDur();
+  const ratio = tLeft / dur;
+  let pts;
+  if (ratio >= 0.70) pts = baseMax;
+  else if (ratio >= 0.50) pts = Math.max(baseMax - 2, 2);
+  else if (ratio >= 0.30) pts = Math.max(baseMax - 4, 2);
+  else if (ratio >= 0.10) pts = Math.max(baseMax - 6, 2);
+  else pts = 2;
+  if (difficulty === 'hard') pts *= 2;
+  if (isNearMiss) pts = Math.max(Math.round(pts * 0.6 / 2) * 2, 2);
+  return pts;
+}
+
+let sessionScore = 0, highScores = {};
+let wordLevel = 'beginner';
+
+function getLevelWords() { return WORDS.filter(w => w.level === wordLevel); }
+
+const LEVEL_META = {
+  beginner:     { label:'✨ Beginner',     cats:24, words:500 },
+  intermediate: { label:'📘 Intermediate', cats:19, words:500 },
+  expert:  { label:'🎓 Expert',  cats:19, words:500 }
+};
+
+function setLevel(lv) {
+  wordLevel = lv;
+  ['beginner','intermediate','expert'].forEach(l => {
+    document.getElementById('btn-lv-'+l).classList.toggle('active', l === lv);
+  });
+  const m = LEVEL_META[lv];
+  const lw = getLevelWords();
+  const cats = [...new Set(lw.map(w=>w.category))].length;
+  document.getElementById('level-badge').textContent = m.label + ' · ' + lw.length + ' Words · ' + cats + ' Categories';
+  loadHS();
+  updateHomeHS();
+}
+
+function hsKey() { return 'malayQuizHS_' + wordLevel; }
+function loadHS()  { try { highScores = JSON.parse(localStorage.getItem(hsKey())||'{}'); } catch(e){highScores={};} }
+function saveHS()  { try { localStorage.setItem(hsKey(), JSON.stringify(highScores)); } catch(e){} }
+function globalBest() {
+  const vals = Object.values(highScores).filter(v => typeof v === 'number' && v > 0);
+  return vals.length ? Math.max(...vals) : 0;
+}
+
+/* ═══════ TOP-5 LEADERBOARD (per level, this browser/device) ═════ */
+const LB_MAX = 5;
+const LB_NAME_MAX = 12;
+let leaderboard = [];
+let pendingLBScore = 0;
+
+function lbKey() { return 'malayQuizLB_' + wordLevel; }
+function loadLB() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(lbKey()) || '[]');
+    leaderboard = Array.isArray(raw) ? raw.filter(e => e && typeof e.name === 'string' && typeof e.score === 'number' && e.score > 0) : [];
+  } catch (e) { leaderboard = []; }
+  leaderboard.sort((a,b) => b.score - a.score);
+  leaderboard = leaderboard.slice(0, LB_MAX);
+}
+function saveLB() { try { localStorage.setItem(lbKey(), JSON.stringify(leaderboard)); } catch (e) {} }
+function qualifiesForLB(score) {
+  if (!(score > 0)) return false;
+  if (leaderboard.length < LB_MAX) return true;
+  const min = Math.min(...leaderboard.map(e => e.score));
+  return score > min;
+}
+function addToLB(name, score) {
+  leaderboard.push({ name, score });
+  leaderboard.sort((a, b) => b.score - a.score);
+  leaderboard = leaderboard.slice(0, LB_MAX);
+  saveLB();
+  renderLB();
+}
+function escapeHTML(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function renderLB() {
+  const bar    = document.getElementById('high-score-bar');
+  const list   = document.getElementById('hs-list');
+  const labelEl = document.getElementById('hs-level-label');
+  if (labelEl) {
+    const meta = LEVEL_META[wordLevel];
+    labelEl.textContent = (meta ? meta.label : wordLevel).replace(/^\S+\s/, '');
+  }
+  if (!leaderboard.length) { bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  const medals = ['🥇','🥈','🥉'];
+  list.innerHTML = leaderboard.map((e, i) =>
+    `<li class="hs-row"><span class="hs-rank">${medals[i] || (i+1)+'.'}</span><span class="hs-name">${escapeHTML(e.name)}</span><span class="hs-pts">${e.score.toLocaleString()} pts</span></li>`
+  ).join('');
+}
+
+/* ═══════ NAME VALIDATION — letters/numbers only, blocks profanity/insults ═══ */
+const BLOCKED_NAME_WORDS = [
+  'fuck','shit','bitch','asshole','ass','bastard','cunt','dick','pussy','cock','whore','slut',
+  'nigger','nigga','fag','faggot','retard','rape','rapist','nazi','hitler','kys',
+  'idiot','stupid','dumb','moron','loser','ugly','fatso','suck','crap',
+  'damn','piss','tit','boob','porn','anal','penis','vagina','clit','jerk',
+  'wank','twat','prick','douche','dumbass','jackass','scumbag','pedo','pedophile',
+  'terrorist','skank','hoe','thot','molest','shithead'
+];
+function containsBlockedWord(nameLower) {
+  return BLOCKED_NAME_WORDS.some(w => nameLower.includes(w));
+}
+function sanitizeName(raw) {
+  return (raw || '').replace(/[^a-zA-Z0-9]/g, '').slice(0, LB_NAME_MAX);
+}
+function validateName(raw) {
+  const clean = sanitizeName(raw);
+  if (!clean) return { ok: false, clean, error: 'Use letters and numbers only.' };
+  if (containsBlockedWord(clean.toLowerCase())) return { ok: false, clean, error: 'That name isn\'t allowed — try another.' };
+  return { ok: true, clean, error: '' };
+}
+function openNameModal(score) {
+  pendingLBScore = score;
+  const modal = document.getElementById('name-modal');
+  const input = document.getElementById('name-input');
+  const err   = document.getElementById('name-error');
+  input.value = ''; err.textContent = '';
+  modal.style.display = 'flex';
+  setTimeout(() => input.focus(), 50);
+}
+function closeNameModal() {
+  document.getElementById('name-modal').style.display = 'none';
+  pendingLBScore = 0;
+}
+function submitNameEntry() {
+  const input  = document.getElementById('name-input');
+  const err    = document.getElementById('name-error');
+  const result = validateName(input.value);
+  input.value = result.clean;
+  if (!result.ok) { err.textContent = result.error; return; }
+  addToLB(result.clean, pendingLBScore);
+  closeNameModal();
+}
+
+function updateHomeHS() {
+  loadLB();
+  renderLB();
+}
+
+/* ═══════ MILESTONES ══════════════════════════════════════════════ */
+const MILESTONES     = [20,50,100,150,200,250,300,350,400];
+const MS_EMOJI       = {20:'🎉',50:'⭐',100:'🌟',150:'💫',200:'🏆',250:'👑',300:'🔥',350:'⚡',400:'🎯'};
+const MS_SUB         = {20:'You\'re on a roll!',50:'Halfway to 100!',100:'Century!',150:'Incredible!',200:'Unstoppable!',250:'Legendary!',300:'Beyond awesome!',350:'Almost at 400!',400:'Perfect mastery!'};
+let shownMilestones  = new Set();
+
+function checkMilestone(callback) {
+  const hit = MILESTONES.find(m => m === correctCount && !shownMilestones.has(m));
+  if (!hit) return false;
+  shownMilestones.add(hit);
+  showMilestone(hit, callback);
+  return true;
+}
+function spawnConfetti() {
+  const c = document.getElementById('confetti-container');
+  c.innerHTML = '';
+  const colors = ['#7C3AED','#F59E0B','#10B981','#EF4444','#3B82F6','#EC4899','#fff','#FDE68A'];
+  for (let i = 0; i < 40; i++) {
+    const d = document.createElement('div');
+    const size = 8 + Math.random()*10;
+    d.className = 'conf-dot';
+    d.style.cssText = `left:${Math.random()*400}px;top:0;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'3px'};animation-duration:${1.2+Math.random()*1.2}s;animation-delay:${Math.random()*0.6}s;`;
+    c.appendChild(d);
+  }
+}
+function showMilestone(count, callback) {
+  sfxMilestone(); spawnConfetti();
+  document.getElementById('ms-emoji').textContent = MS_EMOJI[count]||'🎉';
+  document.getElementById('ms-count').textContent = count;
+  document.getElementById('ms-sub').textContent   = MS_SUB[count]||'Amazing!';
+  const overlay = document.getElementById('milestone-overlay');
+  overlay.style.display = 'flex'; overlay.classList.remove('fade-out');
+  setTimeout(() => {
+    overlay.classList.add('fade-out');
+    setTimeout(() => { overlay.style.display='none'; overlay.classList.remove('fade-out'); if(callback)callback(); }, 500);
+  }, 2600);
+}
+
+/* ═══════ STOP MODAL ══════════════════════════════════════════════ */
+function confirmStop() { stopTimer(); document.getElementById('stop-modal').style.display='flex'; }
+function closeStopModal() { document.getElementById('stop-modal').style.display='none'; if(!answerLocked)startTimer(); }
+function exitToHome() { document.getElementById('stop-modal').style.display='none'; showScreen('screen-home'); }
+
+/* ═══════ GAME STATE ══════════════════════════════════════════════ */
+let gameMode='',difficulty='easy',lives=0,questions=[],currentQIdx=0,correctCount=0,
+    totalAnswered=0,completedCats=[],currentCat=null,godStreak=0,answerLocked=false;
+
+function setDifficulty(d) {
+  difficulty = d;
+  document.getElementById('btn-easy').classList.toggle('active', d === 'easy');
+  document.getElementById('btn-hard').classList.toggle('active', d === 'hard');
+  document.getElementById('diff-box-easy').classList.toggle('selected', d === 'easy');
+  document.getElementById('diff-box-hard').classList.toggle('selected', d === 'hard');
+  const catMax = d === 'hard' ? 12 : 6;
+  const godMax = d === 'hard' ? 20 : 10;
+  document.getElementById('pill-category').textContent = `🎯 No lives limit · Up to ${catMax} pts/word`;
+  document.getElementById('pill-endless').textContent  = `❤️ 3 lives · Up to ${catMax} pts/word`;
+  document.getElementById('pill-god').textContent      = `💀 1 life · Up to ${godMax} pts/word`;
+}
+
+const _DIACRITICS = new RegExp('[\\u0300-\\u036f]', 'g');
+function stripAccents(s) {
+  return s.normalize('NFD').replace(_DIACRITICS, '').toLowerCase().replace(/\s+/g,' ').trim();
+}
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function getCategories(){return[...new Set(getLevelWords().map(w=>w.category))];}
+function getWordsByCat(cat){return getLevelWords().filter(w=>w.category===cat);}
+function randomCat(exc=[]){const a=getCategories().filter(c=>!exc.includes(c));return a.length?a[Math.floor(Math.random()*a.length)]:null;}
+function buildQuestions(words){return shuffle(words).map(word=>{const d=shuffle(getLevelWords().filter(w=>w.malay!==word.malay)).slice(0,3);const c=shuffle([word,...d]);return{word,choices:c,correctIdx:c.indexOf(word)};});}
+function getWordEmoji(word){return WORD_EMOJI[word.english]||CAT_ICONS[word.category]||'❓';}
+
+function showScreen(id) {
+  stopTimer();
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none';});
+  const el=document.getElementById(id);
+  el.style.display=(id==='screen-quiz'||id==='screen-cat-complete')?'flex':'block';
+  el.classList.add('active');
+  if(id==='screen-home')updateHomeHS();
+}
+
+function startMode(mode) {
+  gameMode=mode; correctCount=0; totalAnswered=0; completedCats=[];
+  godStreak=0; sessionScore=0; shownMilestones=new Set();
+  if(mode==='category'){lives=Infinity;buildCategoryGrid();showScreen('screen-categories');}
+  else if(mode==='endless'){lives=3;launchEndlessRound();}
+  else{lives=1;launchGodMode();}
+}
+
+function buildCategoryGrid(){
+  const grid=document.getElementById('category-grid');grid.innerHTML='';
+  getCategories().forEach(cat=>{
+    const count=getWordsByCat(cat).length;
+    const card=document.createElement('div');card.className='cat-card';
+    card.innerHTML=`<span class="cat-icon">${CAT_ICONS[cat]||'📖'}</span><span class="cat-name">${CAT_DISPLAY[cat]||cat}</span><span class="cat-count">${count} words</span>`;
+    card.onclick=()=>startCategory(cat);grid.appendChild(card);
+  });
+}
+function startCategory(cat){currentCat=cat;questions=buildQuestions(getWordsByCat(cat));currentQIdx=0;showScreen('screen-quiz');renderQuestion();}
+
+function launchEndlessRound(forcedCat){
+  const cat=forcedCat||randomCat(completedCats);if(!cat){showResults('all-complete');return;}
+  currentCat=cat;questions=buildQuestions(getWordsByCat(cat));currentQIdx=0;showScreen('screen-quiz');renderQuestion();
+}
+function launchGodMode(){currentCat=null;questions=buildQuestions(getLevelWords());currentQIdx=0;showScreen('screen-quiz');renderQuestion();}
+
+function renderQuestion() {
+  answerLocked=false;
+  if(document.activeElement) document.activeElement.blur();
+  const q=questions[currentQIdx];
+  document.getElementById('quiz-header').style.background = currentCat?(CAT_BG[currentCat]||CAT_BG_DEFAULT):CAT_BG_DEFAULT;
+  const catLabel=currentCat?(CAT_DISPLAY[currentCat]||currentCat):'All Categories';
+  document.getElementById('quiz-category-tag').textContent=catLabel;
+  document.getElementById('quiz-progress-text').textContent=`${currentQIdx+1}/${questions.length}`;
+  document.getElementById('progress-fill').style.width=((currentQIdx/questions.length)*100)+'%';
+  document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+  renderLives();
+  document.getElementById('quiz-word-emoji').textContent=getWordEmoji(q.word);
+  document.getElementById('quiz-word').textContent=q.word.english;
+  const card=document.getElementById('quiz-word-card');
+  card.classList.remove('flash-correct','flash-wrong');card.style.borderColor='transparent';
+  const dirEl=document.getElementById('quiz-direction');
+  dirEl.innerHTML=difficulty==='hard'?'Type the Malay translation: <span class="hard-badge">Hard</span>':'What is the Malay translation?';
+  const choicesEl=document.getElementById('quiz-choices');choicesEl.innerHTML='';
+  if(difficulty==='hard'){
+    choicesEl.className='type-mode';
+    const wrap=document.createElement('div');wrap.className='type-answer-wrap';
+    const inp=document.createElement('input');inp.type='text';inp.id='type-input';inp.className='type-input';
+    inp.placeholder='Type Malay translation…';inp.autocomplete='off';inp.spellcheck=false;
+    inp.setAttribute('autocorrect','off');inp.setAttribute('autocapitalize','none');
+    inp.onkeydown=e=>{if(e.key==='Enter')submitTypedAnswer();};
+    const sub=document.createElement('button');sub.className='type-submit-btn';sub.textContent='→';sub.onclick=submitTypedAnswer;
+    wrap.appendChild(inp);wrap.appendChild(sub);choicesEl.appendChild(wrap);
+    setTimeout(()=>inp.focus(),120);
+  } else {
+    choicesEl.className='choices-grid';
+    q.choices.forEach((choice,i)=>{
+      const btn=document.createElement('button');btn.className='choice-btn';
+      btn.textContent=choice.malay;btn.onclick=()=>handleAnswer(i);choicesEl.appendChild(btn);
+    });
+  }
+  const fb=document.getElementById('quiz-feedback');fb.textContent='';fb.className='quiz-feedback';
+  startTimer();
+}
+
+function renderLives(){
+  const el=document.getElementById('quiz-lives');
+  if(!el||gameMode==='category'){if(el)el.innerHTML='';return;}
+  const max=gameMode==='god'?1:3;let h='';
+  for(let i=0;i<max;i++)h+=i<lives?'❤️':'🖤';
+  el.innerHTML=h;
+}
+
+function handleTimeout(){
+  if(answerLocked)return;answerLocked=true;sfxWrong();
+  const q=questions[currentQIdx];
+  if(difficulty==='easy'){document.querySelectorAll('.choice-btn').forEach((btn,i)=>{btn.disabled=true;if(i===q.correctIdx)btn.classList.add('correct');});}
+  else{const inp=document.getElementById('type-input');const sub=document.querySelector('.type-submit-btn');if(inp)inp.disabled=true;if(sub)sub.disabled=true;}
+  if(lives!==Infinity)lives--;totalAnswered++;
+  document.getElementById('quiz-word-card').classList.add('flash-wrong');
+  const fb=document.getElementById('quiz-feedback');
+  fb.innerHTML=`⏱️ Too slow! Answer: <strong>${q.word.malay}</strong>`;fb.className='quiz-feedback feedback-wrong';
+  renderLives();advanceAfterDelay();
+}
+
+function handleAnswer(choiceIdx){
+  if(answerLocked)return;answerLocked=true;stopTimer();
+  const q=questions[currentQIdx];const correct=choiceIdx===q.correctIdx;
+  const fb=document.getElementById('quiz-feedback');
+  document.querySelectorAll('.choice-btn').forEach((btn,i)=>{
+    btn.disabled=true;if(i===q.correctIdx)btn.classList.add('correct');else if(i===choiceIdx&&!correct)btn.classList.add('wrong');
+  });
+  if(correct){
+    const pts=calcPoints(timeLeft);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
+    fb.textContent=`✅ +${pts} pts`;fb.className='quiz-feedback feedback-correct';
+    document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+    const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
+    popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
+  } else {
+    if(lives!==Infinity)lives--;sfxWrong();
+    document.getElementById('quiz-word-card').classList.add('flash-wrong');
+    fb.innerHTML=`❌ Answer: <strong>${q.word.malay}</strong>`;fb.className='quiz-feedback feedback-wrong';
+  }
+  totalAnswered++;renderLives();advanceAfterDelay();
+}
+
+function submitTypedAnswer(){
+  if(answerLocked)return;
+  const inp=document.getElementById('type-input');if(!inp)return;
+  const typed=inp.value.trim();if(!typed)return;
+  answerLocked=true;stopTimer();
+  const q=questions[currentQIdx];const correct=q.word.malay;
+  const typedClean=typed.toLowerCase();const correctClean=correct.toLowerCase();
+  const exactMatch=typedClean===correctClean;
+  const nearMiss=!exactMatch&&stripAccents(typedClean)===stripAccents(correctClean);
+  inp.disabled=true;const sub=document.querySelector('.type-submit-btn');if(sub)sub.disabled=true;
+  const fb=document.getElementById('quiz-feedback');
+  if(exactMatch){
+    const pts=calcPoints(timeLeft,false);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
+    fb.textContent=`✅ +${pts} pts`;fb.className='quiz-feedback feedback-correct';
+    document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+    const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
+    popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
+  } else if(nearMiss){
+    const pts=calcPoints(timeLeft,true);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
+    fb.innerHTML=`✅ +${pts} pts &nbsp;·&nbsp; Exact spelling: <strong>${correct}</strong>`;fb.className='quiz-feedback feedback-correct';
+    document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
+    const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
+    popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
+  } else {
+    if(lives!==Infinity)lives--;sfxWrong();
+    document.getElementById('quiz-word-card').classList.add('flash-wrong');
+    fb.innerHTML=`❌ Answer: <strong>${correct}</strong>`;fb.className='quiz-feedback feedback-wrong';
+  }
+  totalAnswered++;renderLives();advanceAfterDelay();
+}
+
+function advanceAfterDelay(){
+  const isWrong = document.getElementById('quiz-feedback').classList.contains('feedback-wrong');
+  setTimeout(()=>{
+    if(lives===0){showResults('game-over');return;}
+    currentQIdx++;
+    const doNext=()=>{
+      if(currentQIdx>=questions.length){
+        if(gameMode==='category')showResults('category-complete');
+        else if(gameMode==='endless'){completedCats.push(currentCat);showCatInterstitial();}
+        else showResults('all-complete');
+      } else renderQuestion();
+    };
+    if(!checkMilestone(doNext))doNext();
+  },isWrong?2500:1500);
+}
+
+function showCatInterstitial(){
+  showScreen('screen-cat-complete');
+  document.getElementById('ci-icon').textContent='🎉';
+  document.getElementById('ci-title').textContent=`${CAT_DISPLAY[currentCat]||currentCat} done!`;
+  const nextCat=randomCat(completedCats);
+  if(!nextCat){document.getElementById('ci-sub').textContent='All categories done!';document.getElementById('ci-lives').innerHTML='';setTimeout(()=>showResults('all-complete'),1800);return;}
+  let lh='';for(let i=0;i<3;i++)lh+=i<lives?'❤️':'🖤';
+  document.getElementById('ci-lives').innerHTML=lh;
+  document.getElementById('ci-sub').textContent=`Next: ${CAT_DISPLAY[nextCat]||nextCat}`;
+  setTimeout(()=>launchEndlessRound(nextCat),2000);
+}
+
+function showResults(type){
+  showScreen('screen-results');
+  const prevBest=globalBest();
+  const prevModeBest=highScores[gameMode]||0;
+  if(sessionScore>prevModeBest&&sessionScore>0){highScores[gameMode]=sessionScore;saveHS();}
+  const isNew=sessionScore>0&&sessionScore>prevBest;
+  loadLB();
+  if (qualifiesForLB(sessionScore)) { setTimeout(() => openNameModal(sessionScore), 900); }
+  const pct=totalAnswered>0?Math.round((correctCount/totalAnswered)*100):0;
+  const isGameOver=type==='game-over';
+  const titles={'game-over':gameMode==='god'?'💀 Game Over!':'💔 Out of Lives!','category-complete':'🎉 Category Complete!','all-complete':'🏆 Outstanding!'};
+  document.getElementById('results-title').textContent=titles[type]||'✅ Done!';
+  document.getElementById('results-subtitle').textContent={'game-over':gameMode==='god'?`Streak: ${godStreak} words`:`${completedCats.length} categor${completedCats.length===1?'y':'ies'} done`,'category-complete':CAT_DISPLAY[currentCat]||currentCat,'all-complete':'You conquered every category!'}[type]||'';
+  const hero=document.getElementById('results-hero');
+  hero.classList.remove('celebrate','game-over');
+  if(isGameOver){hero.classList.add('game-over');}else{hero.classList.add('celebrate');launchResultsConfetti();}
+  const scoreBig=document.getElementById('results-score-big');
+  scoreBig.classList.add('score-reveal');setTimeout(()=>scoreBig.classList.remove('score-reveal'),800);
+  animateScore(sessionScore);sfxCelebration(isGameOver);
+  const hsArea=document.getElementById('results-hs-area');
+  const curBest=globalBest();
+  hsArea.innerHTML=isNew?'<div class="new-hs-badge">🏆 New Personal Best!</div>':(curBest>0?`<div class="prev-hs-note">Best: ${curBest.toLocaleString()} pts</div>`:'');
+  let stats=`<div class="stat-chip"><span class="stat-num">${pct}%</span><span class="stat-label">Accuracy</span></div><div class="stat-chip"><span class="stat-num">${correctCount}</span><span class="stat-label">Correct</span></div><div class="stat-chip"><span class="stat-num">${totalAnswered-correctCount}</span><span class="stat-label">Wrong</span></div>`;
+  if(gameMode==='endless')stats+=`<div class="stat-chip"><span class="stat-num">${completedCats.length}</span><span class="stat-label">Categories</span></div>`;
+  if(gameMode==='god')stats+=`<div class="stat-chip"><span class="stat-num">${godStreak}</span><span class="stat-label">Streak</span></div>`;
+  document.getElementById('results-stats').innerHTML=stats;
+  const actEl=document.getElementById('results-actions');actEl.innerHTML='';
+  const btn=(label,cls,fn)=>{const b=document.createElement('button');b.className=cls;b.textContent=label;b.onclick=fn;actEl.appendChild(b);};
+  if(type==='category-complete'){btn('🔄 Try Again','btn-secondary',()=>startCategory(currentCat));btn('📚 Pick Category','btn-secondary',()=>showScreen('screen-categories'));}
+  if(type==='game-over'&&gameMode==='endless')btn('🔥 Play Again','btn-secondary',()=>startMode('endless'));
+  if(type==='game-over'&&gameMode==='god')btn('⚡ God Mode Again','btn-secondary',()=>startMode('god'));
+  btn('🏠 Back to Home','btn-primary',()=>showScreen('screen-home'));
+}
+
+function sfxCelebration(isGameOver){
+  if(isGameOver){tone(392.00,'sine',0.38,0.32,0.00);tone(349.23,'sine',0.38,0.32,0.36);tone(329.63,'sine',0.38,0.55,0.72);}
+  else{[523.25,659.25,783.99,1046.50,1318.50].forEach((f,i)=>tone(f,'sine',0.48,0.22,i*0.10));[523.25,659.25,783.99,1046.50].forEach(f=>tone(f,'sine',0.42,0.75,0.65));tone(1567.98,'sine',0.28,0.55,0.80);}
+}
+
+function animateScore(target){
+  const el=document.getElementById('results-score-big');el.classList.add('counting');el.textContent='0';
+  const dur=Math.min(1800,400+target*6);const start=Date.now();
+  const tick=()=>{const p=Math.min((Date.now()-start)/dur,1);const eased=1-Math.pow(1-p,3);el.textContent=Math.round(eased*target).toLocaleString();if(p<1)requestAnimationFrame(tick);else{el.textContent=target.toLocaleString();el.classList.remove('counting');}};
+  requestAnimationFrame(tick);
+}
+
+function launchResultsConfetti(count=70){
+  const c=document.getElementById('results-confetti');c.innerHTML='';
+  const colors=['#7C3AED','#F59E0B','#10B981','#EF4444','#3B82F6','#EC4899','#ffffff','#FDE68A','#A78BFA'];
+  for(let i=0;i<count;i++){const d=document.createElement('div');const size=7+Math.random()*13;const isCircle=Math.random()>0.45;d.className='conf-rain';d.style.cssText=`left:${Math.random()*100}%;top:-25px;width:${size}px;height:${isCircle?size:size*0.45}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${isCircle?'50%':'2px'};animation-duration:${1.6+Math.random()*1.8}s;animation-delay:${Math.random()*1.0}s;`;c.appendChild(d);}
+  setTimeout(()=>{c.innerHTML='';},4500);
+}
+
+loadHS();
+showScreen('screen-home');
+</script>
+</body>
+</html>
