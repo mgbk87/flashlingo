@@ -30,7 +30,7 @@
       --shadow-card:  0 4px 20px rgba(0,0,0,0.08);
     }
 
-    html, body { height: 100%; font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+    html, body { height: 100%; font-size: 112.5%; font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
 
     .screen { display: none; min-height: 100vh; }
     .screen.active { display: block; }
@@ -56,11 +56,16 @@
     .home-hero p { font-size: 1rem; color: var(--text-mid); font-weight: 600; max-width: 420px; margin: 0 auto; }
     .badge { display: inline-block; background: var(--yellow); color: var(--text); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.5px; padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; text-transform: uppercase; }
 
-    .high-score-bar { background: linear-gradient(135deg, #3B0764, #7C3AED); margin: 0 18px 4px; border-radius: var(--radius-lg); padding: 12px 18px; position: relative; z-index: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .high-score-bar { background: linear-gradient(135deg, #3B0764, #7C3AED); max-width: 480px; margin: 0 auto 4px; border-radius: var(--radius-lg); padding: 14px 18px; position: relative; z-index: 1; display: flex; flex-direction: column; gap: 8px; }
     .hs-title { font-size: 0.78rem; font-weight: 900; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
-    .hs-scores { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
-    .hs-chip { background: rgba(255,255,255,0.15); color: #fff; border-radius: 999px; padding: 4px 11px; font-size: 0.8rem; font-weight: 800; white-space: nowrap; display: flex; align-items: center; gap: 4px; }
-    .hs-chip .hs-pts { color: var(--yellow-light); }
+    .hs-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .hs-row { display: flex; align-items: center; gap: 9px; background: rgba(255,255,255,0.1); border-radius: 12px; padding: 6px 10px; }
+    .hs-rank { font-size: 0.85rem; font-weight: 900; color: rgba(255,255,255,0.85); min-width: 22px; }
+    .hs-name { flex: 1; font-size: 0.86rem; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hs-pts { font-size: 0.82rem; font-weight: 900; color: var(--yellow-light); white-space: nowrap; }
+
+    .name-input-wrap { margin-bottom: 16px; text-align: left; }
+    .name-error { color: var(--red); font-size: 0.75rem; font-weight: 700; margin-top: 6px; min-height: 16px; }
 
     .mode-grid { display: flex; flex-direction: column; gap: 12px; max-width: 480px; margin: 14px auto 28px; padding: 0 18px; position: relative; z-index: 1; }
     .mode-card { border-radius: var(--radius-lg); padding: 20px 24px; cursor: pointer; position: relative; overflow: hidden; border: none; text-align: left; transition: transform 0.18s ease, box-shadow 0.18s ease; box-shadow: 0 6px 24px rgba(0,0,0,0.12); }
@@ -275,10 +280,8 @@
   </div>
 
   <div id="high-score-bar" class="high-score-bar" style="display:none;">
-    <div class="hs-title">🏆 Personal Best</div>
-    <div class="hs-scores">
-      <div class="hs-chip" id="hs-best">🌟 <span class="hs-pts"></span></div>
-    </div>
+    <div class="hs-title">🏆 Top 5 — <span id="hs-level-label">Beginner</span></div>
+    <ol id="hs-list" class="hs-list"></ol>
   </div>
 
   <div class="level-wrap">
@@ -441,6 +444,23 @@
     <div class="stop-modal-btns">
       <button class="stop-cancel" onclick="closeStopModal()">Keep Playing</button>
       <button class="stop-exit"   onclick="exitToHome()">Exit</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ░░ LEADERBOARD NAME ENTRY ░░ -->
+<div id="name-modal" class="stop-modal" style="display:none;">
+  <div class="stop-modal-box">
+    <div class="stop-modal-title">🏆 Top 5 Score!</div>
+    <div class="stop-modal-sub">You made the leaderboard — enter a name to save it:</div>
+    <div class="name-input-wrap">
+      <input id="name-input" class="type-input" type="text" maxlength="12" placeholder="Your name" autocomplete="off" onkeydown="if(event.key==='Enter')submitNameEntry()" />
+      <div id="name-error" class="name-error"></div>
+    </div>
+    <div class="stop-modal-btns">
+      <button class="stop-cancel" onclick="closeNameModal()">Skip</button>
+      <button class="stop-exit" style="background:var(--purple);" onclick="submitNameEntry()">Submit</button>
     </div>
   </div>
 </div>
@@ -2075,15 +2095,100 @@ function globalBest() {
   const vals = Object.values(highScores).filter(v => typeof v === 'number' && v > 0);
   return vals.length ? Math.max(...vals) : 0;
 }
-function updateHomeHS() {
-  const best = globalBest();
-  const bar  = document.getElementById('high-score-bar');
-  if (best > 0) {
-    bar.style.display = 'flex';
-    document.getElementById('hs-best').querySelector('.hs-pts').textContent = best.toLocaleString() + ' pts';
-  } else {
-    bar.style.display = 'none';
+
+/* ═══════ TOP-5 LEADERBOARD (per level, this browser/device) ═════ */
+const LB_MAX = 5;
+const LB_NAME_MAX = 12;
+let leaderboard = [];
+let pendingLBScore = 0;
+
+function lbKey() { return 'spanishQuizLB_' + wordLevel; }
+function loadLB() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(lbKey()) || '[]');
+    leaderboard = Array.isArray(raw) ? raw.filter(e => e && typeof e.name === 'string' && typeof e.score === 'number' && e.score > 0) : [];
+  } catch (e) { leaderboard = []; }
+  leaderboard.sort((a,b) => b.score - a.score);
+  leaderboard = leaderboard.slice(0, LB_MAX);
+}
+function saveLB() { try { localStorage.setItem(lbKey(), JSON.stringify(leaderboard)); } catch (e) {} }
+function qualifiesForLB(score) {
+  if (!(score > 0)) return false;
+  if (leaderboard.length < LB_MAX) return true;
+  const min = Math.min(...leaderboard.map(e => e.score));
+  return score > min;
+}
+function addToLB(name, score) {
+  leaderboard.push({ name, score });
+  leaderboard.sort((a, b) => b.score - a.score);
+  leaderboard = leaderboard.slice(0, LB_MAX);
+  saveLB();
+  renderLB();
+}
+function escapeHTML(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function renderLB() {
+  const bar    = document.getElementById('high-score-bar');
+  const list   = document.getElementById('hs-list');
+  const labelEl = document.getElementById('hs-level-label');
+  if (labelEl) {
+    const meta = LEVEL_META[wordLevel];
+    labelEl.textContent = (meta ? meta.label : wordLevel).replace(/^\S+\s/, '');
   }
+  if (!leaderboard.length) { bar.style.display = 'none'; return; }
+  bar.style.display = 'flex';
+  const medals = ['🥇','🥈','🥉'];
+  list.innerHTML = leaderboard.map((e, i) =>
+    `<li class="hs-row"><span class="hs-rank">${medals[i] || (i+1)+'.'}</span><span class="hs-name">${escapeHTML(e.name)}</span><span class="hs-pts">${e.score.toLocaleString()} pts</span></li>`
+  ).join('');
+}
+
+/* ═══════ NAME VALIDATION — letters/numbers only, blocks profanity/insults ═══ */
+const BLOCKED_NAME_WORDS = [
+  'fuck','shit','bitch','asshole','ass','bastard','cunt','dick','pussy','cock','whore','slut',
+  'nigger','nigga','fag','faggot','retard','rape','rapist','nazi','hitler','kys',
+  'idiot','stupid','dumb','moron','loser','ugly','fatso','suck','crap',
+  'damn','piss','tit','boob','porn','anal','penis','vagina','clit','jerk',
+  'wank','twat','prick','douche','dumbass','jackass','scumbag','pedo','pedophile',
+  'terrorist','skank','hoe','thot','molest','shithead'
+];
+function containsBlockedWord(nameLower) {
+  return BLOCKED_NAME_WORDS.some(w => nameLower.includes(w));
+}
+function sanitizeName(raw) {
+  return (raw || '').replace(/[^a-zA-Z0-9]/g, '').slice(0, LB_NAME_MAX);
+}
+function validateName(raw) {
+  const clean = sanitizeName(raw);
+  if (!clean) return { ok: false, clean, error: 'Use letters and numbers only.' };
+  if (containsBlockedWord(clean.toLowerCase())) return { ok: false, clean, error: 'That name isn\'t allowed — try another.' };
+  return { ok: true, clean, error: '' };
+}
+function openNameModal(score) {
+  pendingLBScore = score;
+  const modal = document.getElementById('name-modal');
+  const input = document.getElementById('name-input');
+  const err   = document.getElementById('name-error');
+  input.value = ''; err.textContent = '';
+  modal.style.display = 'flex';
+  setTimeout(() => input.focus(), 50);
+}
+function closeNameModal() {
+  document.getElementById('name-modal').style.display = 'none';
+  pendingLBScore = 0;
+}
+function submitNameEntry() {
+  const input  = document.getElementById('name-input');
+  const err    = document.getElementById('name-error');
+  const result = validateName(input.value);
+  input.value = result.clean;
+  if (!result.ok) { err.textContent = result.error; return; }
+  addToLB(result.clean, pendingLBScore);
+  closeNameModal();
+}
+
+function updateHomeHS() {
+  loadLB();
+  renderLB();
 }
 
 /* ═══════ MILESTONES ══════════════════════════════════════════════ */
@@ -2339,6 +2444,8 @@ function showResults(type){
   const prevModeBest=highScores[gameMode]||0;
   if(sessionScore>prevModeBest&&sessionScore>0){highScores[gameMode]=sessionScore;saveHS();}
   const isNew=sessionScore>0&&sessionScore>prevBest;
+  loadLB();
+  if (qualifiesForLB(sessionScore)) { setTimeout(() => openNameModal(sessionScore), 900); }
   const pct=totalAnswered>0?Math.round((correctCount/totalAnswered)*100):0;
   const isGameOver=type==='game-over';
   const titles={'game-over':gameMode==='god'?'💀 ¡Game Over!':'💔 Out of Lives!','category-complete':'🎉 ¡Categoría completada!','all-complete':'🏆 ¡Increíble!'};

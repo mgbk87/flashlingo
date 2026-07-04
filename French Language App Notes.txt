@@ -1,0 +1,39 @@
+﻿Prompt: Build a Gamified French Vocabulary Quiz Web App
+I want to build a web app that helps users learn French vocabulary through a quiz format. Please act as a senior full-stack architect and product planner: design the system, propose a tech stack, and produce a phased build plan with concrete tasks. Below are the full functional requirements.
+Core Quiz Mechanic
+* The app shows the user a randomized English word.
+* The user must pick the correct French translation from a set of multiple-choice options.
+* The quiz UI should follow a flash card structure: each round presents the English word as the front/prompt of a card, with the multiple-choice French options displayed below or as part of the card interaction (e.g., the card flips or reveals feedback — correct/incorrect — after the user selects an answer, before moving to the next card).
+* Each round draws from a pool of English↔French word pairs.
+Voice Input Feature
+* Users should be able to answer via voice in addition to tapping/clicking a multiple-choice option, using the device microphone.
+* Users can toggle between written (tap/click) and voice input modes at any point during a session — this should be a simple, accessible switch, not a one-time account setting.
+* Voice recognition must be accurate to native French pronunciation/tones — i.e., it needs to correctly recognize the user's spoken French word with proper accent/pronunciation matching, not just a loose phonetic guess. Recommend a speech-recognition approach/provider suited for accurate French (fr-FR) recognition, and how to handle near-miss pronunciation (e.g., partial credit, retry prompt, or strict matching).
+* Consider and propose: microphone permission handling, fallback behavior if the microphone is unavailable/denied, and how voice answers are scored against the multiple-choice options (e.g., matching spoken word to the closest displayed option vs. open recognition).
+Platform Compatibility
+* The web app must be fully responsive and functional on both desktop and mobile devices/browsers.
+* The flash card quiz interface in particular should be designed mobile-first (touch-friendly tap targets for multiple-choice options, readable card sizing on small screens) while still scaling well to larger desktop layouts.
+Spaced Repetition Rules
+* If a word is answered correctly, it should not reappear in the quiz pool for 30 days.
+* If a word is answered incorrectly, it must reappear the next day for retesting, and keep repeating daily until answered correctly.
+* Design a scheduling/data model that supports this per-user, per-word repetition logic (similar to a lightweight spaced-repetition system).
+Gamification Requirements
+* High scores: track and persist per-user best scores.
+* Streaks: track consecutive correct answers (and/or consecutive days played) — both should probably be tracked separately.
+* Milestones / levels: define a progression system (e.g., Beginner → Intermediate → Advanced → Expert) based on cumulative correct answers, streak length, or vocabulary mastered.
+* Session engagement design: the in-session experience should be structured to encourage users to keep playing as long as possible (e.g., escalating difficulty, near-miss milestone prompts, visual streak feedback, bonus rounds, "one more round" hooks). Propose specific mechanics here.
+* Daily leaderboard: show a scoreboard of top users by score/streak, resetting or aggregating daily, to drive competition.
+User & Access Requirements
+* Users must register a profile (account system) to play.
+* The app itself is free to use — no paywall, no subscription tiers.
+* Monetization is exclusively via Google AdSense (ad placements) — plan where ads should live without disrupting the quiz flow or violating AdSense policies.
+What I need from you
+1. Recommended tech stack (frontend, backend, database, auth, hosting, and speech-recognition service/API) suited for a free-to-use, ad-supported web app with moderate scale, with responsive design (desktop + mobile) and accurate French voice recognition in mind.
+2. Flash card quiz UI/UX design: how the card-based multiple-choice interaction should look and behave across breakpoints (desktop vs. mobile), including transition/feedback animation between cards, and how the written/voice toggle fits into that UI.
+3. Voice input design: recommended speech-recognition technology for accurate fr-FR recognition, microphone permission/fallback handling, and the matching/scoring logic between spoken answers and multiple-choice options.
+4. Data model covering: users, word pairs, per-user word progress/scheduling, scores, streaks, milestones, daily leaderboard.
+5. System architecture (how quiz scheduling, scoring, and leaderboard updates flow together).
+6. Gamification design detail: concrete rules for streaks, milestones/levels, and session-retention mechanics.
+7. AdSense integration plan: ad placement strategy and compliance considerations (e.g., avoiding ads that interrupt active quiz answers).
+8. Phased build plan: break the project into milestones (e.g., MVP → core gamification → leaderboard/social → monetization → polish), with rough task lists per phase.
+9. Flag any open product decisions you think I need to make (e.g., word list size/source, daily leaderboard reset time/timezone handling, strictness of voice pronunciation matching) and ask me before assuming.

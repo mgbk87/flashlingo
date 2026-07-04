@@ -1,0 +1,403 @@
+spanish,english,category,pos,gender
+cero,zero,numbers,numeral,
+uno,one,numbers,numeral,
+dos,two,numbers,numeral,
+tres,three,numbers,numeral,
+cuatro,four,numbers,numeral,
+cinco,five,numbers,numeral,
+seis,six,numbers,numeral,
+siete,seven,numbers,numeral,
+ocho,eight,numbers,numeral,
+nueve,nine,numbers,numeral,
+diez,ten,numbers,numeral,
+once,eleven,numbers,numeral,
+doce,twelve,numbers,numeral,
+trece,thirteen,numbers,numeral,
+catorce,fourteen,numbers,numeral,
+quince,fifteen,numbers,numeral,
+dieciséis,sixteen,numbers,numeral,
+diecisiete,seventeen,numbers,numeral,
+dieciocho,eighteen,numbers,numeral,
+diecinueve,nineteen,numbers,numeral,
+veinte,twenty,numbers,numeral,
+treinta,thirty,numbers,numeral,
+cuarenta,forty,numbers,numeral,
+cincuenta,fifty,numbers,numeral,
+sesenta,sixty,numbers,numeral,
+setenta,seventy,numbers,numeral,
+ochenta,eighty,numbers,numeral,
+noventa,ninety,numbers,numeral,
+cien,hundred,numbers,numeral,
+mil,thousand,numbers,numeral,
+rojo,red,colors,adjective,
+azul,blue,colors,adjective,
+verde,green,colors,adjective,
+amarillo,yellow,colors,adjective,
+naranja,orange,colors,adjective,
+morado,purple,colors,adjective,
+rosa,pink,colors,adjective,
+negro,black,colors,adjective,
+blanco,white,colors,adjective,
+gris,grey,colors,adjective,
+marrón,brown,colors,adjective,
+beige,beige,colors,adjective,
+lunes,Monday,days,noun,m
+martes,Tuesday,days,noun,m
+miércoles,Wednesday,days,noun,m
+jueves,Thursday,days,noun,m
+viernes,Friday,days,noun,m
+sábado,Saturday,days,noun,m
+domingo,Sunday,days,noun,m
+enero,January,months,noun,m
+febrero,February,months,noun,m
+marzo,March,months,noun,m
+abril,April,months,noun,m
+mayo,May,months,noun,m
+junio,June,months,noun,m
+julio,July,months,noun,m
+agosto,August,months,noun,m
+septiembre,September,months,noun,m
+octubre,October,months,noun,m
+noviembre,November,months,noun,m
+diciembre,December,months,noun,m
+la primavera,spring,seasons,noun,f
+el verano,summer,seasons,noun,m
+el otoño,autumn,seasons,noun,m
+el invierno,winter,seasons,noun,m
+la familia,family,family,noun,f
+el padre,father,family,noun,m
+la madre,mother,family,noun,f
+el hijo,son,family,noun,m
+la hija,daughter,family,noun,f
+el hermano,brother,family,noun,m
+la hermana,sister,family,noun,f
+el abuelo,grandfather,family,noun,m
+la abuela,grandmother,family,noun,f
+el tío,uncle,family,noun,m
+la tía,aunt,family,noun,f
+el primo,cousin (male),family,noun,m
+la prima,cousin (female),family,noun,f
+el marido,husband,family,noun,m
+la esposa,wife,family,noun,f
+el niño,child,family,noun,m
+el bebé,baby,family,noun,m
+los padres,parents,family,noun,m
+la cabeza,head,body,noun,f
+la cara,face,body,noun,f
+el pelo,hair,body,noun,m
+el ojo,eye,body,noun,m
+los ojos,eyes,body,noun,m
+la nariz,nose,body,noun,f
+la boca,mouth,body,noun,f
+la oreja,ear,body,noun,f
+el cuello,neck,body,noun,m
+el hombro,shoulder,body,noun,m
+el brazo,arm,body,noun,m
+la mano,hand,body,noun,f
+el dedo,finger,body,noun,m
+el estómago,stomach,body,noun,m
+la espalda,back,body,noun,f
+la pierna,leg,body,noun,f
+la rodilla,knee,body,noun,f
+el pie,foot,body,noun,m
+el corazón,heart,body,noun,m
+el diente,tooth,body,noun,m
+la lengua,tongue,body,noun,f
+el gato,cat,animals,noun,m
+el perro,dog,animals,noun,m
+el caballo,horse,animals,noun,m
+la vaca,cow,animals,noun,f
+el cerdo,pig,animals,noun,m
+la oveja,sheep,animals,noun,f
+la cabra,goat,animals,noun,f
+el pollo,chicken,animals,noun,m
+el conejo,rabbit,animals,noun,m
+el ratón,mouse,animals,noun,m
+el pájaro,bird,animals,noun,m
+el pez,fish,animals,noun,m
+la rana,frog,animals,noun,f
+la serpiente,snake,animals,noun,f
+el elefante,elephant,animals,noun,m
+el león,lion,animals,noun,m
+el tigre,tiger,animals,noun,m
+el oso,bear,animals,noun,m
+el mono,monkey,animals,noun,m
+el pato,duck,animals,noun,m
+la gallina,hen,animals,noun,f
+el pan,bread,food,noun,m
+el queso,cheese,food,noun,m
+la mantequilla,butter,food,noun,f
+la leche,milk,food,noun,f
+el huevo,egg,food,noun,m
+la carne,meat,food,noun,f
+el puerco,pork,food,noun,m
+la ternera,beef,food,noun,f
+la manzana,apple,food,noun,f
+la pera,pear,food,noun,f
+el plátano,banana,food,noun,m
+la naranja,orange,food,noun,f
+la fresa,strawberry,food,noun,f
+la uva,grape,food,noun,f
+el tomate,tomato,food,noun,m
+la zanahoria,carrot,food,noun,f
+la patata,potato,food,noun,f
+la cebolla,onion,food,noun,f
+la ensalada,salad,food,noun,f
+el arroz,rice,food,noun,m
+la pasta,pasta,food,noun,f
+la sopa,soup,food,noun,f
+el pastel,cake,food,noun,m
+el chocolate,chocolate,food,noun,m
+el azúcar,sugar,food,noun,m
+la sal,salt,food,noun,f
+la pimienta,pepper,food,noun,f
+el aceite,oil,food,noun,m
+la comida,meal,food,noun,f
+el desayuno,breakfast,food,noun,m
+el almuerzo,lunch,food,noun,m
+la cena,dinner,food,noun,f
+el agua,water,drinks,noun,f
+el zumo,juice,drinks,noun,m
+el café,coffee,drinks,noun,m
+el té,tea,drinks,noun,m
+el vino,wine,drinks,noun,m
+la cerveza,beer,drinks,noun,f
+el zumo de naranja,orange juice,drinks,noun,m
+la ropa,clothes,clothing,noun,f
+la camisa,shirt,clothing,noun,f
+los pantalones,trousers,clothing,noun,m
+el vestido,dress,clothing,noun,m
+la falda,skirt,clothing,noun,f
+el abrigo,coat,clothing,noun,m
+la chaqueta,jacket,clothing,noun,f
+el suéter,sweater,clothing,noun,m
+los zapatos,shoes,clothing,noun,m
+los calcetines,socks,clothing,noun,m
+el sombrero,hat,clothing,noun,m
+la corbata,tie,clothing,noun,f
+los vaqueros,jeans,clothing,noun,m
+la camiseta,t-shirt,clothing,noun,f
+el pantalón corto,shorts,clothing,noun,m
+los guantes,gloves,clothing,noun,m
+la bufanda,scarf,clothing,noun,f
+la casa,house,home,noun,f
+el apartamento,apartment,home,noun,m
+la habitación,room,home,noun,f
+el dormitorio,bedroom,home,noun,m
+la cocina,kitchen,home,noun,f
+el baño,bathroom,home,noun,m
+el aseo,toilet,home,noun,m
+el salón,living room,home,noun,m
+el comedor,dining room,home,noun,m
+el jardín,garden,home,noun,m
+la puerta,door,home,noun,f
+la ventana,window,home,noun,f
+la escalera,stairs,home,noun,f
+la cama,bed,home,noun,f
+la silla,chair,home,noun,f
+la mesa,table,home,noun,f
+el sofá,sofa,home,noun,m
+el armario,wardrobe,home,noun,m
+el escritorio,desk,home,noun,m
+la lámpara,lamp,home,noun,f
+el espejo,mirror,home,noun,m
+la alfombra,rug,home,noun,f
+el frigorífico,fridge,home,noun,m
+el horno,oven,home,noun,m
+ser,to be (permanent),verbs,verb,
+estar,to be (temporary),verbs,verb,
+tener,to have,verbs,verb,
+ir,to go,verbs,verb,
+hacer,to do / to make,verbs,verb,
+decir,to say,verbs,verb,
+ver,to see,verbs,verb,
+saber,to know (fact),verbs,verb,
+poder,to be able to,verbs,verb,
+querer,to want,verbs,verb,
+venir,to come,verbs,verb,
+tomar,to take,verbs,verb,
+dar,to give,verbs,verb,
+encontrar,to find,verbs,verb,
+hablar,to speak,verbs,verb,
+comer,to eat,verbs,verb,
+beber,to drink,verbs,verb,
+dormir,to sleep,verbs,verb,
+trabajar,to work,verbs,verb,
+vivir,to live,verbs,verb,
+gustar,to like,verbs,verb,
+leer,to read,verbs,verb,
+escribir,to write,verbs,verb,
+escuchar,to listen,verbs,verb,
+mirar,to watch,verbs,verb,
+comprar,to buy,verbs,verb,
+vender,to sell,verbs,verb,
+abrir,to open,verbs,verb,
+cerrar,to close,verbs,verb,
+empezar,to begin,verbs,verb,
+terminar,to finish,verbs,verb,
+caminar,to walk,verbs,verb,
+correr,to run,verbs,verb,
+jugar,to play,verbs,verb,
+cantar,to sing,verbs,verb,
+bailar,to dance,verbs,verb,
+llamar,to call,verbs,verb,
+responder,to answer,verbs,verb,
+buscar,to look for,verbs,verb,
+ayudar,to help,verbs,verb,
+pensar,to think,verbs,verb,
+creer,to believe,verbs,verb,
+conocer,to know (person/place),verbs,verb,
+usar,to use,verbs,verb,
+esperar,to wait,verbs,verb,
+salir,to leave / to go out,verbs,verb,
+llegar,to arrive,verbs,verb,
+entrar,to enter,verbs,verb,
+poner,to put,verbs,verb,
+llevar,to carry / to wear,verbs,verb,
+nadar,to swim,verbs,verb,
+cocinar,to cook,verbs,verb,
+conducir,to drive,verbs,verb,
+viajar,to travel,verbs,verb,
+aprender,to learn,verbs,verb,
+entender,to understand,verbs,verb,
+preguntar,to ask,verbs,verb,
+mostrar,to show,verbs,verb,
+reír,to laugh,verbs,verb,
+llorar,to cry,verbs,verb,
+caer,to fall,verbs,verb,
+quedarse,to stay,verbs,verb,
+pagar,to pay,verbs,verb,
+necesitar,to need,verbs,verb,
+grande,big / tall,adjectives,adjective,
+pequeño,small / little,adjectives,adjective,
+bueno,good,adjectives,adjective,
+malo,bad,adjectives,adjective,
+hermoso,beautiful,adjectives,adjective,
+bonito,pretty,adjectives,adjective,
+viejo,old,adjectives,adjective,
+joven,young,adjectives,adjective,
+nuevo,new,adjectives,adjective,
+largo,long,adjectives,adjective,
+corto,short,adjectives,adjective,
+caliente,hot / warm,adjectives,adjective,
+frío,cold,adjectives,adjective,
+fácil,easy,adjectives,adjective,
+difícil,difficult,adjectives,adjective,
+rápido,fast,adjectives,adjective,
+lento,slow,adjectives,adjective,
+fuerte,strong,adjectives,adjective,
+débil,weak,adjectives,adjective,
+rico,rich,adjectives,adjective,
+pobre,poor,adjectives,adjective,
+contento,happy / pleased,adjectives,adjective,
+triste,sad,adjectives,adjective,
+cansado,tired,adjectives,adjective,
+enfermo,ill / sick,adjectives,adjective,
+limpio,clean,adjectives,adjective,
+sucio,dirty,adjectives,adjective,
+abierto,open,adjectives,adjective,
+cerrado,closed,adjectives,adjective,
+lleno,full,adjectives,adjective,
+vacío,empty,adjectives,adjective,
+solo,alone,adjectives,adjective,
+libre,free,adjectives,adjective,
+ocupado,busy,adjectives,adjective,
+feliz,happy,adjectives,adjective,
+simpático,nice / friendly,adjectives,adjective,
+interesante,interesting,adjectives,adjective,
+buenos días,good morning,greetings,phrase,
+buenas tardes,good afternoon,greetings,phrase,
+buenas noches,good night,greetings,phrase,
+hola,hello / hi,greetings,interjection,
+adiós,goodbye,greetings,interjection,
+gracias,thank you,greetings,interjection,
+por favor,please,greetings,phrase,
+de nada,you're welcome,greetings,phrase,
+perdón,excuse me / sorry,greetings,interjection,
+disculpe,excuse me (formal),greetings,phrase,
+mucho gusto,nice to meet you,greetings,phrase,
+sí,yes,greetings,adverb,
+no,no,greetings,adverb,
+hoy,today,time,adverb,
+mañana,tomorrow,time,adverb,
+ayer,yesterday,time,adverb,
+ahora,now,time,adverb,
+siempre,always,time,adverb,
+nunca,never,time,adverb,
+a menudo,often,time,adverb,
+a veces,sometimes,time,adverb,
+temprano,early,time,adverb,
+tarde,late,time,adverb,
+la hora,hour / time,time,noun,f
+el minuto,minute,time,noun,m
+el día,day,time,noun,m
+la semana,week,time,noun,f
+el mes,month,time,noun,m
+el año,year,time,noun,m
+la mañana,morning,time,noun,f
+el mediodía,noon,time,noun,m
+la tarde,afternoon,time,noun,f
+la noche,night,time,noun,f
+el fin de semana,weekend,time,noun,m
+el sol,sun,weather,noun,m
+la lluvia,rain,weather,noun,f
+la nieve,snow,weather,noun,f
+el viento,wind,weather,noun,m
+la nube,cloud,weather,noun,f
+la tormenta,storm,weather,noun,f
+la niebla,fog,weather,noun,f
+el calor,heat,weather,noun,m
+hace buen tiempo,the weather is nice,weather,phrase,
+está lloviendo,it is raining,weather,phrase,
+está nevando,it is snowing,weather,phrase,
+el coche,car,transport,noun,m
+el tren,train,transport,noun,m
+el autobús,bus,transport,noun,m
+el metro,metro / subway,transport,noun,m
+el avión,plane,transport,noun,m
+el barco,boat,transport,noun,m
+el taxi,taxi,transport,noun,m
+la bicicleta,bicycle,transport,noun,f
+la moto,motorcycle,transport,noun,f
+la estación de tren,train station,transport,noun,f
+el aeropuerto,airport,transport,noun,m
+la parada de autobús,bus stop,transport,noun,f
+la escuela,school,places,noun,f
+la universidad,university,places,noun,f
+la oficina,office,places,noun,f
+la tienda,shop / store,places,noun,f
+el mercado,market,places,noun,m
+el supermercado,supermarket,places,noun,m
+el restaurante,restaurant,places,noun,m
+el café,café,places,noun,m
+el hospital,hospital,places,noun,m
+la farmacia,pharmacy,places,noun,f
+el banco,bank,places,noun,m
+la iglesia,church,places,noun,f
+la calle,street,places,noun,f
+la ciudad,city,places,noun,f
+el pueblo,village,places,noun,m
+el país,country,places,noun,m
+España,Spain,places,noun,f
+el parque,park,places,noun,m
+la playa,beach,places,noun,f
+la montaña,mountain,places,noun,f
+el bosque,forest,places,noun,m
+el mar,sea,places,noun,m
+el río,river,places,noun,m
+el libro,book,objects,noun,m
+el bolígrafo,pen,objects,noun,m
+el lápiz,pencil,objects,noun,m
+el cuaderno,notebook,objects,noun,m
+el teléfono,phone,objects,noun,m
+el ordenador,computer,objects,noun,m
+la llave,key,objects,noun,f
+la bolsa,bag,objects,noun,f
+el reloj,watch,objects,noun,m
+el dinero,money,objects,noun,m
+la tarjeta,card / map,objects,noun,f
+el periódico,newspaper,objects,noun,m
+la foto,photo,objects,noun,f
+la carta,letter,objects,noun,f
+el regalo,gift,objects,noun,m
+el juguete,toy,objects,noun,m

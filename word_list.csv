@@ -1,0 +1,403 @@
+french,english,category,pos,gender
+zéro,zero,numbers,numeral,
+un,one,numbers,numeral,
+deux,two,numbers,numeral,
+trois,three,numbers,numeral,
+quatre,four,numbers,numeral,
+cinq,five,numbers,numeral,
+six,six,numbers,numeral,
+sept,seven,numbers,numeral,
+huit,eight,numbers,numeral,
+neuf,nine,numbers,numeral,
+dix,ten,numbers,numeral,
+onze,eleven,numbers,numeral,
+douze,twelve,numbers,numeral,
+treize,thirteen,numbers,numeral,
+quatorze,fourteen,numbers,numeral,
+quinze,fifteen,numbers,numeral,
+seize,sixteen,numbers,numeral,
+dix-sept,seventeen,numbers,numeral,
+dix-huit,eighteen,numbers,numeral,
+dix-neuf,nineteen,numbers,numeral,
+vingt,twenty,numbers,numeral,
+trente,thirty,numbers,numeral,
+quarante,forty,numbers,numeral,
+cinquante,fifty,numbers,numeral,
+soixante,sixty,numbers,numeral,
+soixante-dix,seventy,numbers,numeral,
+quatre-vingts,eighty,numbers,numeral,
+quatre-vingt-dix,ninety,numbers,numeral,
+cent,hundred,numbers,numeral,
+mille,thousand,numbers,numeral,
+rouge,red,colors,adjective,
+bleu,blue,colors,adjective,
+vert,green,colors,adjective,
+jaune,yellow,colors,adjective,
+orange,orange,colors,adjective,
+violet,purple,colors,adjective,
+rose,pink,colors,adjective,
+noir,black,colors,adjective,
+blanc,white,colors,adjective,
+gris,grey,colors,adjective,
+brun,brown,colors,adjective,
+beige,beige,colors,adjective,
+lundi,Monday,days,noun,m
+mardi,Tuesday,days,noun,m
+mercredi,Wednesday,days,noun,m
+jeudi,Thursday,days,noun,m
+vendredi,Friday,days,noun,m
+samedi,Saturday,days,noun,m
+dimanche,Sunday,days,noun,m
+janvier,January,months,noun,m
+février,February,months,noun,m
+mars,March,months,noun,m
+avril,April,months,noun,m
+mai,May,months,noun,m
+juin,June,months,noun,m
+juillet,July,months,noun,m
+août,August,months,noun,m
+septembre,September,months,noun,m
+octobre,October,months,noun,m
+novembre,November,months,noun,m
+décembre,December,months,noun,m
+le printemps,spring,seasons,noun,m
+l'été,summer,seasons,noun,m
+l'automne,autumn,seasons,noun,m
+l'hiver,winter,seasons,noun,m
+la famille,family,family,noun,f
+le père,father,family,noun,m
+la mère,mother,family,noun,f
+le fils,son,family,noun,m
+la fille,daughter,family,noun,f
+le frère,brother,family,noun,m
+la sœur,sister,family,noun,f
+le grand-père,grandfather,family,noun,m
+la grand-mère,grandmother,family,noun,f
+l'oncle,uncle,family,noun,m
+la tante,aunt,family,noun,f
+le cousin,cousin (male),family,noun,m
+la cousine,cousin (female),family,noun,f
+le mari,husband,family,noun,m
+la femme,wife,family,noun,f
+l'enfant,child,family,noun,m/f
+le bébé,baby,family,noun,m
+les parents,parents,family,noun,m
+la tête,head,body,noun,f
+le visage,face,body,noun,m
+les cheveux,hair,body,noun,m
+l'œil,eye,body,noun,m
+les yeux,eyes,body,noun,m
+le nez,nose,body,noun,m
+la bouche,mouth,body,noun,f
+l'oreille,ear,body,noun,f
+le cou,neck,body,noun,m
+l'épaule,shoulder,body,noun,f
+le bras,arm,body,noun,m
+la main,hand,body,noun,f
+le doigt,finger,body,noun,m
+le ventre,stomach,body,noun,m
+le dos,back,body,noun,m
+la jambe,leg,body,noun,f
+le genou,knee,body,noun,m
+le pied,foot,body,noun,m
+le cœur,heart,body,noun,m
+la dent,tooth,body,noun,f
+la langue,tongue,body,noun,f
+le chat,cat,animals,noun,m
+le chien,dog,animals,noun,m
+le cheval,horse,animals,noun,m
+la vache,cow,animals,noun,f
+le cochon,pig,animals,noun,m
+le mouton,sheep,animals,noun,m
+la chèvre,goat,animals,noun,f
+le poulet,chicken,animals,noun,m
+le lapin,rabbit,animals,noun,m
+la souris,mouse,animals,noun,f
+l'oiseau,bird,animals,noun,m
+le poisson,fish,animals,noun,m
+la grenouille,frog,animals,noun,f
+le serpent,snake,animals,noun,m
+l'éléphant,elephant,animals,noun,m
+le lion,lion,animals,noun,m
+le tigre,tiger,animals,noun,m
+l'ours,bear,animals,noun,m
+le singe,monkey,animals,noun,m
+le canard,duck,animals,noun,m
+la poule,hen,animals,noun,f
+le pain,bread,food,noun,m
+le fromage,cheese,food,noun,m
+le beurre,butter,food,noun,m
+le lait,milk,food,noun,m
+l'œuf,egg,food,noun,m
+la viande,meat,food,noun,f
+le porc,pork,food,noun,m
+le bœuf,beef,food,noun,m
+la pomme,apple,food,noun,f
+la poire,pear,food,noun,f
+la banane,banana,food,noun,f
+l'orange,orange,food,noun,f
+la fraise,strawberry,food,noun,f
+le raisin,grape,food,noun,m
+la tomate,tomato,food,noun,f
+la carotte,carrot,food,noun,f
+la pomme de terre,potato,food,noun,f
+l'oignon,onion,food,noun,m
+la salade,salad,food,noun,f
+le riz,rice,food,noun,m
+les pâtes,pasta,food,noun,f
+la soupe,soup,food,noun,f
+le gâteau,cake,food,noun,m
+le chocolat,chocolate,food,noun,m
+le sucre,sugar,food,noun,m
+le sel,salt,food,noun,m
+le poivre,pepper,food,noun,m
+l'huile,oil,food,noun,f
+le repas,meal,food,noun,m
+le petit-déjeuner,breakfast,food,noun,m
+le déjeuner,lunch,food,noun,m
+le dîner,dinner,food,noun,m
+l'eau,water,drinks,noun,f
+le jus,juice,drinks,noun,m
+le café,coffee,drinks,noun,m
+le thé,tea,drinks,noun,m
+le vin,wine,drinks,noun,m
+la bière,beer,drinks,noun,f
+le jus d'orange,orange juice,drinks,noun,m
+les vêtements,clothes,clothing,noun,m
+la chemise,shirt,clothing,noun,f
+le pantalon,trousers,clothing,noun,m
+la robe,dress,clothing,noun,f
+la jupe,skirt,clothing,noun,f
+le manteau,coat,clothing,noun,m
+la veste,jacket,clothing,noun,f
+le pull,sweater,clothing,noun,m
+les chaussures,shoes,clothing,noun,f
+les chaussettes,socks,clothing,noun,f
+le chapeau,hat,clothing,noun,m
+la cravate,tie,clothing,noun,f
+le jean,jeans,clothing,noun,m
+le t-shirt,t-shirt,clothing,noun,m
+le short,shorts,clothing,noun,m
+les gants,gloves,clothing,noun,m
+l'écharpe,scarf,clothing,noun,f
+la maison,house,home,noun,f
+l'appartement,apartment,home,noun,m
+la pièce,room,home,noun,f
+la chambre,bedroom,home,noun,f
+la cuisine,kitchen,home,noun,f
+la salle de bain,bathroom,home,noun,f
+les toilettes,toilet,home,noun,f
+le salon,living room,home,noun,m
+la salle à manger,dining room,home,noun,f
+le jardin,garden,home,noun,m
+la porte,door,home,noun,f
+la fenêtre,window,home,noun,f
+l'escalier,stairs,home,noun,m
+le lit,bed,home,noun,m
+la chaise,chair,home,noun,f
+la table,table,home,noun,f
+le canapé,sofa,home,noun,m
+l'armoire,wardrobe,home,noun,f
+le bureau,desk,home,noun,m
+la lampe,lamp,home,noun,f
+le miroir,mirror,home,noun,m
+le tapis,rug,home,noun,m
+le frigo,fridge,home,noun,m
+le four,oven,home,noun,m
+être,to be,verbs,verb,
+avoir,to have,verbs,verb,
+aller,to go,verbs,verb,
+faire,to do / to make,verbs,verb,
+dire,to say,verbs,verb,
+voir,to see,verbs,verb,
+savoir,to know (fact),verbs,verb,
+pouvoir,to be able to,verbs,verb,
+vouloir,to want,verbs,verb,
+venir,to come,verbs,verb,
+prendre,to take,verbs,verb,
+donner,to give,verbs,verb,
+trouver,to find,verbs,verb,
+parler,to speak,verbs,verb,
+manger,to eat,verbs,verb,
+boire,to drink,verbs,verb,
+dormir,to sleep,verbs,verb,
+travailler,to work,verbs,verb,
+habiter,to live,verbs,verb,
+aimer,to like / to love,verbs,verb,
+lire,to read,verbs,verb,
+écrire,to write,verbs,verb,
+écouter,to listen,verbs,verb,
+regarder,to watch,verbs,verb,
+acheter,to buy,verbs,verb,
+vendre,to sell,verbs,verb,
+ouvrir,to open,verbs,verb,
+fermer,to close,verbs,verb,
+commencer,to begin,verbs,verb,
+finir,to finish,verbs,verb,
+marcher,to walk,verbs,verb,
+courir,to run,verbs,verb,
+jouer,to play,verbs,verb,
+chanter,to sing,verbs,verb,
+danser,to dance,verbs,verb,
+appeler,to call,verbs,verb,
+répondre,to answer,verbs,verb,
+chercher,to look for,verbs,verb,
+aider,to help,verbs,verb,
+penser,to think,verbs,verb,
+croire,to believe,verbs,verb,
+connaître,to know (person/place),verbs,verb,
+utiliser,to use,verbs,verb,
+attendre,to wait,verbs,verb,
+partir,to leave,verbs,verb,
+arriver,to arrive,verbs,verb,
+entrer,to enter,verbs,verb,
+sortir,to go out,verbs,verb,
+mettre,to put,verbs,verb,
+porter,to carry / to wear,verbs,verb,
+vivre,to live,verbs,verb,
+nager,to swim,verbs,verb,
+cuisiner,to cook,verbs,verb,
+conduire,to drive,verbs,verb,
+voyager,to travel,verbs,verb,
+apprendre,to learn,verbs,verb,
+comprendre,to understand,verbs,verb,
+demander,to ask,verbs,verb,
+montrer,to show,verbs,verb,
+rire,to laugh,verbs,verb,
+pleurer,to cry,verbs,verb,
+tomber,to fall,verbs,verb,
+rester,to stay,verbs,verb,
+payer,to pay,verbs,verb,
+grand,big / tall,adjectives,adjective,
+petit,small / little,adjectives,adjective,
+bon,good,adjectives,adjective,
+mauvais,bad,adjectives,adjective,
+beau,beautiful,adjectives,adjective,
+joli,pretty,adjectives,adjective,
+vieux,old,adjectives,adjective,
+jeune,young,adjectives,adjective,
+nouveau,new,adjectives,adjective,
+long,long,adjectives,adjective,
+court,short,adjectives,adjective,
+chaud,hot / warm,adjectives,adjective,
+froid,cold,adjectives,adjective,
+facile,easy,adjectives,adjective,
+difficile,difficult,adjectives,adjective,
+rapide,fast,adjectives,adjective,
+lent,slow,adjectives,adjective,
+fort,strong,adjectives,adjective,
+faible,weak,adjectives,adjective,
+riche,rich,adjectives,adjective,
+pauvre,poor,adjectives,adjective,
+content,happy / pleased,adjectives,adjective,
+triste,sad,adjectives,adjective,
+fatigué,tired,adjectives,adjective,
+malade,ill / sick,adjectives,adjective,
+propre,clean,adjectives,adjective,
+sale,dirty,adjectives,adjective,
+ouvert,open,adjectives,adjective,
+fermé,closed,adjectives,adjective,
+plein,full,adjectives,adjective,
+vide,empty,adjectives,adjective,
+seul,alone,adjectives,adjective,
+libre,free,adjectives,adjective,
+occupé,busy,adjectives,adjective,
+heureux,happy,adjectives,adjective,
+sympa,nice / friendly,adjectives,adjective,
+intéressant,interesting,adjectives,adjective,
+bonjour,hello / good morning,greetings,interjection,
+bonsoir,good evening,greetings,interjection,
+bonne nuit,good night,greetings,phrase,
+au revoir,goodbye,greetings,phrase,
+salut,hi,greetings,interjection,
+merci,thank you,greetings,interjection,
+s'il vous plaît,please (formal),greetings,phrase,
+s'il te plaît,please (informal),greetings,phrase,
+de rien,you're welcome,greetings,phrase,
+pardon,excuse me / sorry,greetings,interjection,
+excusez-moi,excuse me (formal),greetings,phrase,
+oui,yes,greetings,adverb,
+non,no,greetings,adverb,
+aujourd'hui,today,time,adverb,
+demain,tomorrow,time,adverb,
+hier,yesterday,time,adverb,
+maintenant,now,time,adverb,
+toujours,always,time,adverb,
+jamais,never,time,adverb,
+souvent,often,time,adverb,
+parfois,sometimes,time,adverb,
+tôt,early,time,adverb,
+tard,late,time,adverb,
+l'heure,hour / time,time,noun,f
+la minute,minute,time,noun,f
+le jour,day,time,noun,m
+la semaine,week,time,noun,f
+le mois,month,time,noun,m
+l'année,year,time,noun,f
+le matin,morning,time,noun,m
+le midi,noon,time,noun,m
+l'après-midi,afternoon,time,noun,m
+le soir,evening,time,noun,m
+la nuit,night,time,noun,f
+le soleil,sun,weather,noun,m
+la pluie,rain,weather,noun,f
+la neige,snow,weather,noun,f
+le vent,wind,weather,noun,m
+le nuage,cloud,weather,noun,m
+l'orage,storm,weather,noun,m
+le brouillard,fog,weather,noun,m
+la chaleur,heat,weather,noun,f
+il fait beau,the weather is nice,weather,phrase,
+il pleut,it is raining,weather,phrase,
+il neige,it is snowing,weather,phrase,
+la voiture,car,transport,noun,f
+le train,train,transport,noun,m
+le bus,bus,transport,noun,m
+le métro,metro / subway,transport,noun,m
+l'avion,plane,transport,noun,m
+le bateau,boat,transport,noun,m
+le taxi,taxi,transport,noun,m
+le vélo,bicycle,transport,noun,m
+la moto,motorcycle,transport,noun,f
+la gare,train station,transport,noun,f
+l'aéroport,airport,transport,noun,m
+l'arrêt de bus,bus stop,transport,noun,m
+l'école,school,places,noun,f
+l'université,university,places,noun,f
+le bureau,office,places,noun,m
+le magasin,shop / store,places,noun,m
+le marché,market,places,noun,m
+le supermarché,supermarket,places,noun,m
+le restaurant,restaurant,places,noun,m
+le café,café,places,noun,m
+l'hôpital,hospital,places,noun,m
+la pharmacie,pharmacy,places,noun,f
+la banque,bank,places,noun,f
+l'église,church,places,noun,f
+la rue,street,places,noun,f
+la ville,city,places,noun,f
+le village,village,places,noun,m
+le pays,country,places,noun,m
+la France,France,places,noun,f
+le parc,park,places,noun,m
+la plage,beach,places,noun,f
+la montagne,mountain,places,noun,f
+la forêt,forest,places,noun,f
+la mer,sea,places,noun,f
+la rivière,river,places,noun,f
+le livre,book,objects,noun,m
+le stylo,pen,objects,noun,m
+le crayon,pencil,objects,noun,m
+le cahier,notebook,objects,noun,m
+le téléphone,phone,objects,noun,m
+l'ordinateur,computer,objects,noun,m
+la clé,key,objects,noun,f
+le sac,bag,objects,noun,m
+la montre,watch,objects,noun,f
+l'argent,money,objects,noun,m
+la carte,card / map,objects,noun,f
+le journal,newspaper,objects,noun,m
+la photo,photo,objects,noun,f
+la lettre,letter,objects,noun,f
+le cadeau,gift,objects,noun,m
+le jouet,toy,objects,noun,m
