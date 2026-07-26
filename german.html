@@ -262,6 +262,23 @@
     .score-reveal { animation: scoreReveal 0.7s cubic-bezier(0.175,0.885,0.32,1.275) both; }
     @keyframes scoreReveal { from { transform: scale(0.3) rotate(-10deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
     .results-hero.game-over { background: linear-gradient(135deg, #1F1F1F, #4B0000, #7C0000); }
+
+    /* ── LANGUAGE CONTENT (added for AdSense content quality) ── */
+    .lang-learn { max-width: 640px; margin: 6px auto 0; padding: 0 20px 40px; position: relative; z-index: 1; text-align: left; }
+    .lang-learn-title { text-align: center; font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 16px; }
+    .lang-card-info { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 22px 24px; margin-bottom: 16px; }
+    .lang-card-info h2 { font-size: 1.02rem; font-weight: 900; color: var(--purple-dark); margin-bottom: 10px; }
+    .lang-card-info p { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.65; margin-bottom: 8px; }
+    .lang-card-info ul { padding-left: 18px; margin-bottom: 6px; }
+    .lang-card-info li { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.6; margin-bottom: 6px; }
+    .lang-card-info strong { color: var(--text); }
+    .lang-fact-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 10px; margin: 12px 0 4px; }
+    .lang-fact { background: var(--purple-faint); border-radius: 14px; padding: 10px 12px; text-align: center; }
+    .lang-fact-num { display: block; font-weight: 900; color: var(--purple-dark); font-size: 1rem; }
+    .lang-fact-label { font-size: 0.68rem; font-weight: 700; color: var(--text-mid); }
+    .lang-faq-q { font-weight: 800; color: var(--text); font-size: 0.9rem; margin: 12px 0 3px; }
+    .lang-faq-q:first-child { margin-top: 0; }
+    .lang-faq-a { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.6; margin: 0; }
   </style>
 </head>
 <body>
@@ -348,6 +365,36 @@
     <div class="home-stat"><span class="home-stat-num">500</span><span class="home-stat-label">Words</span></div>
     <div class="home-stat"><span class="home-stat-num">24</span><span class="home-stat-label">Categories</span></div>
     <div class="home-stat"><span class="home-stat-num">2×</span><span class="home-stat-label">Hard pts</span></div>
+  </div>
+
+  <div class="lang-learn">
+    <div class="lang-learn-title">📖 About German</div>
+
+    <div class="lang-card-info">
+      <h2>Why learn German with Flashlingo?</h2>
+      <p>German has about 135 million speakers and is an official language in Germany, Austria, Switzerland, Liechtenstein, Luxembourg and Belgium. It's the most widely spoken native language in the European Union, and its close relationship to English means more of its vocabulary will feel familiar than you might expect.</p>
+      <div class="lang-fact-grid"><div class="lang-fact"><span class="lang-fact-num">135M</span><span class="lang-fact-label">Speakers worldwide</span></div><div class="lang-fact"><span class="lang-fact-num">6</span><span class="lang-fact-label">Countries (official)</span></div><div class="lang-fact"><span class="lang-fact-num">500</span><span class="lang-fact-label">Words in this deck</span></div></div>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>How the levels work</h2>
+      <p>Every language deck on Flashlingo comes in three levels, so you can start where you actually are instead of where a textbook assumes you are.</p><ul><li><strong>Beginner</strong> — the 500 highest-frequency words: greetings, numbers, everyday objects and simple phrases.</li><li><strong>Intermediate</strong> — broader everyday vocabulary spread across 24 topic categories, from food and travel to family and work.</li><li><strong>Expert</strong> — less common but genuinely useful words that push you past textbook basics toward natural, fluent vocabulary.</li></ul>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>Tips for learning German vocabulary faster</h2>
+      <ul><li>German capitalizes every noun, not just proper nouns — once you notice this it actually makes reading easier, since nouns visually jump out of a sentence.</li><li>There are three grammatical genders (der/die/das). Learn the article with the noun from day one rather than trying to memorize gender rules separately.</li><li>Compound words look intimidating but are usually just smaller words stuck together — once you know the parts, you can often guess the whole (Handschuh = hand + shoe = glove).</li><li>German word order is flexible, but the verb's position in the sentence follows strict rules — that's a grammar problem, not a vocabulary one, so don't let it slow down your word learning.</li><li>Review missed words the same day you learn them — German's longer words are more prone to being half-remembered if you wait too long.</li></ul>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>A few words to start with</h2>
+      <p>Hallo (hello), Danke (thank you), Bitte (please / you're welcome), Ja / Nein (yes / no), and Auf Wiedersehen (goodbye) cover the basics of almost any interaction.</p>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>FAQ</h2>
+      <div class="lang-faq-q">Is German close to English?</div><p class="lang-faq-a">Yes — both are Germanic languages and share a surprising number of word roots (Haus/house, Wasser/water, Buch/book), which makes vocabulary easier to pick up than the long compound words might suggest.</p><div class="lang-faq-q">Why are all German nouns capitalized?</div><p class="lang-faq-a">It's a spelling convention unique to German that dates back centuries. It looks unusual at first, but most learners find it actually speeds up reading once it becomes familiar.</p><div class="lang-faq-q">What's the fastest way to build German vocabulary here?</div><p class="lang-faq-a">Stick to Beginner until the 500 core words feel automatic, then move to Intermediate — jumping ahead too early just means re-learning basics later.</p>
+    </div>
   </div>
 </div>
 
