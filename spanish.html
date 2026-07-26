@@ -262,6 +262,23 @@
     .score-reveal { animation: scoreReveal 0.7s cubic-bezier(0.175,0.885,0.32,1.275) both; }
     @keyframes scoreReveal { from { transform: scale(0.3) rotate(-10deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
     .results-hero.game-over { background: linear-gradient(135deg, #1F1F1F, #4B0000, #7C0000); }
+
+    /* ── LANGUAGE CONTENT (added for AdSense content quality) ── */
+    .lang-learn { max-width: 640px; margin: 6px auto 0; padding: 0 20px 40px; position: relative; z-index: 1; text-align: left; }
+    .lang-learn-title { text-align: center; font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 16px; }
+    .lang-card-info { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 22px 24px; margin-bottom: 16px; }
+    .lang-card-info h2 { font-size: 1.02rem; font-weight: 900; color: var(--purple-dark); margin-bottom: 10px; }
+    .lang-card-info p { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.65; margin-bottom: 8px; }
+    .lang-card-info ul { padding-left: 18px; margin-bottom: 6px; }
+    .lang-card-info li { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.6; margin-bottom: 6px; }
+    .lang-card-info strong { color: var(--text); }
+    .lang-fact-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 10px; margin: 12px 0 4px; }
+    .lang-fact { background: var(--purple-faint); border-radius: 14px; padding: 10px 12px; text-align: center; }
+    .lang-fact-num { display: block; font-weight: 900; color: var(--purple-dark); font-size: 1rem; }
+    .lang-fact-label { font-size: 0.68rem; font-weight: 700; color: var(--text-mid); }
+    .lang-faq-q { font-weight: 800; color: var(--text); font-size: 0.9rem; margin: 12px 0 3px; }
+    .lang-faq-q:first-child { margin-top: 0; }
+    .lang-faq-a { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.6; margin: 0; }
   </style>
 </head>
 <body>
@@ -348,6 +365,36 @@
     <div class="home-stat"><span class="home-stat-num">500</span><span class="home-stat-label">Words</span></div>
     <div class="home-stat"><span class="home-stat-num">24</span><span class="home-stat-label">Categories</span></div>
     <div class="home-stat"><span class="home-stat-num">2×</span><span class="home-stat-label">Hard pts</span></div>
+  </div>
+
+  <div class="lang-learn">
+    <div class="lang-learn-title">📖 About Spanish</div>
+
+    <div class="lang-card-info">
+      <h2>Why learn Spanish with Flashlingo?</h2>
+      <p>Spanish is the world's second most-spoken native language, with an estimated 485–560 million speakers when you include second-language use, and it's the official language of 20 countries across Europe and the Americas — Spain, Mexico, Argentina and Colombia among them.</p>
+      <div class="lang-fact-grid"><div class="lang-fact"><span class="lang-fact-num">485M+</span><span class="lang-fact-label">Native speakers</span></div><div class="lang-fact"><span class="lang-fact-num">20</span><span class="lang-fact-label">Countries (official)</span></div><div class="lang-fact"><span class="lang-fact-num">500</span><span class="lang-fact-label">Words in this deck</span></div></div>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>How the levels work</h2>
+      <p>Every language deck on Flashlingo comes in three levels, so you can start where you actually are instead of where a textbook assumes you are.</p><ul><li><strong>Beginner</strong> — the 500 highest-frequency words: greetings, numbers, everyday objects and simple phrases.</li><li><strong>Intermediate</strong> — broader everyday vocabulary spread across 24 topic categories, from food and travel to family and work.</li><li><strong>Expert</strong> — less common but genuinely useful words that push you past textbook basics toward natural, fluent vocabulary.</li></ul>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>Tips for learning Spanish vocabulary faster</h2>
+      <ul><li>Practice rolling your R's early — it's a real muscle-memory skill, not just an accent quirk.</li><li>Nouns carry gender (el/la), so learn the article alongside the word rather than bolting it on later.</li><li>Spanish verbs conjugate heavily by person and tense; building vocabulary first, before you tackle conjugation tables, makes grammar much easier to absorb later.</li><li>Vocabulary can shift between Spain and Latin America — this deck sticks to core words that are understood everywhere.</li><li>Use Endless or God Mode once Beginner feels comfortable — mixing categories forces faster, more reliable recall than studying one topic at a time.</li></ul>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>A few words to start with</h2>
+      <p>Hola (hello), Gracias (thank you), Por favor (please), Sí / No (yes / no), and Adiós (goodbye) are the five words you'll reach for constantly.</p>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>FAQ</h2>
+      <div class="lang-faq-q">Does this deck teach Spain or Latin American Spanish?</div><p class="lang-faq-a">Neither exclusively — the word choices focus on vocabulary that's understood across both, so you're not stuck relearning things later if you travel or study a specific region.</p><div class="lang-faq-q">Is Spanish useful outside of Spanish-speaking countries?</div><p class="lang-faq-a">Very — it's the second most-spoken language in the United States, with over 40 million speakers, and one of the most widely studied second languages worldwide.</p><div class="lang-faq-q">Which level should a complete beginner start with?</div><p class="lang-faq-a">Beginner, always — it's built around the highest-frequency words, so the vocabulary you learn first is the vocabulary you'll actually use first.</p>
+    </div>
   </div>
 </div>
 

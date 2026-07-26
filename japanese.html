@@ -264,6 +264,23 @@
     .score-reveal { animation: scoreReveal 0.7s cubic-bezier(0.175,0.885,0.32,1.275) both; }
     @keyframes scoreReveal { from { transform: scale(0.3) rotate(-10deg); opacity: 0; } to { transform: scale(1) rotate(0deg); opacity: 1; } }
     .results-hero.game-over { background: linear-gradient(135deg, #1F1F1F, #4B0000, #7C0000); }
+
+    /* ── LANGUAGE CONTENT (added for AdSense content quality) ── */
+    .lang-learn { max-width: 640px; margin: 6px auto 0; padding: 0 20px 40px; position: relative; z-index: 1; text-align: left; }
+    .lang-learn-title { text-align: center; font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 16px; }
+    .lang-card-info { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 22px 24px; margin-bottom: 16px; }
+    .lang-card-info h2 { font-size: 1.02rem; font-weight: 900; color: var(--purple-dark); margin-bottom: 10px; }
+    .lang-card-info p { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.65; margin-bottom: 8px; }
+    .lang-card-info ul { padding-left: 18px; margin-bottom: 6px; }
+    .lang-card-info li { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.6; margin-bottom: 6px; }
+    .lang-card-info strong { color: var(--text); }
+    .lang-fact-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 10px; margin: 12px 0 4px; }
+    .lang-fact { background: var(--purple-faint); border-radius: 14px; padding: 10px 12px; text-align: center; }
+    .lang-fact-num { display: block; font-weight: 900; color: var(--purple-dark); font-size: 1rem; }
+    .lang-fact-label { font-size: 0.68rem; font-weight: 700; color: var(--text-mid); }
+    .lang-faq-q { font-weight: 800; color: var(--text); font-size: 0.9rem; margin: 12px 0 3px; }
+    .lang-faq-q:first-child { margin-top: 0; }
+    .lang-faq-a { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.6; margin: 0; }
   </style>
 </head>
 <body>
@@ -350,6 +367,36 @@
     <div class="home-stat"><span class="home-stat-num">500</span><span class="home-stat-label">Words</span></div>
     <div class="home-stat"><span class="home-stat-num">24</span><span class="home-stat-label">Categories</span></div>
     <div class="home-stat"><span class="home-stat-num">2×</span><span class="home-stat-label">Hard pts</span></div>
+  </div>
+
+  <div class="lang-learn">
+    <div class="lang-learn-title">📖 About Japanese</div>
+
+    <div class="lang-card-info">
+      <h2>Why learn Japanese with Flashlingo?</h2>
+      <p>Japanese has around 125 million speakers, spoken almost entirely within Japan, and its vocabulary underpins a huge amount of globally exported culture — from anime and manga to video games and cuisine — which is part of why so many learners are drawn to it.</p>
+      <div class="lang-fact-grid"><div class="lang-fact"><span class="lang-fact-num">125M</span><span class="lang-fact-label">Speakers worldwide</span></div><div class="lang-fact"><span class="lang-fact-num">1</span><span class="lang-fact-label">Primary country</span></div><div class="lang-fact"><span class="lang-fact-num">500</span><span class="lang-fact-label">Words in this deck</span></div></div>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>How the levels work</h2>
+      <p>Every language deck on Flashlingo comes in three levels, so you can start where you actually are instead of where a textbook assumes you are.</p><ul><li><strong>Beginner</strong> — the 500 highest-frequency words: greetings, numbers, everyday objects and simple phrases.</li><li><strong>Intermediate</strong> — broader everyday vocabulary spread across 24 topic categories, from food and travel to family and work.</li><li><strong>Expert</strong> — less common but genuinely useful words that push you past textbook basics toward natural, fluent vocabulary.</li></ul>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>Tips for learning Japanese vocabulary faster</h2>
+      <ul><li>Japanese uses three writing systems together — hiragana, katakana and kanji. This deck pairs words with romaji (Roman letters) so you can learn pronunciation immediately, without waiting to master reading first.</li><li>Word order differs from English (the verb comes at the end of the sentence), but for vocabulary building that mostly doesn't matter — focus on meaning first.</li><li>Verbs don't conjugate by person the way they do in English or Spanish — “I, you, he” all use the same verb form, which removes a whole category of memorization other languages require.</li><li>Pay attention to long versus short vowel sounds — they can change a word's meaning entirely, even though they look like a small difference in romaji.</li><li>Once vocabulary feels solid, learning hiragana (the phonetic script) is a natural next step outside this deck — it will make everything you've already learned easier to read.</li></ul>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>A few words to start with</h2>
+      <p>Konnichiwa (hello), Arigatou (thank you), Onegaishimasu (please), Hai / Iie (yes / no), and Sayounara (goodbye) are a good everyday starting set.</p>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>FAQ</h2>
+      <div class="lang-faq-q">Do I need to learn kanji to use this deck?</div><p class="lang-faq-a">No — words are shown in romaji so you can build spoken vocabulary first, then add kanji reading as a separate step whenever you're ready for it.</p><div class="lang-faq-q">Is Japanese grammar hard?</div><p class="lang-faq-a">Word order and particles take some adjustment, but verb conjugation is simpler and far more regular than in most European languages, which balances things out.</p><div class="lang-faq-q">Why focus on vocabulary before writing systems?</div><p class="lang-faq-a">Spoken vocabulary is useful immediately, while reading fluency in three scripts takes much longer to build — starting with words you can actually use keeps motivation high.</p>
+    </div>
   </div>
 </div>
 

@@ -89,6 +89,31 @@
     /* ── COMING SOON CARD ── */
     .lang-card--coming { background: linear-gradient(135deg, #374151, #6B7280); cursor: default; opacity: 0.7; }
     .lang-card--coming:hover { transform: none; box-shadow: 0 6px 28px rgba(0,0,0,0.14); }
+
+    /* ── HOME CONTENT SECTION (added for AdSense content quality) ── */
+    .home-info { max-width: 720px; margin: 20px auto 0; padding: 0 20px 48px; position: relative; z-index: 1; text-align: left; }
+    .info-card { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 26px 28px; margin-bottom: 18px; }
+    .info-card h2 { font-size: 1.15rem; font-weight: 900; color: var(--purple-dark); margin-bottom: 12px; }
+    .info-card p { font-size: 0.92rem; color: var(--text-mid); font-weight: 600; line-height: 1.7; margin-bottom: 10px; }
+    .info-card p:last-child { margin-bottom: 0; }
+    .steps-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 6px; }
+    .step { display: flex; gap: 14px; align-items: flex-start; }
+    .step-num { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; background: var(--purple-faint); color: var(--purple-dark); font-weight: 900; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; }
+    .step-body h3 { font-size: 0.95rem; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .step-body p { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; margin: 0; line-height: 1.55; }
+    .lang-blurb-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 4px; }
+    .lang-blurb { padding: 12px 0; border-top: 2px solid var(--purple-faint); }
+    .lang-blurb:first-child { border-top: none; padding-top: 0; }
+    .lang-blurb strong { color: var(--text); font-size: 0.9rem; }
+    .lang-blurb span { display: block; font-size: 0.86rem; color: var(--text-mid); font-weight: 600; line-height: 1.55; margin-top: 2px; }
+    .faq-q { font-weight: 800; color: var(--text); font-size: 0.94rem; margin: 14px 0 4px; }
+    .faq-q:first-child { margin-top: 0; }
+    .faq-a { font-size: 0.9rem; color: var(--text-mid); font-weight: 600; line-height: 1.65; margin: 0; }
+
+    @media (min-width: 560px) {
+      .steps-grid { grid-template-columns: repeat(3, 1fr); }
+      .step { flex-direction: column; }
+    }
   </style>
 </head>
 <body>
@@ -166,6 +191,69 @@
 
 <div class="cover-tagline">
   <p>More languages coming soon</p>
+</div>
+
+<div class="home-info">
+
+  <div class="info-card">
+    <h2>How Flashlingo works</h2>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Pick a language</h3>
+          <p>Choose from French, Spanish, German, Italian, Portuguese, Mandarin, Japanese or Malay — more are on the way.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Choose your level</h3>
+          <p>Beginner, Intermediate or Expert — each built from real word-frequency data, so you're always learning words worth knowing.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Race the clock</h3>
+          <p>Answer multiple-choice or typed questions before time runs out, rack up points, and try to beat your own high score.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h2>Why flashcards actually work</h2>
+    <p>Flashcards work because they force what learning scientists call "active recall" — pulling a word out of memory yourself, rather than just re-reading it, is what actually strengthens the memory. Pair that with spaced repetition — reviewing a word again right around the point you'd start to forget it — and short, frequent sessions, and a simple flashcard quiz can outperform far more elaborate study methods when the goal is pure vocabulary.</p>
+    <p>That's the whole idea behind Flashlingo: no grammar drills, no long lessons — just fast, repeated exposure to the words you're most likely to actually use, with a timer and a scoreboard to keep it feeling like a game instead of homework.</p>
+  </div>
+
+  <div class="info-card">
+    <h2>Eight languages, one method</h2>
+    <div class="lang-blurb-grid">
+      <div class="lang-blurb"><strong>French</strong><span>320M+ speakers across 29 countries, and one of the most useful second languages for travel across Europe and West Africa.</span></div>
+      <div class="lang-blurb"><strong>Spanish</strong><span>The world's second most-spoken native language, official in 20 countries across the Americas and Europe.</span></div>
+      <div class="lang-blurb"><strong>German</strong><span>The EU's most widely spoken native language, with more vocabulary overlap with English than you'd expect.</span></div>
+      <div class="lang-blurb"><strong>Italian</strong><span>Highly phonetic and spoken by roughly 85 million people, prized for travel, food and the arts.</span></div>
+      <div class="lang-blurb"><strong>Portuguese</strong><span>260 million speakers across nine countries on four continents, led by Brazil's huge Portuguese-speaking population.</span></div>
+      <div class="lang-blurb"><strong>Mandarin</strong><span>The most-spoken native language on Earth, with over a billion speakers and no verb conjugation to memorize.</span></div>
+      <div class="lang-blurb"><strong>Japanese</strong><span>125 million speakers, with vocabulary tied closely to a huge amount of globally exported pop culture.</span></div>
+      <div class="lang-blurb"><strong>Malay</strong><span>The national language of Malaysia and Brunei, closely related to Indonesian and written in the Latin alphabet.</span></div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <h2>Frequently asked questions</h2>
+    <div class="faq-q">Is Flashlingo free?</div>
+    <p class="faq-a">Yes — every language, level and quiz mode is free to use, with no account or subscription required. The site is supported by lightweight advertising instead.</p>
+    <div class="faq-q">Do I need to sign up?</div>
+    <p class="faq-a">No sign-up walls. Pick a language and start playing right away; enter a name only if you want to appear on that language's high-score list.</p>
+    <div class="faq-q">Which language should I start with?</div>
+    <p class="faq-a">Whichever one you'll actually use. Vocabulary sticks best when there's a real reason to remember it — an upcoming trip, a class, or family you want to talk to.</p>
+    <div class="faq-q">Is my progress saved?</div>
+    <p class="faq-a">High scores are saved per language and level so you can track your improvement over time, without needing to create an account.</p>
+  </div>
+
 </div>
 
 <script src="sidebar.js" defer></script>

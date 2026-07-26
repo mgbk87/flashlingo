@@ -266,6 +266,23 @@
     .star-burst { position: absolute; font-size: 1.6rem; pointer-events: none; animation: starFly 1.4s ease forwards; }
     @keyframes starFly { 0% { opacity: 1; transform: translate(0,0) scale(1); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.4); } }
     .results-hero.game-over { background: linear-gradient(135deg, #1F1F1F, #4B0000, #7C0000); }
+
+    /* ── LANGUAGE CONTENT (added for AdSense content quality) ── */
+    .lang-learn { max-width: 640px; margin: 6px auto 0; padding: 0 20px 40px; position: relative; z-index: 1; text-align: left; }
+    .lang-learn-title { text-align: center; font-size: 0.78rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 16px; }
+    .lang-card-info { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 22px 24px; margin-bottom: 16px; }
+    .lang-card-info h2 { font-size: 1.02rem; font-weight: 900; color: var(--purple-dark); margin-bottom: 10px; }
+    .lang-card-info p { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.65; margin-bottom: 8px; }
+    .lang-card-info ul { padding-left: 18px; margin-bottom: 6px; }
+    .lang-card-info li { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.6; margin-bottom: 6px; }
+    .lang-card-info strong { color: var(--text); }
+    .lang-fact-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 10px; margin: 12px 0 4px; }
+    .lang-fact { background: var(--purple-faint); border-radius: 14px; padding: 10px 12px; text-align: center; }
+    .lang-fact-num { display: block; font-weight: 900; color: var(--purple-dark); font-size: 1rem; }
+    .lang-fact-label { font-size: 0.68rem; font-weight: 700; color: var(--text-mid); }
+    .lang-faq-q { font-weight: 800; color: var(--text); font-size: 0.9rem; margin: 12px 0 3px; }
+    .lang-faq-q:first-child { margin-top: 0; }
+    .lang-faq-a { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.6; margin: 0; }
   </style>
 </head>
 <body>
@@ -352,6 +369,36 @@
     <div class="home-stat"><span class="home-stat-num">500</span><span class="home-stat-label">Words</span></div>
     <div class="home-stat"><span class="home-stat-num">24</span><span class="home-stat-label">Categories</span></div>
     <div class="home-stat"><span class="home-stat-num">2×</span><span class="home-stat-label">Hard pts</span></div>
+  </div>
+
+  <div class="lang-learn">
+    <div class="lang-learn-title">📖 About Italian</div>
+
+    <div class="lang-card-info">
+      <h2>Why learn Italian with Flashlingo?</h2>
+      <p>Italian has around 85 million speakers and is the official language of Italy, Switzerland, San Marino and Vatican City. Beyond its home countries, it's one of the most widely studied languages in the world thanks to its outsized role in art, food, opera and design.</p>
+      <div class="lang-fact-grid"><div class="lang-fact"><span class="lang-fact-num">85M</span><span class="lang-fact-label">Speakers worldwide</span></div><div class="lang-fact"><span class="lang-fact-num">4</span><span class="lang-fact-label">Countries / territories (official)</span></div><div class="lang-fact"><span class="lang-fact-num">500</span><span class="lang-fact-label">Words in this deck</span></div></div>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>How the levels work</h2>
+      <p>Every language deck on Flashlingo comes in three levels, so you can start where you actually are instead of where a textbook assumes you are.</p><ul><li><strong>Beginner</strong> — the 500 highest-frequency words: greetings, numbers, everyday objects and simple phrases.</li><li><strong>Intermediate</strong> — broader everyday vocabulary spread across 24 topic categories, from food and travel to family and work.</li><li><strong>Expert</strong> — less common but genuinely useful words that push you past textbook basics toward natural, fluent vocabulary.</li></ul>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>Tips for learning Italian vocabulary faster</h2>
+      <ul><li>Italian is highly phonetic — words are pronounced almost exactly the way they're spelled, so once you learn the pronunciation rules you can read most Italian words aloud correctly on sight.</li><li>Nouns are gendered and often predictable from their ending: words ending in -o are usually masculine, -a usually feminine.</li><li>Double consonants genuinely change meaning (pena = pain/sorrow, penna = pen) — Italian pronunciation rewards paying close attention to them.</li><li>You already know more Italian than you think: piano, pizza, studio, and dozens of other everyday English words are Italian loanwords.</li><li>Use Hard mode to practice spelling from memory — it's especially useful in Italian, where double letters are easy to drop if you're only recognizing words, not producing them.</li></ul>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>A few words to start with</h2>
+      <p>Ciao (hi / bye), Grazie (thank you), Per favore (please), Sì / No (yes / no), and Arrivederci (goodbye, formal) are the essentials to start with.</p>
+    </div>
+
+    <div class="lang-card-info">
+      <h2>FAQ</h2>
+      <div class="lang-faq-q">Is Italian easy if I already know Spanish or French?</div><p class="lang-faq-a">Often, yes — Italian shares a huge amount of vocabulary with other Romance languages, so recognition tends to come faster if you've studied a related language before.</p><div class="lang-faq-q">Why does pronunciation matter so much for vocabulary?</div><p class="lang-faq-a">Because Italian spelling is phonetic, mispronouncing a word usually means you'll also mis-hear or misspell it later — getting the sound right early saves relearning down the line.</p><div class="lang-faq-q">Which level covers travel basics?</div><p class="lang-faq-a">Beginner and Intermediate together cover the everyday, travel-friendly vocabulary; Expert is aimed at learners who already feel comfortable with day-to-day conversation.</p>
+    </div>
   </div>
 </div>
 
