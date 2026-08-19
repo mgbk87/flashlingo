@@ -10,6 +10,7 @@
     { href: 'japanese.html', label: '🇯🇵 Japanese' },
     { href: 'malay.html', label: '🇲🇾 Malay' },
     { divider: true },
+    { href: 'blog.html', label: '📝 Blog' },
     { href: 'about.html', label: '💜 About Us' },
     { href: 'contact.html', label: '✉️ Contact Us' },
     { href: 'privacy-policy.html', label: '🔒 Privacy Policy' },
