@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /dashboard.html
 
-Sitemap: https://flashlingo.app/sitemap.xml
+Sitemap: https://www.flashlingolanguage.com/sitemap.xml

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://flashlingo.app/index.html</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://flashlingo.app/french.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://flashlingo.app/spanish.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://flashlingo.app/german.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://flashlingo.app/italian.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://flashlingo.app/portuguese.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://flashlingo.app/mandarin.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://flashlingo.app/japanese.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://flashlingo.app/malay.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://flashlingo.app/blog.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://flashlingo.app/blog-spaced-repetition.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://flashlingo.app/blog-choosing-a-language.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://flashlingo.app/about.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://flashlingo.app/contact.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://flashlingo.app/privacy-policy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://flashlingo.app/terms.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/index.html</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/french.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/spanish.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/german.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/italian.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/portuguese.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/mandarin.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/japanese.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/malay.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/blog.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/blog-spaced-repetition.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/blog-choosing-a-language.html</loc><changefreq>yearly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/about.html</loc><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/contact.html</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/privacy-policy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.flashlingolanguage.com/terms.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>
