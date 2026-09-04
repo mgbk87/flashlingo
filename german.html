@@ -1712,7 +1712,11 @@ function containsBlockedWord(nameLower) {
   return BLOCKED_NAME_WORDS.some(w => nameLower.includes(w));
 }
 function sanitizeName(raw) {
-  return (raw || '').replace(/[^a-zA-Z0-9]/g, '').slice(0, LB_NAME_MAX);
+  return (raw || '')
+    .replace(/[^a-zA-Z0-9 ]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, LB_NAME_MAX);
 }
 function validateName(raw) {
   const clean = sanitizeName(raw);
