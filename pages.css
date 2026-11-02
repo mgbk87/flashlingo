@@ -64,3 +64,10 @@ html, body { min-height: 100%; font-size: 112.5%; font-family: 'Nunito', sans-se
 .footer-link-row { text-align: center; margin-top: 36px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 .footer-link-row a { color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-decoration: none; }
 .footer-link-row a:hover { color: var(--purple); }
+
+/* Example tables in guides and blog posts */
+.ex-table{display:block;max-width:100%;overflow-x:auto;border-collapse:collapse;margin:10px 0 4px;font-size:.92rem}
+.ex-table th,.ex-table td{text-align:left;padding:7px 8px;border-bottom:1px solid #EDE9FE;vertical-align:top}
+.ex-table th{color:var(--purple);font-weight:900}
+.big{font-size:1.25rem;font-weight:800}
+.related-posts ul{padding-left:20px;line-height:1.8}

@@ -10,7 +10,8 @@
   <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="canonical" href="https://www.flashlingolanguage.com/mandarin.html" />
-  <title>Flashlingo 🇨🇳</title>
+  <title>Flashlingo 🇨🇳 Mandarin Vocabulary Quiz — 1,500 Words, 3 Levels</title>
+  <meta name="description" content="Free Mandarin Chinese vocabulary flashcard quiz: 1,500 Mandarin words in characters with pinyin across Beginner, Intermediate and Expert levels. Multiple-choice and typed modes, no sign-up." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&display=swap" rel="stylesheet" />
@@ -287,6 +288,8 @@
     .lang-faq-q:first-child { margin-top: 0; }
     .lang-faq-a { font-size: 0.88rem; color: var(--text-mid); font-weight: 600; line-height: 1.6; margin: 0; }
   </style>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need to learn Chinese characters to use this deck?", "acceptedAnswer": {"@type": "Answer", "text": "Not to start. Every word is shown with pinyin so you can learn pronunciation and meaning first, then layer characters on once you're ready."}}, {"@type": "Question", "name": "Is Mandarin really as hard as people say?", "acceptedAnswer": {"@type": "Answer", "text": "The tones and vocabulary take real, consistent practice, but the grammar is simpler in several ways than many European languages — no verb conjugation and no grammatical gender to memorize."}}, {"@type": "Question", "name": "What's the point of learning vocabulary before grammar?", "acceptedAnswer": {"@type": "Answer", "text": "In Mandarin, vocabulary carries an unusually large share of the meaning-making work, so a strong word bank pays off faster here than in more conjugation-heavy languages."}}]}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Flashlingo", "item": "https://www.flashlingolanguage.com/"}, {"@type": "ListItem", "position": 2, "name": "Mandarin vocabulary quiz", "item": "https://www.flashlingolanguage.com/mandarin.html"}]}</script>
 </head>
 <body>
 
@@ -307,7 +310,7 @@
   </div>
 
   <div id="high-score-bar" class="high-score-bar" style="display:none;">
-    <div class="hs-title">🏆 Top 5 — <span id="hs-level-label">Beginner</span></div>
+    <div class="hs-title">🏆 Your Top 5 — <span id="hs-level-label">Beginner</span></div>
     <ol id="hs-list" class="hs-list"></ol>
   </div>
 
@@ -348,7 +351,7 @@
       <div class="mode-name">By Category</div>
       <div class="mode-tagline">Master one topic at a time</div>
       <div class="mode-desc">Pick any topic and answer every word within it.</div>
-      <div class="mode-pill" id="pill-category">🎯 No lives limit · Up to 6 pts/word</div>
+      <div class="mode-pill" id="pill-category">🎯 No lives limit · Up to 3 pts/word</div>
     </button>
     <button class="mode-card mode-card--endless" onclick="startMode('endless')">
       <div class="mode-card-bg"></div>
@@ -384,8 +387,8 @@
     </div>
 
     <div class="lang-card-info">
-      <h2>How the levels work</h2>
-      <p>Every language deck on Flashlingo comes in three levels, so you can start where you actually are instead of where a textbook assumes you are.</p><ul><li><strong>Beginner</strong> — the 500 highest-frequency words: greetings, numbers, everyday objects and simple phrases.</li><li><strong>Intermediate</strong> — broader everyday vocabulary spread across 19 topic categories, from food and travel to family and work.</li><li><strong>Expert</strong> — less common but genuinely useful words that push you past textbook basics toward natural, fluent vocabulary.</li></ul>
+      <h2>How the Mandarin levels work</h2>
+      <p>The Mandarin deck has three levels of 500 words each, so you can start where you actually are.</p><ul><li><strong>Beginner</strong> — 500 words across 24 topics: everyday essentials such as food, home, transport, numbers and greetings. For example: <span lang="zh-Hans">苹果</span> (<em>píngguǒ</em>, apple), <span lang="zh-Hans">汽车</span> (<em>qìchē</em>, car), <span lang="zh-Hans">电话</span> (<em>diànhuà</em>, phone).</li><li><strong>Intermediate</strong> — 500 words across 19 topics: vocabulary for work, travel, technology, health, money and the news. For example: <span lang="zh-Hans">远程工作</span> (<em>yuǎnchéng gōngzuò</em>, remote work), <span lang="zh-Hans">护照</span> (<em>hùzhào</em>, passport), <span lang="zh-Hans">应用程序</span> (<em>yìngyòng chéngxù</em>, app).</li><li><strong>Expert</strong> — 500 words across 17 topics: formal and academic vocabulary for law, science, philosophy, economics and the arts. For example: <span lang="zh-Hans">判例法</span> (<em>pànlìfǎ</em>, case law), <span lang="zh-Hans">自由意志</span> (<em>zìyóu yìzhì</em>, free will), <span lang="zh-Hans">黑洞</span> (<em>hēidòng</em>, black hole).</li></ul><p>Higher-level words are often built from characters you already know. <span lang="zh-Hans">黑洞</span> (<em>hēidòng</em>, black hole) is simply 黑 "black" + 洞 "hole", and <span lang="zh-Hans">自由意志</span> (<em>zìyóu yìzhì</em>, free will) combines 自由 "freedom" and 意志 "will". Every character you learn at Beginner level pays off again later.</p>
     </div>
 
     <div class="lang-card-info">
@@ -395,7 +398,7 @@
 
     <div class="lang-card-info">
       <h2>A few words to start with</h2>
-      <p>Nǐ hǎo (hello), Xièxiè (thank you), Qǐng (please), Shì / Bù shì (yes / no — literally “is / is not”), and Zàijiàn (goodbye) are a solid starting toolkit.</p>
+      <p>Nǐ hǎo (hello), Xièxie (thank you), Qǐng (please), Shì / Bù shì (yes / no — literally “is / is not”), and Zàijiàn (goodbye) are a solid starting toolkit.</p>
     </div>
 
     <style>
@@ -428,7 +431,7 @@
 <h3>Drinks <span style="font-weight:600">(7)</span></h3><table class="vocab-table"><thead><tr><th>Chinese (汉字)</th><th>Pinyin</th><th>English</th></tr></thead><tbody><tr><td lang=zh-Hans>水</td><td>shuǐ</td><td>water</td></tr><tr><td lang=zh-Hans>果汁</td><td>guǒzhī</td><td>juice</td></tr><tr><td lang=zh-Hans>咖啡</td><td>kāfēi</td><td>coffee</td></tr><tr><td lang=zh-Hans>茶</td><td>chá</td><td>tea</td></tr><tr><td lang=zh-Hans>葡萄酒</td><td>pútaojiǔ</td><td>wine</td></tr><tr><td lang=zh-Hans>啤酒</td><td>píjiǔ</td><td>beer</td></tr><tr><td lang=zh-Hans>橙汁</td><td>chéngzhī</td><td>orange juice</td></tr></tbody></table>
 <h3>Clothing <span style="font-weight:600">(17)</span></h3><table class="vocab-table"><thead><tr><th>Chinese (汉字)</th><th>Pinyin</th><th>English</th></tr></thead><tbody><tr><td lang=zh-Hans>衣服</td><td>yīfu</td><td>clothes</td></tr><tr><td lang=zh-Hans>衬衫</td><td>chènshān</td><td>shirt</td></tr><tr><td lang=zh-Hans>裤子</td><td>kùzi</td><td>trousers</td></tr><tr><td lang=zh-Hans>连衣裙</td><td>liányīqún</td><td>dress</td></tr><tr><td lang=zh-Hans>裙子</td><td>qúnzi</td><td>skirt</td></tr><tr><td lang=zh-Hans>大衣</td><td>dàyī</td><td>coat</td></tr><tr><td lang=zh-Hans>夹克</td><td>jiákè</td><td>jacket</td></tr><tr><td lang=zh-Hans>毛衣</td><td>máoyī</td><td>sweater</td></tr><tr><td lang=zh-Hans>鞋子</td><td>xiézi</td><td>shoes</td></tr><tr><td lang=zh-Hans>袜子</td><td>wàzi</td><td>socks</td></tr><tr><td lang=zh-Hans>帽子</td><td>màozi</td><td>hat</td></tr><tr><td lang=zh-Hans>领带</td><td>lǐngdài</td><td>tie</td></tr><tr><td lang=zh-Hans>牛仔裤</td><td>niúzǎikù</td><td>jeans</td></tr><tr><td lang=zh-Hans>T恤</td><td>T-xù</td><td>t-shirt</td></tr><tr><td lang=zh-Hans>短裤</td><td>duǎnkù</td><td>shorts</td></tr><tr><td lang=zh-Hans>手套</td><td>shǒutào</td><td>gloves</td></tr><tr><td lang=zh-Hans>围巾</td><td>wéijīn</td><td>scarf</td></tr></tbody></table>
 <h3>Home &amp; Furniture <span style="font-weight:600">(24)</span></h3><table class="vocab-table"><thead><tr><th>Chinese (汉字)</th><th>Pinyin</th><th>English</th></tr></thead><tbody><tr><td lang=zh-Hans>房子</td><td>fángzi</td><td>house</td></tr><tr><td lang=zh-Hans>公寓</td><td>gōngyù</td><td>apartment</td></tr><tr><td lang=zh-Hans>房间</td><td>fángjiān</td><td>room</td></tr><tr><td lang=zh-Hans>卧室</td><td>wòshì</td><td>bedroom</td></tr><tr><td lang=zh-Hans>厨房</td><td>chúfáng</td><td>kitchen</td></tr><tr><td lang=zh-Hans>浴室</td><td>yùshì</td><td>bathroom</td></tr><tr><td lang=zh-Hans>厕所</td><td>cèsuǒ</td><td>toilet</td></tr><tr><td lang=zh-Hans>客厅</td><td>kètīng</td><td>living room</td></tr><tr><td lang=zh-Hans>餐厅</td><td>cāntīng</td><td>dining room</td></tr><tr><td lang=zh-Hans>花园</td><td>huāyuán</td><td>garden</td></tr><tr><td lang=zh-Hans>门</td><td>mén</td><td>door</td></tr><tr><td lang=zh-Hans>窗户</td><td>chuānghu</td><td>window</td></tr><tr><td lang=zh-Hans>楼梯</td><td>lóutī</td><td>stairs</td></tr><tr><td lang=zh-Hans>床</td><td>chuáng</td><td>bed</td></tr><tr><td lang=zh-Hans>椅子</td><td>yǐzi</td><td>chair</td></tr><tr><td lang=zh-Hans>桌子</td><td>zhuōzi</td><td>table</td></tr><tr><td lang=zh-Hans>沙发</td><td>shāfā</td><td>sofa</td></tr><tr><td lang=zh-Hans>衣柜</td><td>yīguì</td><td>wardrobe</td></tr><tr><td lang=zh-Hans>书桌</td><td>shūzhuō</td><td>desk</td></tr><tr><td lang=zh-Hans>灯</td><td>dēng</td><td>lamp</td></tr><tr><td lang=zh-Hans>镜子</td><td>jìngzi</td><td>mirror</td></tr><tr><td lang=zh-Hans>地毯</td><td>dìtǎn</td><td>rug</td></tr><tr><td lang=zh-Hans>冰箱</td><td>bīngxiāng</td><td>fridge</td></tr><tr><td lang=zh-Hans>烤箱</td><td>kǎoxiāng</td><td>oven</td></tr></tbody></table>
-<h3>Verbs <span style="font-weight:600">(89)</span></h3><table class="vocab-table"><thead><tr><th>Chinese (汉字)</th><th>Pinyin</th><th>English</th></tr></thead><tbody><tr><td lang=zh-Hans>是</td><td>shì</td><td>to be (permanent)</td></tr><tr><td lang=zh-Hans>在</td><td>zài</td><td>to be (temporary)</td></tr><tr><td lang=zh-Hans>有</td><td>yǒu</td><td>to have</td></tr><tr><td lang=zh-Hans>去</td><td>qù</td><td>to go</td></tr><tr><td lang=zh-Hans>做</td><td>zuò</td><td>to do / to make</td></tr><tr><td lang=zh-Hans>说</td><td>shuō</td><td>to say</td></tr><tr><td lang=zh-Hans>看见</td><td>kànjiàn</td><td>to see</td></tr><tr><td lang=zh-Hans>知道</td><td>zhīdào</td><td>to know (fact)</td></tr><tr><td lang=zh-Hans>能</td><td>néng</td><td>to be able to</td></tr><tr><td lang=zh-Hans>想要</td><td>xiǎngyào</td><td>to want</td></tr><tr><td lang=zh-Hans>来</td><td>lái</td><td>to come</td></tr><tr><td lang=zh-Hans>拿</td><td>ná</td><td>to take</td></tr><tr><td lang=zh-Hans>给</td><td>gěi</td><td>to give</td></tr><tr><td lang=zh-Hans>找到</td><td>zhǎodào</td><td>to find</td></tr><tr><td lang=zh-Hans>说话</td><td>shuōhuà</td><td>to speak</td></tr><tr><td lang=zh-Hans>吃</td><td>chī</td><td>to eat</td></tr><tr><td lang=zh-Hans>喝</td><td>hē</td><td>to drink</td></tr><tr><td lang=zh-Hans>睡觉</td><td>shuìjiào</td><td>to sleep</td></tr><tr><td lang=zh-Hans>工作</td><td>gōngzuò</td><td>to work</td></tr><tr><td lang=zh-Hans>住</td><td>zhù</td><td>to live</td></tr><tr><td lang=zh-Hans>喜欢</td><td>xǐhuan</td><td>to like</td></tr><tr><td lang=zh-Hans>读</td><td>dú</td><td>to read</td></tr><tr><td lang=zh-Hans>写</td><td>xiě</td><td>to write</td></tr><tr><td lang=zh-Hans>听</td><td>tīng</td><td>to listen</td></tr><tr><td lang=zh-Hans>看</td><td>kàn</td><td>to watch</td></tr><tr><td lang=zh-Hans>买</td><td>mǎi</td><td>to buy</td></tr><tr><td lang=zh-Hans>卖</td><td>mài</td><td>to sell</td></tr><tr><td lang=zh-Hans>打开</td><td>dǎkāi</td><td>to open</td></tr><tr><td lang=zh-Hans>关闭</td><td>guānbì</td><td>to close</td></tr><tr><td lang=zh-Hans>开始</td><td>kāishǐ</td><td>to begin</td></tr><tr><td lang=zh-Hans>完成</td><td>wánchéng</td><td>to finish</td></tr><tr><td lang=zh-Hans>走路</td><td>zǒulù</td><td>to walk</td></tr><tr><td lang=zh-Hans>跑步</td><td>pǎobù</td><td>to run</td></tr><tr><td lang=zh-Hans>玩</td><td>wán</td><td>to play</td></tr><tr><td lang=zh-Hans>唱歌</td><td>chànggē</td><td>to sing</td></tr><tr><td lang=zh-Hans>跳舞</td><td>tiàowǔ</td><td>to dance</td></tr><tr><td lang=zh-Hans>叫</td><td>jiào</td><td>to call</td></tr><tr><td lang=zh-Hans>回答</td><td>huídá</td><td>to answer</td></tr><tr><td lang=zh-Hans>找</td><td>zhǎo</td><td>to look for</td></tr><tr><td lang=zh-Hans>帮助</td><td>bāngzhù</td><td>to help</td></tr><tr><td lang=zh-Hans>想</td><td>xiǎng</td><td>to think</td></tr><tr><td lang=zh-Hans>相信</td><td>xiāngxìn</td><td>to believe</td></tr><tr><td lang=zh-Hans>认识</td><td>rènshi</td><td>to know (person/place)</td></tr><tr><td lang=zh-Hans>用</td><td>yòng</td><td>to use</td></tr><tr><td lang=zh-Hans>等</td><td>děng</td><td>to wait</td></tr><tr><td lang=zh-Hans>离开</td><td>líkāi</td><td>to leave / to go out</td></tr><tr><td lang=zh-Hans>到达</td><td>dàodá</td><td>to arrive</td></tr><tr><td lang=zh-Hans>进入</td><td>jìnrù</td><td>to enter</td></tr><tr><td lang=zh-Hans>放</td><td>fàng</td><td>to put</td></tr><tr><td lang=zh-Hans>穿</td><td>chuān</td><td>to carry / to wear</td></tr><tr><td lang=zh-Hans>游泳</td><td>yóuyǒng</td><td>to swim</td></tr><tr><td lang=zh-Hans>做饭</td><td>zuòfàn</td><td>to cook</td></tr><tr><td lang=zh-Hans>开车</td><td>kāichē</td><td>to drive</td></tr><tr><td lang=zh-Hans>旅行</td><td>lǚxíng</td><td>to travel</td></tr><tr><td lang=zh-Hans>学习</td><td>xuéxí</td><td>to learn</td></tr><tr><td lang=zh-Hans>明白</td><td>míngbai</td><td>to understand</td></tr><tr><td lang=zh-Hans>问</td><td>wèn</td><td>to ask</td></tr><tr><td lang=zh-Hans>展示</td><td>zhǎnshì</td><td>to show</td></tr><tr><td lang=zh-Hans>笑</td><td>xiào</td><td>to laugh</td></tr><tr><td lang=zh-Hans>哭</td><td>kū</td><td>to cry</td></tr><tr><td lang=zh-Hans>摔倒</td><td>shuāidǎo</td><td>to fall</td></tr><tr><td lang=zh-Hans>留</td><td>liú</td><td>to stay</td></tr><tr><td lang=zh-Hans>付钱</td><td>fùqián</td><td>to pay</td></tr><tr><td lang=zh-Hans>需要</td><td>xūyào</td><td>to need</td></tr><tr><td lang=zh-Hans>打扫</td><td>dǎsǎo</td><td>to clean</td></tr><tr><td lang=zh-Hans>选择</td><td>xuǎnzé</td><td>to choose</td></tr><tr><td lang=zh-Hans>赢</td><td>yíng</td><td>to win / to earn</td></tr><tr><td lang=zh-Hans>输</td><td>shū</td><td>to lose</td></tr><tr><td lang=zh-Hans>忘记</td><td>wàngjì</td><td>to forget</td></tr><tr><td lang=zh-Hans>记得</td><td>jìde</td><td>to remember</td></tr><tr><td lang=zh-Hans>分享</td><td>fēnxiǎng</td><td>to share</td></tr><tr><td lang=zh-Hans>准备</td><td>zhǔnbèi</td><td>to prepare</td></tr><tr><td lang=zh-Hans>接受</td><td>jiēshòu</td><td>to accept</td></tr><tr><td lang=zh-Hans>拒绝</td><td>jùjué</td><td>to refuse</td></tr><tr><td lang=zh-Hans>解释</td><td>jiěshì</td><td>to explain</td></tr><tr><td lang=zh-Hans>继续</td><td>jìxù</td><td>to continue</td></tr><tr><td lang=zh-Hans>回来</td><td>huílái</td><td>to return</td></tr><tr><td lang=zh-Hans>参观</td><td>cānguān</td><td>to visit</td></tr><tr><td lang=zh-Hans>改变</td><td>gǎibiàn</td><td>to change</td></tr><tr><td lang=zh-Hans>提供</td><td>tígōng</td><td>to offer</td></tr><tr><td lang=zh-Hans>允许</td><td>yǔnxǔ</td><td>to allow</td></tr><tr><td lang=zh-Hans>预订</td><td>yùdìng</td><td>to book / to reserve</td></tr><tr><td lang=zh-Hans>重复</td><td>chóngfù</td><td>to repeat</td></tr><tr><td lang=zh-Hans>邀请</td><td>yāoqǐng</td><td>to invite</td></tr><tr><td lang=zh-Hans>改进</td><td>gǎijìn</td><td>to improve</td></tr><tr><td lang=zh-Hans>加入</td><td>jiārù</td><td>to join</td></tr><tr><td lang=zh-Hans>决定</td><td>juédìng</td><td>to decide</td></tr><tr><td lang=zh-Hans>尝试</td><td>chángshì</td><td>to try</td></tr><tr><td lang=zh-Hans>成功</td><td>chénggōng</td><td>to succeed</td></tr></tbody></table>
+<h3>Verbs <span style="font-weight:600">(89)</span></h3><table class="vocab-table"><thead><tr><th>Chinese (汉字)</th><th>Pinyin</th><th>English</th></tr></thead><tbody><tr><td lang=zh-Hans>是</td><td>shì</td><td>to be (permanent)</td></tr><tr><td lang=zh-Hans>在</td><td>zài</td><td>to be (temporary)</td></tr><tr><td lang=zh-Hans>有</td><td>yǒu</td><td>to have</td></tr><tr><td lang=zh-Hans>去</td><td>qù</td><td>to go</td></tr><tr><td lang=zh-Hans>做</td><td>zuò</td><td>to do / to make</td></tr><tr><td lang=zh-Hans>说</td><td>shuō</td><td>to say</td></tr><tr><td lang=zh-Hans>看见</td><td>kànjiàn</td><td>to see</td></tr><tr><td lang=zh-Hans>知道</td><td>zhīdào</td><td>to know (fact)</td></tr><tr><td lang=zh-Hans>能</td><td>néng</td><td>to be able to</td></tr><tr><td lang=zh-Hans>想要</td><td>xiǎngyào</td><td>to want</td></tr><tr><td lang=zh-Hans>来</td><td>lái</td><td>to come</td></tr><tr><td lang=zh-Hans>拿</td><td>ná</td><td>to take</td></tr><tr><td lang=zh-Hans>给</td><td>gěi</td><td>to give</td></tr><tr><td lang=zh-Hans>找到</td><td>zhǎodào</td><td>to find</td></tr><tr><td lang=zh-Hans>说话</td><td>shuōhuà</td><td>to speak</td></tr><tr><td lang=zh-Hans>吃</td><td>chī</td><td>to eat</td></tr><tr><td lang=zh-Hans>喝</td><td>hē</td><td>to drink</td></tr><tr><td lang=zh-Hans>睡觉</td><td>shuìjiào</td><td>to sleep</td></tr><tr><td lang=zh-Hans>工作</td><td>gōngzuò</td><td>to work</td></tr><tr><td lang=zh-Hans>住</td><td>zhù</td><td>to live</td></tr><tr><td lang=zh-Hans>喜欢</td><td>xǐhuan</td><td>to like</td></tr><tr><td lang=zh-Hans>读</td><td>dú</td><td>to read</td></tr><tr><td lang=zh-Hans>写</td><td>xiě</td><td>to write</td></tr><tr><td lang=zh-Hans>听</td><td>tīng</td><td>to listen</td></tr><tr><td lang=zh-Hans>看</td><td>kàn</td><td>to watch</td></tr><tr><td lang=zh-Hans>买</td><td>mǎi</td><td>to buy</td></tr><tr><td lang=zh-Hans>卖</td><td>mài</td><td>to sell</td></tr><tr><td lang=zh-Hans>打开</td><td>dǎkāi</td><td>to open</td></tr><tr><td lang=zh-Hans>关闭</td><td>guānbì</td><td>to close</td></tr><tr><td lang=zh-Hans>开始</td><td>kāishǐ</td><td>to begin</td></tr><tr><td lang=zh-Hans>完成</td><td>wánchéng</td><td>to finish</td></tr><tr><td lang=zh-Hans>走路</td><td>zǒulù</td><td>to walk</td></tr><tr><td lang=zh-Hans>跑步</td><td>pǎobù</td><td>to run</td></tr><tr><td lang=zh-Hans>玩</td><td>wán</td><td>to play</td></tr><tr><td lang=zh-Hans>唱歌</td><td>chànggē</td><td>to sing</td></tr><tr><td lang=zh-Hans>跳舞</td><td>tiàowǔ</td><td>to dance</td></tr><tr><td lang=zh-Hans>叫</td><td>jiào</td><td>to call</td></tr><tr><td lang=zh-Hans>回答</td><td>huídá</td><td>to answer</td></tr><tr><td lang=zh-Hans>找</td><td>zhǎo</td><td>to look for</td></tr><tr><td lang=zh-Hans>帮助</td><td>bāngzhù</td><td>to help</td></tr><tr><td lang=zh-Hans>想</td><td>xiǎng</td><td>to think</td></tr><tr><td lang=zh-Hans>相信</td><td>xiāngxìn</td><td>to believe</td></tr><tr><td lang=zh-Hans>认识</td><td>rènshi</td><td>to know (person/place)</td></tr><tr><td lang=zh-Hans>用</td><td>yòng</td><td>to use</td></tr><tr><td lang=zh-Hans>等</td><td>děng</td><td>to wait</td></tr><tr><td lang=zh-Hans>离开</td><td>líkāi</td><td>to leave / to go out</td></tr><tr><td lang=zh-Hans>到达</td><td>dàodá</td><td>to arrive</td></tr><tr><td lang=zh-Hans>进入</td><td>jìnrù</td><td>to enter</td></tr><tr><td lang=zh-Hans>放</td><td>fàng</td><td>to put</td></tr><tr><td lang=zh-Hans>穿</td><td>chuān</td><td>to wear (clothes)</td></tr><tr><td lang=zh-Hans>游泳</td><td>yóuyǒng</td><td>to swim</td></tr><tr><td lang=zh-Hans>做饭</td><td>zuòfàn</td><td>to cook</td></tr><tr><td lang=zh-Hans>开车</td><td>kāichē</td><td>to drive</td></tr><tr><td lang=zh-Hans>旅行</td><td>lǚxíng</td><td>to travel</td></tr><tr><td lang=zh-Hans>学习</td><td>xuéxí</td><td>to learn</td></tr><tr><td lang=zh-Hans>明白</td><td>míngbai</td><td>to understand</td></tr><tr><td lang=zh-Hans>问</td><td>wèn</td><td>to ask</td></tr><tr><td lang=zh-Hans>展示</td><td>zhǎnshì</td><td>to show</td></tr><tr><td lang=zh-Hans>笑</td><td>xiào</td><td>to laugh</td></tr><tr><td lang=zh-Hans>哭</td><td>kū</td><td>to cry</td></tr><tr><td lang=zh-Hans>摔倒</td><td>shuāidǎo</td><td>to fall</td></tr><tr><td lang=zh-Hans>留</td><td>liú</td><td>to stay</td></tr><tr><td lang=zh-Hans>付钱</td><td>fùqián</td><td>to pay</td></tr><tr><td lang=zh-Hans>需要</td><td>xūyào</td><td>to need</td></tr><tr><td lang=zh-Hans>打扫</td><td>dǎsǎo</td><td>to clean</td></tr><tr><td lang=zh-Hans>选择</td><td>xuǎnzé</td><td>to choose</td></tr><tr><td lang=zh-Hans>赢</td><td>yíng</td><td>to win / to earn</td></tr><tr><td lang=zh-Hans>输</td><td>shū</td><td>to lose</td></tr><tr><td lang=zh-Hans>忘记</td><td>wàngjì</td><td>to forget</td></tr><tr><td lang=zh-Hans>记得</td><td>jìde</td><td>to remember</td></tr><tr><td lang=zh-Hans>分享</td><td>fēnxiǎng</td><td>to share</td></tr><tr><td lang=zh-Hans>准备</td><td>zhǔnbèi</td><td>to prepare</td></tr><tr><td lang=zh-Hans>接受</td><td>jiēshòu</td><td>to accept</td></tr><tr><td lang=zh-Hans>拒绝</td><td>jùjué</td><td>to refuse</td></tr><tr><td lang=zh-Hans>解释</td><td>jiěshì</td><td>to explain</td></tr><tr><td lang=zh-Hans>继续</td><td>jìxù</td><td>to continue</td></tr><tr><td lang=zh-Hans>回来</td><td>huílái</td><td>to return</td></tr><tr><td lang=zh-Hans>参观</td><td>cānguān</td><td>to visit</td></tr><tr><td lang=zh-Hans>改变</td><td>gǎibiàn</td><td>to change</td></tr><tr><td lang=zh-Hans>提供</td><td>tígōng</td><td>to offer</td></tr><tr><td lang=zh-Hans>允许</td><td>yǔnxǔ</td><td>to allow</td></tr><tr><td lang=zh-Hans>预订</td><td>yùdìng</td><td>to book / to reserve</td></tr><tr><td lang=zh-Hans>重复</td><td>chóngfù</td><td>to repeat</td></tr><tr><td lang=zh-Hans>邀请</td><td>yāoqǐng</td><td>to invite</td></tr><tr><td lang=zh-Hans>改进</td><td>gǎijìn</td><td>to improve</td></tr><tr><td lang=zh-Hans>加入</td><td>jiārù</td><td>to join</td></tr><tr><td lang=zh-Hans>决定</td><td>juédìng</td><td>to decide</td></tr><tr><td lang=zh-Hans>尝试</td><td>chángshì</td><td>to try</td></tr><tr><td lang=zh-Hans>成功</td><td>chénggōng</td><td>to succeed</td></tr></tbody></table>
 <h3>Adjectives <span style="font-weight:600">(52)</span></h3><table class="vocab-table"><thead><tr><th>Chinese (汉字)</th><th>Pinyin</th><th>English</th></tr></thead><tbody><tr><td lang=zh-Hans>大</td><td>dà</td><td>big / tall</td></tr><tr><td lang=zh-Hans>小</td><td>xiǎo</td><td>small / little</td></tr><tr><td lang=zh-Hans>好</td><td>hǎo</td><td>good</td></tr><tr><td lang=zh-Hans>坏</td><td>huài</td><td>bad</td></tr><tr><td lang=zh-Hans>美丽</td><td>měilì</td><td>beautiful</td></tr><tr><td lang=zh-Hans>漂亮</td><td>piàoliang</td><td>pretty</td></tr><tr><td lang=zh-Hans>老</td><td>lǎo</td><td>old</td></tr><tr><td lang=zh-Hans>年轻</td><td>niánqīng</td><td>young</td></tr><tr><td lang=zh-Hans>新</td><td>xīn</td><td>new</td></tr><tr><td lang=zh-Hans>长</td><td>cháng</td><td>long</td></tr><tr><td lang=zh-Hans>短</td><td>duǎn</td><td>short</td></tr><tr><td lang=zh-Hans>热</td><td>rè</td><td>hot / warm</td></tr><tr><td lang=zh-Hans>冷</td><td>lěng</td><td>cold</td></tr><tr><td lang=zh-Hans>容易</td><td>róngyì</td><td>easy</td></tr><tr><td lang=zh-Hans>难</td><td>nán</td><td>difficult</td></tr><tr><td lang=zh-Hans>快</td><td>kuài</td><td>fast</td></tr><tr><td lang=zh-Hans>慢</td><td>màn</td><td>slow</td></tr><tr><td lang=zh-Hans>强壮</td><td>qiángzhuàng</td><td>strong</td></tr><tr><td lang=zh-Hans>弱</td><td>ruò</td><td>weak</td></tr><tr><td lang=zh-Hans>富有</td><td>fùyǒu</td><td>rich</td></tr><tr><td lang=zh-Hans>穷</td><td>qióng</td><td>poor</td></tr><tr><td lang=zh-Hans>高兴</td><td>gāoxìng</td><td>happy / pleased</td></tr><tr><td lang=zh-Hans>伤心</td><td>shāngxīn</td><td>sad</td></tr><tr><td lang=zh-Hans>累</td><td>lèi</td><td>tired</td></tr><tr><td lang=zh-Hans>生病</td><td>shēngbìng</td><td>ill / sick</td></tr><tr><td lang=zh-Hans>干净</td><td>gānjìng</td><td>clean</td></tr><tr><td lang=zh-Hans>脏</td><td>zāng</td><td>dirty</td></tr><tr><td lang=zh-Hans>开</td><td>kāi</td><td>open</td></tr><tr><td lang=zh-Hans>关</td><td>guān</td><td>closed</td></tr><tr><td lang=zh-Hans>满</td><td>mǎn</td><td>full</td></tr><tr><td lang=zh-Hans>空</td><td>kōng</td><td>empty</td></tr><tr><td lang=zh-Hans>独自</td><td>dúzì</td><td>alone</td></tr><tr><td lang=zh-Hans>自由</td><td>zìyóu</td><td>free</td></tr><tr><td lang=zh-Hans>忙</td><td>máng</td><td>busy</td></tr><tr><td lang=zh-Hans>快乐</td><td>kuàilè</td><td>happy</td></tr><tr><td lang=zh-Hans>友好</td><td>yǒuhǎo</td><td>nice / friendly</td></tr><tr><td lang=zh-Hans>有趣</td><td>yǒuqù</td><td>interesting</td></tr><tr><td lang=zh-Hans>聪明</td><td>cōngming</td><td>intelligent</td></tr><tr><td lang=zh-Hans>现代</td><td>xiàndài</td><td>modern</td></tr><tr><td lang=zh-Hans>自然</td><td>zìrán</td><td>natural</td></tr><tr><td lang=zh-Hans>重要</td><td>zhòngyào</td><td>important</td></tr><tr><td lang=zh-Hans>不同</td><td>bùtóng</td><td>different</td></tr><tr><td lang=zh-Hans>完美</td><td>wánměi</td><td>perfect</td></tr><tr><td lang=zh-Hans>好吃</td><td>hǎochī</td><td>delicious</td></tr><tr><td lang=zh-Hans>危险</td><td>wēixiǎn</td><td>dangerous</td></tr><tr><td lang=zh-Hans>平静</td><td>píngjìng</td><td>calm</td></tr><tr><td lang=zh-Hans>吵闹</td><td>chǎonào</td><td>noisy</td></tr><tr><td lang=zh-Hans>特别</td><td>tèbié</td><td>special</td></tr><tr><td lang=zh-Hans>最后</td><td>zuìhòu</td><td>last</td></tr><tr><td lang=zh-Hans>第一</td><td>dìyī</td><td>first</td></tr><tr><td lang=zh-Hans>下一个</td><td>xiàyīgè</td><td>next</td></tr><tr><td lang=zh-Hans>一样</td><td>yīyàng</td><td>same</td></tr></tbody></table>
 <h3>Greetings <span style="font-weight:600">(13)</span></h3><table class="vocab-table"><thead><tr><th>Chinese (汉字)</th><th>Pinyin</th><th>English</th></tr></thead><tbody><tr><td lang=zh-Hans>早上好</td><td>zǎoshanghǎo</td><td>good morning</td></tr><tr><td lang=zh-Hans>下午好</td><td>xiàwǔhǎo</td><td>good afternoon</td></tr><tr><td lang=zh-Hans>晚安</td><td>wǎn&#x27;ān</td><td>good night</td></tr><tr><td lang=zh-Hans>你好</td><td>nǐhǎo</td><td>hello / hi</td></tr><tr><td lang=zh-Hans>再见</td><td>zàijiàn</td><td>goodbye</td></tr><tr><td lang=zh-Hans>谢谢</td><td>xièxie</td><td>thank you</td></tr><tr><td lang=zh-Hans>请</td><td>qǐng</td><td>please</td></tr><tr><td lang=zh-Hans>不客气</td><td>bú kèqi</td><td>you&#x27;re welcome</td></tr><tr><td lang=zh-Hans>对不起</td><td>duìbuqǐ</td><td>excuse me / sorry</td></tr><tr><td lang=zh-Hans>不好意思</td><td>bùhǎoyìsi</td><td>excuse me (formal)</td></tr><tr><td lang=zh-Hans>很高兴认识你</td><td>hěn gāoxìng rènshi nǐ</td><td>nice to meet you</td></tr><tr><td lang=zh-Hans>是</td><td>shì</td><td>yes</td></tr><tr><td lang=zh-Hans>不</td><td>bù</td><td>no</td></tr></tbody></table>
 <h3>Time &amp; When <span style="font-weight:600">(21)</span></h3><table class="vocab-table"><thead><tr><th>Chinese (汉字)</th><th>Pinyin</th><th>English</th></tr></thead><tbody><tr><td lang=zh-Hans>今天</td><td>jīntiān</td><td>today</td></tr><tr><td lang=zh-Hans>明天</td><td>míngtiān</td><td>tomorrow</td></tr><tr><td lang=zh-Hans>昨天</td><td>zuótiān</td><td>yesterday</td></tr><tr><td lang=zh-Hans>现在</td><td>xiànzài</td><td>now</td></tr><tr><td lang=zh-Hans>总是</td><td>zǒngshì</td><td>always</td></tr><tr><td lang=zh-Hans>从不</td><td>cóngbù</td><td>never</td></tr><tr><td lang=zh-Hans>经常</td><td>jīngcháng</td><td>often</td></tr><tr><td lang=zh-Hans>有时</td><td>yǒushí</td><td>sometimes</td></tr><tr><td lang=zh-Hans>早</td><td>zǎo</td><td>early</td></tr><tr><td lang=zh-Hans>晚</td><td>wǎn</td><td>late</td></tr><tr><td lang=zh-Hans>小时</td><td>xiǎoshí</td><td>hour / time</td></tr><tr><td lang=zh-Hans>分钟</td><td>fēnzhōng</td><td>minute</td></tr><tr><td lang=zh-Hans>天</td><td>tiān</td><td>day</td></tr><tr><td lang=zh-Hans>星期</td><td>xīngqī</td><td>week</td></tr><tr><td lang=zh-Hans>月</td><td>yuè</td><td>month</td></tr><tr><td lang=zh-Hans>年</td><td>nián</td><td>year</td></tr><tr><td lang=zh-Hans>早上</td><td>zǎoshang</td><td>morning</td></tr><tr><td lang=zh-Hans>中午</td><td>zhōngwǔ</td><td>noon</td></tr><tr><td lang=zh-Hans>下午</td><td>xiàwǔ</td><td>afternoon</td></tr><tr><td lang=zh-Hans>晚上</td><td>wǎnshang</td><td>night</td></tr><tr><td lang=zh-Hans>周末</td><td>zhōumò</td><td>weekend</td></tr></tbody></table>
@@ -487,7 +490,15 @@
       <h2>FAQ</h2>
       <div class="lang-faq-q">Do I need to learn Chinese characters to use this deck?</div><p class="lang-faq-a">Not to start. Every word is shown with pinyin so you can learn pronunciation and meaning first, then layer characters on once you're ready.</p><div class="lang-faq-q">Is Mandarin really as hard as people say?</div><p class="lang-faq-a">The tones and vocabulary take real, consistent practice, but the grammar is simpler in several ways than many European languages — no verb conjugation and no grammatical gender to memorize.</p><div class="lang-faq-q">What's the point of learning vocabulary before grammar?</div><p class="lang-faq-a">In Mandarin, vocabulary carries an unusually large share of the meaning-making work, so a strong word bank pays off faster here than in more conjugation-heavy languages.</p>
     </div>
+    <div class="lang-card-info">
+      <h2>Further reading</h2>
+      <ul><li><a href="blog-mandarin-tones-pinyin.html">Mandarin Tones and Pinyin: A Beginner&#x27;s Guide</a></li><li><a href="blog-spaced-repetition.html">The Science of Flashcards: Why Active Recall and Spaced Repetition Work</a></li><li><a href="blog-choosing-a-language.html">Which Language Should You Learn First? Comparing Flashlingo&#x27;s 12 Languages</a></li></ul>
+      <p><a href="blog.html">All articles on the Flashlingo blog →</a> · <a href="index.html">Browse all 12 languages →</a></p>
+    </div>
   </div>
+<div class="site-footer-links" style="max-width:720px;margin:8px auto 32px;padding:0 20px;text-align:center;font-size:.85rem;font-weight:700;line-height:2">
+  <a href="index.html">Home</a> · <a href="blog.html">Blog</a> · <a href="how-to-play.html">How to Play</a> · <a href="how-we-build-word-lists.html">Our Word Lists</a> · <a href="about.html">About Us</a> · <a href="contact.html">Contact Us</a> · <a href="privacy-policy.html">Privacy Policy</a> · <a href="terms.html">Terms &amp; Conditions</a>
+</div>
 </div>
 
 
@@ -572,7 +583,7 @@
   <div class="milestone-box">
     <span class="milestone-emoji" id="ms-emoji">🎉</span>
     <span class="milestone-count" id="ms-count">50</span>
-    <span class="milestone-label">words correct!</span>
+    <span class="milestone-label" id="ms-label">words correct!</span>
     <span class="milestone-sub"   id="ms-sub">Keep going!</span>
   </div>
 </div>
@@ -591,21 +602,6 @@
 </div>
 
 
-<!-- ░░ LEADERBOARD NAME ENTRY ░░ -->
-<div id="name-modal" class="stop-modal" style="display:none;">
-  <div class="stop-modal-box">
-    <div class="stop-modal-title">🏆 Top 5 Score!</div>
-    <div class="stop-modal-sub">You made the leaderboard — enter a name to save it:</div>
-    <div class="name-input-wrap">
-      <input id="name-input" class="type-input" type="text" maxlength="12" placeholder="Your name" autocomplete="off" onkeydown="if(event.key==='Enter')submitNameEntry()" />
-      <div id="name-error" class="name-error"></div>
-    </div>
-    <div class="stop-modal-btns">
-      <button class="stop-cancel" onclick="closeNameModal()">Skip</button>
-      <button class="stop-exit" style="background:var(--purple);" onclick="submitNameEntry()">Submit</button>
-    </div>
-  </div>
-</div>
 
 
 <script>
@@ -739,7 +735,7 @@ const WORDS = [
   {hanzi:"用",pinyin:"yòng",english:"to use",category:"verbs",level:"beginner"},{hanzi:"等",pinyin:"děng",english:"to wait",category:"verbs",level:"beginner"},
   {hanzi:"离开",pinyin:"líkāi",english:"to leave / to go out",category:"verbs",level:"beginner"},{hanzi:"到达",pinyin:"dàodá",english:"to arrive",category:"verbs",level:"beginner"},
   {hanzi:"进入",pinyin:"jìnrù",english:"to enter",category:"verbs",level:"beginner"},{hanzi:"放",pinyin:"fàng",english:"to put",category:"verbs",level:"beginner"},
-  {hanzi:"穿",pinyin:"chuān",english:"to carry / to wear",category:"verbs",level:"beginner"},{hanzi:"游泳",pinyin:"yóuyǒng",english:"to swim",category:"verbs",level:"beginner"},
+  {hanzi:"穿",pinyin:"chuān",english:"to wear (clothes)",category:"verbs",level:"beginner"},{hanzi:"游泳",pinyin:"yóuyǒng",english:"to swim",category:"verbs",level:"beginner"},
   {hanzi:"做饭",pinyin:"zuòfàn",english:"to cook",category:"verbs",level:"beginner"},{hanzi:"开车",pinyin:"kāichē",english:"to drive",category:"verbs",level:"beginner"},
   {hanzi:"旅行",pinyin:"lǚxíng",english:"to travel",category:"verbs",level:"beginner"},{hanzi:"学习",pinyin:"xuéxí",english:"to learn",category:"verbs",level:"beginner"},
   {hanzi:"明白",pinyin:"míngbai",english:"to understand",category:"verbs",level:"beginner"},{hanzi:"问",pinyin:"wèn",english:"to ask",category:"verbs",level:"beginner"},
@@ -1694,10 +1690,17 @@ function updateTimerUI() {
 
 /* ═══════ SCORING ═════════════════════════════════════════════════ */
 function calcPoints(tLeft, isNearMiss = false) {
-  const baseMax = gameMode === 'god' ? 10 : 6;
   const dur = getTimerDur();
   const ratio = tLeft / dur;
   let pts;
+  if (gameMode === 'category') {
+    // Category mode: max 3 pts/word (3 / 2 / 1 by speed)
+    pts = ratio >= 0.70 ? 3 : ratio >= 0.40 ? 2 : 1;
+    if (difficulty === 'hard') pts *= 2;
+    if (isNearMiss) pts = Math.max(Math.round(pts * 0.6), 1);
+    return pts;
+  }
+  const baseMax = gameMode === 'god' ? 10 : 6;
   if (ratio >= 0.70) pts = baseMax;
   else if (ratio >= 0.50) pts = Math.max(baseMax - 2, 2);
   else if (ratio >= 0.30) pts = Math.max(baseMax - 4, 2);
@@ -1741,17 +1744,15 @@ function globalBest() {
   return vals.length ? Math.max(...vals) : 0;
 }
 
-/* ═══════ TOP-5 LEADERBOARD (per level, this browser/device) ═════ */
+/* ═══════ PERSONAL TOP-5 (per level, this browser/device) — timestamped, no names ═════ */
 const LB_MAX = 5;
-const LB_NAME_MAX = 12;
 let leaderboard = [];
-let pendingLBScore = 0;
 
 function lbKey() { return 'mandarinQuizLB_' + wordLevel; }
 function loadLB() {
   try {
     const raw = JSON.parse(localStorage.getItem(lbKey()) || '[]');
-    leaderboard = Array.isArray(raw) ? raw.filter(e => e && typeof e.name === 'string' && typeof e.score === 'number' && e.score > 0) : [];
+    leaderboard = Array.isArray(raw) ? raw.filter(e => e && typeof e.score === 'number' && e.score > 0) : [];
   } catch (e) { leaderboard = []; }
   leaderboard.sort((a,b) => b.score - a.score);
   leaderboard = leaderboard.slice(0, LB_MAX);
@@ -1763,14 +1764,23 @@ function qualifiesForLB(score) {
   const min = Math.min(...leaderboard.map(e => e.score));
   return score > min;
 }
-function addToLB(name, score) {
-  leaderboard.push({ name, score });
-  leaderboard.sort((a, b) => b.score - a.score);
+function addToLB(score) {
+  const entry = { score, ts: Date.now() };
+  leaderboard.push(entry);
+  leaderboard.sort((a, b) => b.score - a.score || b.ts - a.ts);
   leaderboard = leaderboard.slice(0, LB_MAX);
   saveLB();
   renderLB();
+  return leaderboard.indexOf(entry); // rank (0-based), -1 if not kept
 }
 function escapeHTML(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function formatLBStamp(ts) {
+  if (typeof ts !== 'number') return 'Earlier record';
+  const d = new Date(ts);
+  const date = d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+  const time = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  return date + ' · ' + time;
+}
 function renderLB() {
   const bar    = document.getElementById('high-score-bar');
   const list   = document.getElementById('hs-list');
@@ -1783,56 +1793,8 @@ function renderLB() {
   bar.style.display = 'flex';
   const medals = ['🥇','🥈','🥉'];
   list.innerHTML = leaderboard.map((e, i) =>
-    `<li class="hs-row"><span class="hs-rank">${medals[i] || (i+1)+'.'}</span><span class="hs-name">${escapeHTML(e.name)}</span><span class="hs-pts">${e.score.toLocaleString()} pts</span></li>`
+    `<li class="hs-row"><span class="hs-rank">${medals[i] || (i+1)+'.'}</span><span class="hs-name">${escapeHTML(formatLBStamp(e.ts))}</span><span class="hs-pts">${e.score.toLocaleString()} pts</span></li>`
   ).join('');
-}
-
-/* ═══════ NAME VALIDATION — letters/numbers only, blocks profanity/insults ═══ */
-const BLOCKED_NAME_WORDS = [
-  'fuck','shit','bitch','asshole','ass','bastard','cunt','dick','pussy','cock','whore','slut',
-  'nigger','nigga','fag','faggot','retard','rape','rapist','nazi','hitler','kys',
-  'idiot','stupid','dumb','moron','loser','ugly','fatso','suck','crap',
-  'damn','piss','tit','boob','porn','anal','penis','vagina','clit','jerk',
-  'wank','twat','prick','douche','dumbass','jackass','scumbag','pedo','pedophile',
-  'terrorist','skank','hoe','thot','molest','shithead'
-];
-function containsBlockedWord(nameLower) {
-  return BLOCKED_NAME_WORDS.some(w => nameLower.includes(w));
-}
-function sanitizeName(raw) {
-  return (raw || '')
-    .replace(/[^a-zA-Z0-9 ]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, LB_NAME_MAX);
-}
-function validateName(raw) {
-  const clean = sanitizeName(raw);
-  if (!clean) return { ok: false, clean, error: 'Use letters and numbers only.' };
-  if (containsBlockedWord(clean.toLowerCase())) return { ok: false, clean, error: 'That name isn\'t allowed — try another.' };
-  return { ok: true, clean, error: '' };
-}
-function openNameModal(score) {
-  pendingLBScore = score;
-  const modal = document.getElementById('name-modal');
-  const input = document.getElementById('name-input');
-  const err   = document.getElementById('name-error');
-  input.value = ''; err.textContent = '';
-  modal.style.display = 'flex';
-  setTimeout(() => input.focus(), 50);
-}
-function closeNameModal() {
-  document.getElementById('name-modal').style.display = 'none';
-  pendingLBScore = 0;
-}
-function submitNameEntry() {
-  const input  = document.getElementById('name-input');
-  const err    = document.getElementById('name-error');
-  const result = validateName(input.value);
-  input.value = result.clean;
-  if (!result.ok) { err.textContent = result.error; return; }
-  addToLB(result.clean, pendingLBScore);
-  closeNameModal();
 }
 
 function updateHomeHS() {
@@ -1845,9 +1807,16 @@ const MILESTONES     = [20,50,100,150,200,250,300,350,400];
 const MS_EMOJI       = {20:'🎉',50:'⭐',100:'🌟',150:'💫',200:'🏆',250:'👑',300:'🔥',350:'⚡',400:'🎯'};
 const MS_SUB         = {20:'你真棒!',50:'Halfway to 100!',100:'Century!',150:'太厉害了!',200:'势不可挡!',250:'传奇!',300:'太厉害了!',350:'Almost at 400!',400:'完美!'};
 let shownMilestones  = new Set();
+let catStreak        = 0; // category mode: consecutive correct answers, reset on any mistake
 
+function resetCatStreak() {
+  if (gameMode !== 'category') return;
+  catStreak = 0;
+  shownMilestones = new Set();
+}
 function checkMilestone(callback) {
-  const hit = MILESTONES.find(m => m === correctCount && !shownMilestones.has(m));
+  const count = gameMode === 'category' ? catStreak : correctCount;
+  const hit = MILESTONES.find(m => m === count && !shownMilestones.has(m));
   if (!hit) return false;
   shownMilestones.add(hit);
   showMilestone(hit, callback);
@@ -1871,6 +1840,7 @@ function showMilestone(count, callback) {
   document.getElementById('ms-count').textContent = count;
   document.getElementById('ms-sub').textContent   = MS_SUB[count]||'真棒!';
   const overlay = document.getElementById('milestone-overlay');
+  document.getElementById('ms-label').textContent = gameMode === 'category' ? 'in a row!' : 'words correct!';
   overlay.style.display = 'flex'; overlay.classList.remove('fade-out');
   setTimeout(() => {
     overlay.classList.add('fade-out');
@@ -1893,10 +1863,11 @@ function setDifficulty(d) {
   document.getElementById('btn-hard').classList.toggle('active', d === 'hard');
   document.getElementById('diff-box-easy').classList.toggle('selected', d === 'easy');
   document.getElementById('diff-box-hard').classList.toggle('selected', d === 'hard');
-  const catMax = d === 'hard' ? 12 : 6;
+  const catMax = d === 'hard' ? 6 : 3;
+  const endlessMax = d === 'hard' ? 12 : 6;
   const godMax = d === 'hard' ? 20 : 10;
   document.getElementById('pill-category').textContent = `🎯 No lives limit · Up to ${catMax} pts/word`;
-  document.getElementById('pill-endless').textContent  = `❤️ 3 lives · Up to ${catMax} pts/word`;
+  document.getElementById('pill-endless').textContent  = `❤️ 3 lives · Up to ${endlessMax} pts/word`;
   document.getElementById('pill-god').textContent      = `💀 1 life · Up to ${godMax} pts/word`;
 }
 
@@ -1923,7 +1894,7 @@ function showScreen(id) {
 
 function startMode(mode) {
   gameMode=mode; correctCount=0; totalAnswered=0; completedCats=[];
-  godStreak=0; sessionScore=0; shownMilestones=new Set();
+  godStreak=0; sessionScore=0; shownMilestones=new Set(); catStreak=0;
   if(mode==='category'){lives=Infinity;buildCategoryGrid();showScreen('screen-categories');}
   else if(mode==='endless'){lives=3;launchEndlessRound();}
   else{lives=1;launchGodMode();}
@@ -1998,7 +1969,7 @@ function handleTimeout(){
   const q=questions[currentQIdx];
   if(difficulty==='easy'){document.querySelectorAll('.choice-btn').forEach((btn,i)=>{btn.disabled=true;if(i===q.correctIdx)btn.classList.add('correct');});}
   else{const inp=document.getElementById('type-input');const sub=document.querySelector('.type-submit-btn');if(inp)inp.disabled=true;if(sub)sub.disabled=true;}
-  if(lives!==Infinity)lives--;totalAnswered++;
+  if(lives!==Infinity)lives--;resetCatStreak();totalAnswered++;
   document.getElementById('quiz-word-card').classList.add('flash-wrong');
   const fb=document.getElementById('quiz-feedback');
   fb.innerHTML=`⏱️ Too slow! Answer: <strong>${q.word.hanzi} (${q.word.pinyin})</strong>`;fb.className='quiz-feedback feedback-wrong';
@@ -2013,14 +1984,14 @@ function handleAnswer(choiceIdx){
     btn.disabled=true;if(i===q.correctIdx)btn.classList.add('correct');else if(i===choiceIdx&&!correct)btn.classList.add('wrong');
   });
   if(correct){
-    const pts=calcPoints(timeLeft);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    const pts=calcPoints(timeLeft);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;if(gameMode==='category')catStreak++;
     sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
     fb.textContent=`✅ +${pts} pts`;fb.className='quiz-feedback feedback-correct';
     document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
     const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
     popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
   } else {
-    if(lives!==Infinity)lives--;sfxWrong();
+    if(lives!==Infinity)lives--;resetCatStreak();sfxWrong();
     document.getElementById('quiz-word-card').classList.add('flash-wrong');
     fb.innerHTML=`❌ Answer: <strong>${q.word.hanzi} (${q.word.pinyin})</strong>`;fb.className='quiz-feedback feedback-wrong';
   }
@@ -2039,21 +2010,21 @@ function submitTypedAnswer(){
   inp.disabled=true;const sub=document.querySelector('.type-submit-btn');if(sub)sub.disabled=true;
   const fb=document.getElementById('quiz-feedback');
   if(exactMatch){
-    const pts=calcPoints(timeLeft,false);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    const pts=calcPoints(timeLeft,false);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;if(gameMode==='category')catStreak++;
     sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
     fb.textContent=`✅ +${pts} pts`;fb.className='quiz-feedback feedback-correct';
     document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
     const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
     popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
   } else if(nearMiss){
-    const pts=calcPoints(timeLeft,true);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;
+    const pts=calcPoints(timeLeft,true);sessionScore+=pts;correctCount++;if(gameMode==='god')godStreak++;if(gameMode==='category')catStreak++;
     sfxCorrect();document.getElementById('quiz-word-card').classList.add('flash-correct');
     fb.innerHTML=`✅ +${pts} pts &nbsp;·&nbsp; Exact spelling: <strong>${correct}</strong>`;fb.className='quiz-feedback feedback-correct';
     document.getElementById('quiz-score-display').textContent=sessionScore+' pts';
     const popEl=document.createElement('div');popEl.className='pts-pop';popEl.textContent='+'+pts;
     popEl.style.cssText='top:45%;left:50%;transform:translateX(-50%)';document.body.appendChild(popEl);setTimeout(()=>popEl.remove(),1200);
   } else {
-    if(lives!==Infinity)lives--;sfxWrong();
+    if(lives!==Infinity)lives--;resetCatStreak();sfxWrong();
     document.getElementById('quiz-word-card').classList.add('flash-wrong');
     fb.innerHTML=`❌ Answer: <strong>${correct}</strong>`;fb.className='quiz-feedback feedback-wrong';
   }
@@ -2095,7 +2066,8 @@ function showResults(type){
   if(sessionScore>prevModeBest&&sessionScore>0){highScores[gameMode]=sessionScore;saveHS();}
   const isNew=sessionScore>0&&sessionScore>prevBest;
   loadLB();
-  if (qualifiesForLB(sessionScore)) { setTimeout(() => openNameModal(sessionScore), 900); }
+  let lbRank = -1, lbStamp = '';
+  if (qualifiesForLB(sessionScore)) { lbRank = addToLB(sessionScore); if (lbRank >= 0) lbStamp = formatLBStamp(leaderboard[lbRank].ts); }
   const pct=totalAnswered>0?Math.round((correctCount/totalAnswered)*100):0;
   const isGameOver=type==='game-over';
   const titles={'game-over':gameMode==='god'?'💀 Game Over!':'💔 Out of Lives!','category-complete':'🎉 分类完成!','all-complete':'🏆 太厉害了!'};
@@ -2109,7 +2081,8 @@ function showResults(type){
   animateScore(sessionScore);sfxCelebration(isGameOver);
   const hsArea=document.getElementById('results-hs-area');
   const curBest=globalBest();
-  hsArea.innerHTML=isNew?'<div class="new-hs-badge">🏆 New Personal Best!</div>':(curBest>0?`<div class="prev-hs-note">Best: ${curBest.toLocaleString()} pts</div>`:'');
+  hsArea.innerHTML=(isNew?'<div class="new-hs-badge">🏆 New Personal Best!</div>':(curBest>0?`<div class="prev-hs-note">Best: ${curBest.toLocaleString()} pts</div>`:''))
+    +(lbRank>=0?`<div class="prev-hs-note">📅 Saved to your Top 5 (#${lbRank+1}) · ${escapeHTML(lbStamp)}</div>`:'');
   let stats=`<div class="stat-chip"><span class="stat-num">${pct}%</span><span class="stat-label">Accuracy</span></div><div class="stat-chip"><span class="stat-num">${correctCount}</span><span class="stat-label">Correct</span></div><div class="stat-chip"><span class="stat-num">${totalAnswered-correctCount}</span><span class="stat-label">Wrong</span></div>`;
   if(gameMode==='endless')stats+=`<div class="stat-chip"><span class="stat-num">${completedCats.length}</span><span class="stat-label">Categories</span></div>`;
   if(gameMode==='god')stats+=`<div class="stat-chip"><span class="stat-num">${godStreak}</span><span class="stat-label">Streak</span></div>`;

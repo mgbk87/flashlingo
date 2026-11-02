@@ -10,7 +10,8 @@
   <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="canonical" href="https://www.flashlingolanguage.com/" />
-  <title>Flashlingo — Language Quiz Platform</title>
+  <title>Flashlingo — Free Vocabulary Flashcard Quizzes in 12 Languages</title>
+  <meta name="description" content="Learn vocabulary in 12 languages with free, timed flashcard quizzes: French, Spanish, German, Italian, Portuguese, Mandarin, Japanese, Korean, Malay, Vietnamese, Indonesian and Hindi. 1,500 words per language." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800&display=swap" rel="stylesheet" />
@@ -78,6 +79,10 @@
     .lang-card--japanese { background: linear-gradient(135deg, #BC002D, #7A0020); }
     .lang-card--italian { background: linear-gradient(135deg, #008C45, #CD212A); }
     .lang-card--malay { background: linear-gradient(135deg, #010066, #CC0001); }
+    .lang-card--korean { background: linear-gradient(135deg, #CD2E3A, #0047A0); }
+    .lang-card--vietnamese { background: linear-gradient(135deg, #DA251D, #E8A200); }
+    .lang-card--indonesian { background: linear-gradient(135deg, #CE1126, #8E0A18); }
+    .lang-card--hindi { background: linear-gradient(135deg, #FF9933, #138808); }
 
     /* ── FEATURES ── */
     .cover-features { display: flex; justify-content: center; gap: 0; flex-wrap: wrap; padding: 12px 20px 40px; max-width: 480px; margin: 0 auto; position: relative; z-index: 1; }
@@ -120,6 +125,8 @@
       .step { flex-direction: column; }
     }
   </style>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Flashlingo", "url": "https://www.flashlingolanguage.com/", "description": "Free timed vocabulary flashcard quizzes in 12 languages, 1,500 words each across three levels."}</script>
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Flashlingo", "url": "https://www.flashlingolanguage.com/", "logo": "https://www.flashlingolanguage.com/icons/apple-touch-icon.png", "email": "flashlingo.language@gmail.com"}</script>
 </head>
 <body>
 
@@ -180,10 +187,30 @@
     <img src="Design/Flag_of_Japan.svg" class="lang-flag" alt="Japan flag">
     <div class="lang-name">Japanese</div>
   </a>
+  <a href="korean.html" class="lang-card lang-card--korean">
+    <div class="lang-card-glow"></div>
+    <img src="Design/Flag_of_South_Korea.svg" class="lang-flag" alt="South Korea flag">
+    <div class="lang-name">Korean</div>
+  </a>
   <a href="malay.html" class="lang-card lang-card--malay">
     <div class="lang-card-glow"></div>
     <img src="Design/Flag_of_Malaysia.svg" class="lang-flag" alt="Malaysia flag">
     <div class="lang-name">Malay</div>
+  </a>
+  <a href="vietnamese.html" class="lang-card lang-card--vietnamese">
+    <div class="lang-card-glow"></div>
+    <img src="Design/Flag_of_Vietnam.svg" class="lang-flag" alt="Vietnam flag">
+    <div class="lang-name">Vietnamese</div>
+  </a>
+  <a href="indonesian.html" class="lang-card lang-card--indonesian">
+    <div class="lang-card-glow"></div>
+    <img src="Design/Flag_of_Indonesia.svg" class="lang-flag" alt="Indonesia flag">
+    <div class="lang-name">Indonesian</div>
+  </a>
+  <a href="hindi.html" class="lang-card lang-card--hindi">
+    <div class="lang-card-glow"></div>
+    <img src="Design/Flag_of_India.svg" class="lang-flag" alt="India flag">
+    <div class="lang-name">Hindi</div>
   </a>
 </div>
 
@@ -207,7 +234,7 @@
         <div class="step-num">1</div>
         <div class="step-body">
           <h3>Pick a language</h3>
-          <p>Choose from French, Spanish, German, Italian, Portuguese, Mandarin, Japanese or Malay — more are on the way.</p>
+          <p>Choose from French, Spanish, German, Italian, Portuguese, Mandarin, Japanese, Korean, Malay, Vietnamese, Indonesian or Hindi — more are on the way.</p>
         </div>
       </div>
       <div class="step">
@@ -234,7 +261,7 @@
   </div>
 
   <div class="info-card">
-    <h2>Eight languages, one method</h2>
+    <h2>Twelve languages, one method</h2>
     <div class="lang-blurb-grid">
       <div class="lang-blurb"><strong>French</strong><span>320M+ speakers across 29 countries, and one of the most useful second languages for travel across Europe and West Africa.</span></div>
       <div class="lang-blurb"><strong>Spanish</strong><span>The world's second most-spoken native language, official in 20 countries across the Americas and Europe.</span></div>
@@ -243,7 +270,11 @@
       <div class="lang-blurb"><strong>Portuguese</strong><span>260 million speakers across nine countries on four continents, led by Brazil's huge Portuguese-speaking population.</span></div>
       <div class="lang-blurb"><strong>Mandarin</strong><span>The most-spoken native language on Earth, with over a billion speakers and no verb conjugation to memorize.</span></div>
       <div class="lang-blurb"><strong>Japanese</strong><span>125 million speakers, with vocabulary tied closely to a huge amount of globally exported pop culture.</span></div>
+      <div class="lang-blurb"><strong>Korean</strong><span>Around 80 million speakers, written in Hangul — a 24-letter alphabet that most learners can read within days.</span></div>
       <div class="lang-blurb"><strong>Malay</strong><span>The national language of Malaysia and Brunei, closely related to Indonesian and written in the Latin alphabet.</span></div>
+      <div class="lang-blurb"><strong>Vietnamese</strong><span>The national language of Vietnam, written in the Latin alphabet with tone marks — and with no verb conjugation to learn.</span></div>
+      <div class="lang-blurb"><strong>Indonesian</strong><span>The national language of Indonesia, used by well over 200 million people and written in the Latin alphabet with very regular spelling.</span></div>
+      <div class="lang-blurb"><strong>Hindi</strong><span>Around 600 million speakers including second-language users, written in the Devanagari script and an official language of India.</span></div>
     </div>
   </div>
 
@@ -259,6 +290,17 @@
     <p class="faq-a">High scores are saved per language and level so you can track your improvement over time, without needing to create an account.</p>
   </div>
 
+  <div class="info-card">
+    <h2>From the Flashlingo blog</h2>
+    <p>Practical guides to the languages on Flashlingo and the science of learning vocabulary.</p>
+    <ul style="padding-left:20px;line-height:1.8"><li><a href="blog-mandarin-tones-pinyin.html">Mandarin Tones and Pinyin: A Beginner&#x27;s Guide</a></li><li><a href="blog-japanese-writing-systems.html">Hiragana, Katakana and Kanji: Japanese Writing Explained</a></li><li><a href="blog-french-noun-gender.html">Le or La? A Practical Guide to French Noun Gender</a></li><li><a href="blog-spanish-vs-portuguese.html">Spanish vs Portuguese: How Similar Are They Really?</a></li><li><a href="blog-malay-for-beginners.html">Why Malay Is a Great First Asian Language for English Speakers</a></li><li><a href="blog-german-compound-words.html">German Compound Words: How to Decode Long German Nouns</a></li><li><a href="blog-spaced-repetition.html">The Science of Flashcards: Why Active Recall and Spaced Repetition Work</a></li><li><a href="blog-choosing-a-language.html">Which Language Should You Learn First? Comparing Flashlingo&#x27;s 12 Languages</a></li></ul>
+    <p><a href="blog.html">See all articles →</a></p>
+  </div>
+
+</div>
+
+<div class="site-footer-links" style="max-width:720px;margin:8px auto 32px;padding:0 20px;text-align:center;font-size:.85rem;font-weight:700;line-height:2">
+  <a href="index.html">Home</a> · <a href="blog.html">Blog</a> · <a href="how-to-play.html">How to Play</a> · <a href="how-we-build-word-lists.html">Our Word Lists</a> · <a href="about.html">About Us</a> · <a href="contact.html">Contact Us</a> · <a href="privacy-policy.html">Privacy Policy</a> · <a href="terms.html">Terms &amp; Conditions</a>
 </div>
 
 <script src="sidebar.js" defer></script>
